@@ -33,6 +33,7 @@
 *.su
 firmware/Debug/
 firmware/.launches
+firmware/.settings/org.eclipse.core.resources.prefs
 
 # Tracealyzer files
 firmware/GenericRecorderLibSrc/
