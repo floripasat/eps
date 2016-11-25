@@ -34,5 +34,6 @@
 firmware/Debug/
 firmware/.launches
 
+
 # Tracealyzer files
 firmware/GenericRecorderLibSrc/
