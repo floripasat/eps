@@ -9,7 +9,7 @@
 
 volatile unsigned int cont = 0;
 volatile float duty_cycle = 0;
-volatile float t = 0;
+volatile long t = 0;
 volatile float temperature = 0;
 volatile extern char EPS_Data[23];
 

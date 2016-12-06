@@ -34,7 +34,7 @@ void config_MSP430(void)
 	/*** clock configuration ***/
 	BCSCTL1 = CALBC1_8MHZ;                      // Set DCO
 	DCOCTL = CALDCO_8MHZ;					  	// Set DCO
-	BCSCTL2 = DIVS_3;
+	BCSCTL2 = DIVS_3;							// Set SMCLK = DCO/8 = 1MHz
 
 	/*** SPI configuration ***/
 	UCB1CTL0 |=  UCMSB + UCMST + UCSYNC;  				// 3-pin, 8-bit SPI master

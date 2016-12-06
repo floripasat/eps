@@ -19,14 +19,6 @@
 #define NOP_command 0xff				// no operation command, used to clock out data
 #define SYNC_command 0x04				// command to start ADC conversion
 
-/**** REGISTERS ****/
-
-#define MUX0_register 0x00						// multiplexer control register 0
-#define VBIAS_register 0x01						// bias voltage register
-#define MUX1_register 0x02						// multiplexer control register 1
-#define SYS0_register 0x03						// system control register 0
-
-
 void config_ADS1248(int channel);
 void read_ADS1248(int channel);
 

@@ -26,8 +26,8 @@ extern volatile int cr_lsb;
 extern volatile int acr_msb;
 extern volatile int acr_lsb;
 extern volatile unsigned int RG_Protection;
-extern volatile unsigned char EPSData[18];
-extern volatile int temp[2];
+extern volatile unsigned char EPSData[23];
+extern volatile long temp[3];
 
 
 void make_frame(void);
