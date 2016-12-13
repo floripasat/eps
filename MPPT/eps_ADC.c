@@ -1,5 +1,5 @@
 #include <msp430.h> 
-#include <eps_ADC.h>
+#include "eps_ADC.h"
 
 /*
  * main.c
