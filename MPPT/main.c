@@ -34,8 +34,8 @@ void main(void) {
 
 void config_MSP430(void)
 {
-	BCSCTL1 = 0x8D;                    // Set DCO
-	DCOCTL = 0x89;					  // Set DCO
+	BCSCTL1 = 	CALBC1_8MHZ;                    // Set DCO
+	DCOCTL = CALDCO_8MHZ;;					  // Set DCO
 
 	P6SEL = 0xff;
 
