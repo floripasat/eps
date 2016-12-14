@@ -294,7 +294,6 @@ void measurement_data_DS2775(void){
     aux=OWReadByte();
     tr_lsb=aux>>5;
 
-//    	while(1);
     reset= OneWireReset();              		// TEMPERATURE MEASUREMENT - MSB REGISTER
     OWWriteByte(0xCC);							// eeprom address (only one slave on bus, CC is used)
     OWWriteByte(0x69);							// read operation

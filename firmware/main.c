@@ -32,8 +32,8 @@ void config_MSP430(void)
 	P3DIR |= BIT6;
 
 	/*** clock configuration ***/
-	BCSCTL1 = CALBC1_8MHZ;                      // Set DCO
-	DCOCTL = CALDCO_8MHZ;					  	// Set DCO
+	BCSCTL1 = 0x8D;                      		// Set DCO
+	DCOCTL = 0x89;					  			// Set DCO
 	BCSCTL2 = DIVS_3;							// Set SMCLK = DCO/8 = 1MHz
 
 	/*** SPI configuration ***/
