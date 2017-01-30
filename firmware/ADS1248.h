@@ -19,12 +19,13 @@
 #define NOP_command 0xff				// no operation command, used to clock out data
 #define SYNC_command 0x04				// command to start ADC conversion
 
-/**** PINS ****/
+/**** PINS and Channels ****/
 
 #define chip_select_port P5OUT
 #define chip_select_pin BIT4
+#define negative_channel 0x01
 
 void config_ADS1248(int channel);
-void read_ADS1248(int channel);
+long read_ADS1248(int channel);
 
 #endif /* ADS1248_H_ */
