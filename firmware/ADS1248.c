@@ -14,7 +14,7 @@ void config_ADS1248(int channel)
 	UCB1TXBUF = RESET_command;                     		    // Send reset command to ensure device is properly powered on
 	__delay_cycles(4800);									// delay after reset of 0.6ms
 
-	chip_select_port &= ~BIT4;		// pull chip select low to start communication
+	chip_select_port &= ~chip_select_pin;		// pull chip select low to start communication
 
 	for(w=0;w < 21;w++)		// send all initialization commands/data
 	{
@@ -24,7 +24,7 @@ void config_ADS1248(int channel)
 
 	if(w == 21)
 	{
-		chip_select_port |= BIT4;							// pull chip select high after communication is done
+		chip_select_port |= chip_select_pin;							// pull chip select high after communication is done
 	}
 }
 void read_ADS1248(int channel)
@@ -32,7 +32,7 @@ void read_ADS1248(int channel)
 
 	/* configure positive input channel to read */
 
-	chip_select_port &= ~BIT4;						// pull chip select low to start communication
+	chip_select_port &= ~chip_select_pin;						// pull chip select low to start communication
 	UCB1TXBUF = SDATAC_command;			// send stop read data continuous mode command
 	for (i = 500; i; i--);				// Add time between transmissions to make sure slave can keep up
 	UCB1TXBUF = WREG_command;			// send write to register command
@@ -46,10 +46,10 @@ void read_ADS1248(int channel)
 
 	UCB1TXBUF = SYNC_command;			// send command to start conversion
 	__delay_cycles(7);					// delay of 7 tclk
-	chip_select_port |= BIT4;						// pull chip select high after communication is done
+	chip_select_port |= chip_select_pin;						// pull chip select high after communication is done
 
 	__delay_cycles(250000);				// dealy to wait the conversion
-	chip_select_port &= ~BIT4;						// pull chips select low to start communication
+	chip_select_port &= ~chip_select_pin;						// pull chips select low to start communication
 	__delay_cycles(7);					// delay of 7 tclk
 	UCB1TXBUF = RDATA_command;			// send command to read conversion result
 	for (i = 500; i; i--);              // Add time between transmissions to make sure slave can keep up
@@ -67,7 +67,7 @@ void read_ADS1248(int channel)
 	temp[2] = UCB1RXBUF;				// save output to variable
 
 	__delay_cycles(7);					// delay of 7 tclk
-	chip_select_port |= BIT4;						// pull chip select high after communcation is done
+	chip_select_port |= chip_select_pin;						// pull chip select high after communcation is done
 
 
 }
