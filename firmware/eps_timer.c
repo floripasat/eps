@@ -37,8 +37,7 @@ __interrupt void Timer_A (void)
 		wdt_reset_counter();
 		read_ADS1248(6);
 		wdt_reset_counter();
-		t = (temp[0] << 16) + (temp[1] << 8) + temp[2];
-		temperature = (t*0.00111342/8 - 1000)/3.85;
+		temperature = (read_ADS1248(6)*0.00111342/8 - 1000)/3.85;
 		duty_cycle = Pid_Control(42,temperature,parameters);
 		TBCCR3 = (1-duty_cycle)*PWM_PERIOD/2;
 		wdt_reset_counter();
