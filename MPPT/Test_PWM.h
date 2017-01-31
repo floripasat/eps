@@ -8,7 +8,7 @@
 #ifndef TEST_PWM_H_
 #define TEST_PWM_H_
 
-#define PWM_DUTY_CYCLE	0.25		// absolute pwm duty cycle
+#define PWM_DUTY_CYCLE	0.5		// absolute pwm duty cycle
 #define PWM_PERIOD	1000			// pwm period in us
 
 #endif /* TEST_PWM_H_ */

@@ -1,8 +1,8 @@
+#include <msp430.h>
 #include "eps_timer.h"
 #include "eps_onewire.h"
 #include "eps_i2c.h"
 #include "watchdog.h"
-#include <msp430.h>
 #include "ADS1248.h"
 #include "pid.h"
 #include <stdlib.h>
@@ -65,9 +65,9 @@ void make_frame(void)
 	EPSData[11] = acr_msb;
 	EPSData[12] = acr_lsb;
 	EPSData[13] =  RG_Protection;
-	EPSData[14] = temp[0];
-	EPSData[15] = temp[1];
-	EPSData[16] = temp[2];
+//	EPSData[14] = temp[0];
+//	EPSData[15] = temp[1];
+//	EPSData[16] = temp[2];
 	EPSData[17] = 0;
 	EPSData[18] = 0;
 	EPSData[19] = 0;
