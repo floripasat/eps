@@ -13,7 +13,7 @@ enum {
  * variable of this type for every PID device in the system. A pointer
  * to a variable of this type is then passed to the driver API functions.
  */
-typedef struct {
+struct Pid {
 	float LastProcessValue;
 	float SumError;
 	float ScalingFactor;
@@ -22,10 +22,10 @@ typedef struct {
 	long DFactor;
 	int MaxError;
 	long MaxSumError;
-} Pid;
+};
 
-void Pid_Init(Pid *pid, float PFactor, float IFactor, float DFactor,
+void Pid_Init(struct Pid pid, float PFactor, float IFactor, float DFactor,
 		int ScalingFactor);
-float Pid_Control(int SetPoint, float ProcessValue, Pid *pid);
+float Pid_Control(int SetPoint, float ProcessValue, struct Pid pid);
 
 #endif
