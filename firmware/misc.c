@@ -34,7 +34,7 @@ unsigned char hex_to_char(unsigned char byte){
 	return character;
 }
 
-void int_to_char(int data, unsigned char string[], int size){
+void int_to_char(int data, char string[], int size){
 	int i,j,n;
 	n=1;
 	sprintf(string, "%d", data);
