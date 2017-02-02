@@ -1,11 +1,12 @@
 #include <msp430.h> 
+#include <stdlib.h>
 #include "eps_onewire.h"
 #include "eps_i2c.h"
 #include "eps_timer.h"
 #include "eps_uart.h"
 #include "ADS1248.h"
 #include "pid.h"
-#include <stdlib.h>
+
 
 
 void config_MSP430(void);
@@ -32,9 +33,9 @@ void config_MSP430(void)
 	P3DIR |= BIT6;
 
 	/*** clock configuration ***/
-	BCSCTL1 = CALBC1_8MHZ;                      // Set DCO
-	DCOCTL = CALDCO_8MHZ;					  	// Set DCO
-	BCSCTL2 = DIVS_3;
+	BCSCTL1 = 0x8D;                      		// Set DCO
+	DCOCTL = 0x89;					  			// Set DCO
+	BCSCTL2 = DIVS_3;							// Set SMCLK = DCO/8 = 1MHz
 
 	/*** SPI configuration ***/
 	UCB1CTL0 |=  UCMSB + UCMST + UCSYNC;  				// 3-pin, 8-bit SPI master
