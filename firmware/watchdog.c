@@ -7,6 +7,7 @@
 
 #include "watchdog.h"
 
+/*
 void watchdog_setup(char mode, char time2trigger) {
 	WDTCTL = WDTPW + mode + time2trigger;
 	if (mode == INTERVAL)
@@ -41,3 +42,4 @@ __interrupt void watchdog_timer(void){
 //
 //	}
 }
+*/

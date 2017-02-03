@@ -28,16 +28,33 @@ void config_MSP430(void)
 {
 	WDTCTL = WDTPW + WDTHOLD;
 
+	UCSCTL4 |= SELA_2;	// SELA_2: ACLK source is REFOCLK (32768Hz)
+
+	__bis_SR_register(GIE);       // enable interrupts
+
+
+
+
+	/* Timer A0 configuration
+	 * Interrupt period: 1s
+	 */
+	P1DIR |= 0x01;                            // P1.0 output
+	TA0CCTL0 = CCIE;                          // CCR0 interrupt enabled
+	TA0CCR0 = 32768;
+	TA0CTL = TASSEL_1 + MC_1 + TACLR;         // SMCLK, upmode, clear TAR
+	while(1);
+/*
+
 	P1DIR |= BIT6;
 	P1OUT ^= BIT6;
 	P3DIR |= BIT6;
 
-	/*** clock configuration ***/
+	*** clock configuration ***
 	BCSCTL1 = 0x8D;                      		// Set DCO
 	DCOCTL = 0x89;					  			// Set DCO
 	BCSCTL2 = DIVS_3;							// Set SMCLK = DCO/8 = 1MHz
 
-	/*** SPI configuration ***/
+	*** SPI configuration ***
 	UCB1CTL0 |=  UCMSB + UCMST + UCSYNC;  				// 3-pin, 8-bit SPI master
 	UCB1CTL1 |= UCSSEL_2;                     			// SMCLK
 	UCB1BR0 |= 0x02;                          			// BRCLK = SMCLK/2
@@ -46,7 +63,7 @@ void config_MSP430(void)
 	P5OUT &= ~BIT0;                           			// reset slave - RST - active low
 	P5OUT |= BIT0;                            			// Now with SPI signals initialized,
 
-	/*** I2C Configuration ***/
+	*** I2C Configuration ***
 	P3SEL |= 0x06;                            // Assign I2C pins to USCI_B0
 	UCB0CTL1 |= UCSWRST;                      // Enable SW reset
 	UCB0CTL0 = UCMODE_3 + UCSYNC;             // I2C Slave, synchronous mode
@@ -54,7 +71,7 @@ void config_MSP430(void)
 	UCB0CTL1 &= ~UCSWRST;                     // Clear SW reset, resume operation
 	IE2 |= UCB0TXIE;                          // Enable TX interrupt
 
-	/*** UART Configuration ***/
+	*** UART Configuration ***
 
 	P3SEL |= 0x30;                             // P3.4,5 = USCI_A0 TXD/RXD
 	UCA0CTL1 |= UCSSEL_2;                     // SMCLK
@@ -63,17 +80,20 @@ void config_MSP430(void)
 	UCA0MCTL |= UCBRS0;                        // Modulation UCBRSx = 1
 	UCA0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
 
-	/*** timer configuration ***/
+	*** timer configuration ***
 	CCTL0 = CCIE;                             // CCR0 interrupt enabled
 	CCR0 =50000;							    // timer A capture and compare register
 	TACTL = TASSEL_2 + MC_3;                   // SMCLK, contmode
 
-	/*** ADS1248 configuration ***/
+
+	*** ADS1248 configuration ***
 	P5DIR |= BIT0 + BIT4;
 	P5OUT = BIT0;                             // Set slave reset - P3.
 	P5SEL |= 0x0E;                            // P5.1,2,3 USCI_B1 option select
 	P4DIR |= BIT6;
 	P4OUT |= BIT6;
+
+	*/
 
 }
 

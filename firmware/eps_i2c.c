@@ -18,7 +18,7 @@ unsigned int time=1;
 // I2C master. PTxData points to the next byte to be transmitted, and TXByteCtr
 // keeps track of the number of bytes transmitted.
 //------------------------------------------------------------------------------
-
+/*
 #pragma vector = USCIAB0TX_VECTOR
 __interrupt void USCIAB0TX_ISR(void) {
 	P3OUT |= BIT6;
@@ -51,7 +51,7 @@ __interrupt void USCIAB0TX_ISR(void) {
 	}
 }
 
-/*
+
 //------------------------------------------------------------------------------
 // The USCI_B0 state ISR is used to wake up the CPU from LPM0 in order to do
 // processing in the main program after data has been transmitted. LPM0 is

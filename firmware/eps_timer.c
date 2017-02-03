@@ -18,6 +18,17 @@ struct Pid parameters = {0, 0, 1, 250, 20, 0 , INT_MAX, 150};
 
 /********** INTERRUPTS **********/
 
+
+
+// Timer0 A0 interrupt service routine
+
+#pragma vector=TIMER0_A0_VECTOR
+__interrupt void TIMER0_A0_ISR(void)
+{
+  P1OUT ^= 0x01;                            // Toggle P1.0
+}
+
+/*
 #pragma vector=TIMERA0_VECTOR
 __interrupt void Timer_A (void)
 {
@@ -41,7 +52,7 @@ __interrupt void Timer_A (void)
 		wdt_reset_counter();
 	}
 }
-
+*/
 void make_frame(void)
 {
 	EPSData[0] = '{';
