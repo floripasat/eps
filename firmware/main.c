@@ -9,14 +9,14 @@
 
 
 
-void config_MSP430(void);
+void vconfig_msp430(void);
 
 
-void main(void)
-{
+void main(void){
+
 	WDTCTL = WDTPW + WDTHOLD;
 
-	config_MSP430();
+	vconfig_msp430();
 	config_ADS1248(6);
 	config_DS2775();
 	__bis_SR_register(GIE);
@@ -24,25 +24,37 @@ void main(void)
 }
 
 
-void config_MSP430(void)
-{
-	WDTCTL = WDTPW + WDTHOLD;
+/**********************************
+ * Function name: config_msp430
+ *
+ * Arguments: void
+ *
+ * Returns: void
+ *
+ */
+
+
+void vconfig_msp430(void){
 
 	UCSCTL4 |= SELA_2;	// SELA_2: ACLK source is REFOCLK (32768Hz)
-
-	__bis_SR_register(GIE);       // enable interrupts
-
-
-
 
 	/* Timer A0 configuration
 	 * Interrupt period: 1s
 	 */
-	P1DIR |= 0x01;                            // P1.0 output
-	TA0CCTL0 = CCIE;                          // CCR0 interrupt enabled
-	TA0CCR0 = 32768;
-	TA0CTL = TASSEL_1 + MC_1 + TACLR;         // SMCLK, upmode, clear TAR
-	while(1);
+
+	P1DIR |= 0x01;                          // P1.0 output
+	TA0CCR0 = 32768;						// timer A0 CCR0 interrupt period = 32768 * 1/32768 = 1s
+	TA0CCTL0 = CCIE;                        // timer A0 CCR0 interrupt enabled
+	TA0CTL = TASSEL_1 + MC_1 + TACLR;       // SMCLK, upmode, timer A interrupt enable, clear TAR
+
+	/* Timer A0 configuration
+	 * Interrupt period: 100.006ms
+	 */
+
+	P3DIR |= 0x01;							// P3.0 output
+	TA1CCR0 = 3277;							// timer A1 CCR0 interrupt period = 3277 * 1/32768 = 100.006ms
+	TA1CCTL0 = CCIE;						// timer A1 CCR0 interrupt enabled
+	TA1CTL = TASSEL_1 + MC_1 + TACLR;       // SMCLK, upmode, timer A interrupt enable, clear TAR
 /*
 
 	P1DIR |= BIT6;
@@ -80,11 +92,6 @@ void config_MSP430(void)
 	UCA0MCTL |= UCBRS0;                        // Modulation UCBRSx = 1
 	UCA0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
 
-	*** timer configuration ***
-	CCTL0 = CCIE;                             // CCR0 interrupt enabled
-	CCR0 =50000;							    // timer A capture and compare register
-	TACTL = TASSEL_2 + MC_3;                   // SMCLK, contmode
-
 
 	*** ADS1248 configuration ***
 	P5DIR |= BIT0 + BIT4;
@@ -94,6 +101,8 @@ void config_MSP430(void)
 	P4OUT |= BIT6;
 
 	*/
+
+	__bis_SR_register(GIE);       // enable interrupts
 
 }
 
