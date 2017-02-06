@@ -5,7 +5,7 @@
 
 /********** UART functions **********/
 
-void uart_tx(char *tx_data);
+void vUartTx(char *tx_data);
 
 
 #endif /* EPS_SERIAL_TEST_H_ */

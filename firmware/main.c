@@ -9,14 +9,15 @@
 
 
 
-void vconfig_msp430(void);
+void vConfigMsp430(void);
 
 
 void main(void){
 
 	WDTCTL = WDTPW + WDTHOLD;
 
-	vconfig_msp430();
+	vConfigMsp430();
+
 	config_ADS1248(6);
 	config_DS2775();
 	__bis_SR_register(GIE);
@@ -34,9 +35,30 @@ void main(void){
  */
 
 
-void vconfig_msp430(void){
+void vConfigMsp430(void){
 
-	UCSCTL4 |= SELA_2;	// SELA_2: ACLK source is REFOCLK (32768Hz)
+	/*Clock Configuration:
+	 * MCKL = default DCO = 1.045MHz
+	 * SMCKL = default DCO = 1.045MHz
+	 * ACKL = REFOCLK = 32.768kHz
+	 */
+	UCSCTL4 |= SELA_2 + SELS_3;	// SELA_2: ACLK source is REFOCLK (32768Hz), SELS_3: SMCL source is DCOCLK (1.045MHz)
+
+	/* UCA2 UART configuration:
+	 * baud rate: 9600
+	 * 	 */
+	P9SEL |= 0x0C;                            // Assign P9.2 to UCA2TXD and P9.3 to UCA2RXD
+
+	UCA2CTL1 |= UCSWRST;                      // **Put state machine in reset**
+	UCA2CTL1 |= UCSSEL_1;                     // CLK = SMCLK
+	UCA2BR0 = 0x03;                           // baud rate selection 32768/UCA2BRO=9600 => UCA0BRO = 3
+	UCA2BR1 = 0x00;
+	UCA2MCTL = UCBRS_3|UCBRF_0;               // Modulation UCBRSx=3, UCBRFx=0
+	UCA2CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
+
+	#ifdef _DEBUG
+		vUartTx("system booting\r\n");
+	#endif
 
 	/* Timer A0 configuration
 	 * Interrupt period: 1s
@@ -61,11 +83,6 @@ void vconfig_msp430(void){
 	P1OUT ^= BIT6;
 	P3DIR |= BIT6;
 
-	*** clock configuration ***
-	BCSCTL1 = 0x8D;                      		// Set DCO
-	DCOCTL = 0x89;					  			// Set DCO
-	BCSCTL2 = DIVS_3;							// Set SMCLK = DCO/8 = 1MHz
-
 	*** SPI configuration ***
 	UCB1CTL0 |=  UCMSB + UCMST + UCSYNC;  				// 3-pin, 8-bit SPI master
 	UCB1CTL1 |= UCSSEL_2;                     			// SMCLK
@@ -83,16 +100,6 @@ void vconfig_msp430(void){
 	UCB0CTL1 &= ~UCSWRST;                     // Clear SW reset, resume operation
 	IE2 |= UCB0TXIE;                          // Enable TX interrupt
 
-	*** UART Configuration ***
-
-	P3SEL |= 0x30;                             // P3.4,5 = USCI_A0 TXD/RXD
-	UCA0CTL1 |= UCSSEL_2;                     // SMCLK
-	UCA0BR0 = 65;                            // 1MHz 9600; (104)decimal = 0x068h
-	UCA0BR1 = 3;                              // 1MHz 9600
-	UCA0MCTL |= UCBRS0;                        // Modulation UCBRSx = 1
-	UCA0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
-
-
 	*** ADS1248 configuration ***
 	P5DIR |= BIT0 + BIT4;
 	P5OUT = BIT0;                             // Set slave reset - P3.
@@ -101,9 +108,11 @@ void vconfig_msp430(void){
 	P4OUT |= BIT6;
 
 	*/
-
 	__bis_SR_register(GIE);       // enable interrupts
 
+	#ifdef _DEBUG
+		vUartTx("system boot complete\r\n");
+	#endif
 }
 
 

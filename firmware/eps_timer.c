@@ -18,10 +18,6 @@ struct Pid parameters = {0, 0, 1, 250, 20, 0 , INT_MAX, 150};
 
 /********** INTERRUPTS **********/
 
-
-
-// Timer0 A0 interrupt service routine
-
 #pragma vector=TIMER0_A0_VECTOR
 __interrupt void vtimer0_a0_isr(void){
 

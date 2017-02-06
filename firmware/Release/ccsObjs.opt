@@ -1,0 +1,1 @@
+"./ADS1248.obj" "./eps_i2c.obj" "./eps_onewire.obj" "./eps_spi.obj" "./eps_timer.obj" "./eps_uart.obj" "./main.obj" "./misc.obj" "./pid.obj" "./watchdog.obj" "../lnk_msp430f6659.cmd" -l"libc.a" -l"libmath.a" 
