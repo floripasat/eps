@@ -10,6 +10,8 @@
 #ifndef EPS_TIMER_H_
 #define EPS_TIMER_H_
 
+#include <stdint.h>
+
 #define PWM_DUTY_CYCLE	0.5		// absolute pwm duty cycle
 #define PWM_PERIOD	10000			// pwm period in us
 
@@ -26,9 +28,8 @@ extern volatile int cr_lsb;
 extern volatile int acr_msb;
 extern volatile int acr_lsb;
 extern volatile unsigned int RG_Protection;
-extern volatile unsigned char EPSData[23];
+extern volatile uint8_t EPSData[23];
 extern volatile long temp[3];
-
 
 void make_frame(void);
 

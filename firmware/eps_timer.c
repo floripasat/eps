@@ -5,13 +5,25 @@
 #include "watchdog.h"
 #include "ADS1248.h"
 #include "pid.h"
+#include "eps_ADC.h"
+#include "eps_uart.h"
 #include <stdlib.h>
+#include <stdio.h>
 
-volatile unsigned int cont = 0;
 volatile float duty_cycle = 0;
 volatile long t = 0;
 volatile float temperature = 0;
-volatile extern char EPS_Data[23];
+volatile extern uint8_t EPS_data[23];
+
+volatile uint16_t adc0 = 0x00;
+volatile uint16_t adc1 = 0x00;
+volatile uint16_t adc2 = 0x00;
+volatile uint16_t adc3 = 0x00;
+volatile uint16_t adc4 = 0x00;
+volatile uint16_t adc5 = 0x00;
+volatile uint16_t adc6 = 0x00;
+volatile uint16_t adc7 = 0x00;
+volatile uint16_t msp_ts = 0x00;
 
 struct Pid parameters = {0, 0, 1, 250, 20, 0 , INT_MAX, 150};
 
@@ -19,15 +31,28 @@ struct Pid parameters = {0, 0, 1, 250, 20, 0 , INT_MAX, 150};
 /********** INTERRUPTS **********/
 
 #pragma vector=TIMER0_A0_VECTOR
-__interrupt void vtimer0_a0_isr(void){
+__interrupt void timer0_a0_isr(void){
 
+    #ifdef _DEBUG
     P1OUT ^= 0x01;		// Toggle P1.0
+	#endif
+
+    adc0 = read_adc(0);
+    EPS_data[3] = (uint8_t) (adc0 >> 8);
+    EPS_data[4] = (uint8_t) (adc0 & 0xff);
+
+
+
+
 }
 
 #pragma vector=TIMER1_A0_VECTOR
-__interrupt void vtimer1_a0_isr(void){
+__interrupt void timer1_a0_isr(void){
 
+	#ifdef _DEBUG
 	P3OUT ^= 0x01;		// Toggle P3.0
+	#endif
+
 }
 
 

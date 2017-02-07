@@ -8,6 +8,8 @@
 #ifndef EPS_I2C_H_
 #define EPS_I2C_H_
 
+#include <stdint.h>
+
 
 
 #endif /* EPS_I2C_H_ */
