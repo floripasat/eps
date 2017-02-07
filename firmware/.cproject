@@ -199,6 +199,15 @@
 		</project-mappings>
 	</storageModule>
 	<storageModule moduleId="scannerConfiguration"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/fsat_eps"/>
+		</configuration>
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/fsat_eps"/>
+		</configuration>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="null.endianPreference"/>
 	<storageModule moduleId="cpuFamily"/>
 </cproject>

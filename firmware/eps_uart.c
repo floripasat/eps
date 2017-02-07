@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <intrinsics.h>
 
-void vUartTx(char *tx_data)               // Define a function which accepts a character pointer to an array
+void uart_tx(uint8_t *tx_data)            // Define a function which accepts a character pointer to an array
 {
-	unsigned int i = 0;				  	  // used to determine when array is finished
+	uint8_t i = 0;				  	      // used to determine when array is finished
 	while(tx_data[i])                     // Increment through array, look for null pointer (0) at end of string
 	{
 		while ((UCA2STAT & UCBUSY));      // Wait if line TX/RX module is busy with data

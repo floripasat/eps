@@ -9,14 +9,14 @@
 
 
 
-void vConfigMsp430(void);
+void config_msp430(void);
 
 
 void main(void){
 
 	WDTCTL = WDTPW + WDTHOLD;
 
-	vConfigMsp430();
+	config_msp430();
 
 	config_ADS1248(6);
 	config_DS2775();
@@ -35,7 +35,7 @@ void main(void){
  */
 
 
-void vConfigMsp430(void){
+void config_msp430(void){
 
 	/*Clock Configuration:
 	 * MCKL = default DCO = 1.045MHz
@@ -57,7 +57,7 @@ void vConfigMsp430(void){
 	UCA2CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
 
 	#ifdef _DEBUG
-		vUartTx("system booting\r\n");
+		uart_tx("system booting\r\n");
 	#endif
 
 	/* Timer A0 configuration
@@ -111,7 +111,7 @@ void vConfigMsp430(void){
 	__bis_SR_register(GIE);       // enable interrupts
 
 	#ifdef _DEBUG
-		vUartTx("system boot complete\r\n");
+		uart_tx("system boot complete\r\n");
 	#endif
 }
 
