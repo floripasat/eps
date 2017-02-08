@@ -23,6 +23,9 @@ volatile uint16_t adc4 = 0x00;
 volatile uint16_t adc5 = 0x00;
 volatile uint16_t adc6 = 0x00;
 volatile uint16_t adc7 = 0x00;
+volatile uint16_t adc12 = 0x00;
+volatile uint16_t adc13 = 0x00;
+volatile uint16_t adc14 = 0x00;
 volatile uint16_t msp_ts = 0x00;
 
 struct Pid parameters = {0, 0, 1, 250, 20, 0 , INT_MAX, 150};
@@ -34,15 +37,8 @@ struct Pid parameters = {0, 0, 1, 250, 20, 0 , INT_MAX, 150};
 __interrupt void timer0_a0_isr(void){
 
     #ifdef _DEBUG
-    P1OUT ^= 0x01;		// Toggle P1.0
+//    P1OUT ^= 0x01;		// Toggle P1.0
 	#endif
-
-    adc0 = read_adc(0);
-    EPS_data[3] = (uint8_t) (adc0 >> 8);
-    EPS_data[4] = (uint8_t) (adc0 & 0xff);
-
-
-
 
 }
 
@@ -53,6 +49,45 @@ __interrupt void timer1_a0_isr(void){
 	P3OUT ^= 0x01;		// Toggle P3.0
 	#endif
 
+    adc0 = read_adc(0);
+    EPS_data[3] = (uint8_t) (adc0 >> 8);
+    EPS_data[4] = (uint8_t) (adc0 & 0xff);
+
+    adc1 = read_adc(1);
+    EPS_data[5] = (uint8_t) (adc1 >> 8);
+    EPS_data[6] = (uint8_t) (adc1 & 0xff);
+
+    adc2 = read_adc(2);
+    EPS_data[7] = (uint8_t) (adc2 >> 8);
+    EPS_data[8] = (uint8_t) (adc2 & 0xff);
+
+    adc3 = read_adc(3);
+    EPS_data[9] = (uint8_t) (adc3 >> 8);
+    EPS_data[10] = (uint8_t) (adc3 & 0xff);
+
+    adc4 = read_adc(4);
+    EPS_data[11] = (uint8_t) (adc4 >> 8);
+    EPS_data[12] = (uint8_t) (adc4 & 0xff);
+
+    adc5 = read_adc(5);
+    EPS_data[13] = (uint8_t) (adc5 >> 8);
+    EPS_data[14] = (uint8_t) (adc5 & 0xff);
+
+    adc6 = read_adc(6);
+    EPS_data[15] = (uint8_t) (adc6 >> 8);
+    EPS_data[16] = (uint8_t) (adc6 & 0xff);
+
+    adc12 = read_adc(12);
+    EPS_data[17] = (uint8_t) (adc12 >> 8);
+    EPS_data[18] = (uint8_t) (adc12 & 0xff);
+
+    adc13 = read_adc(13);
+    EPS_data[19] = (uint8_t) (adc13 >> 8);
+    EPS_data[20] = (uint8_t) (adc13 & 0xff);
+
+    adc14 = read_adc(14);
+    EPS_data[21] = (uint8_t) (adc14 >> 8);
+    EPS_data[22] = (uint8_t) (adc14 & 0xff);
 }
 
 
