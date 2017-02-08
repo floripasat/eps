@@ -82,18 +82,26 @@ void config_msp430(void){
 	 *
 	 */
 
-	P6SEL = 0xff;                             		// Enable A/D channel inputs
-	ADC12CTL0 = ADC12ON + ADC12MSC + ADC12SHT0_15; 	// Turn on ADC12, extend sampling time to avoid overflow of results
-	ADC12CTL1 = ADC12SHP + ADC12CONSEQ_1;       	// Use sampling timer, sequence of channels
-	ADC12MCTL0 = ADC12SREF1 + ADC12INCH_0;                 		// ref+=AVcc, channel = A0
-	ADC12MCTL1 = ADC12INCH_1;                 		// ref+=AVcc, channel = A1
-	ADC12MCTL2 = ADC12INCH_2;                 		// ref+=AVcc, channel = A2
-	ADC12MCTL3 = ADC12INCH_3;        		  		// ref+=AVcc, channel = A3
-	ADC12MCTL4 = ADC12INCH_4;        		  		// ref+=AVcc, channel = A4
-	ADC12MCTL5 = ADC12INCH_5;        		  		// ref+=AVcc, channel = A5
-	ADC12MCTL6 = ADC12INCH_6;        		  		// ref+=AVcc, channel = A6
-	ADC12MCTL7 = ADC12INCH_7 + ADC12EOS;      		// ref+=AVcc, channel = A7
-	ADC12CTL0 |= ADC12ENC;                    		// Enable conversions
+	P6SEL = 0xff;                             			// Enable A/D channel inputs
+	ADC12CTL0 = ADC12ON + ADC12MSC + ADC12SHT0_15; 		// Turn on ADC12, extend sampling time to avoid overflow of results
+	ADC12CTL1 = ADC12SHP + ADC12CONSEQ_1;       		// Use sampling timer, sequence of channels
+	ADC12MCTL0 = ADC12INCH_0;              				// ref+=AVcc, channel = A0
+	ADC12MCTL1 = ADC12INCH_1;              				// ref+=AVcc, channel = A1
+	ADC12MCTL2 = ADC12INCH_2;              				// ref+=AVcc, channel = A2
+	ADC12MCTL3 = ADC12INCH_3;        					// ref+=AVcc, channel = A3
+	ADC12MCTL4 = ADC12INCH_4;        					// ref+=AVcc, channel = A4
+	ADC12MCTL5 = ADC12INCH_5;        					// ref+=AVcc, channel = A5
+	ADC12MCTL6 = ADC12INCH_6;        					// ref+=AVcc, channel = A6
+	ADC12MCTL7 = ADC12INCH_7;        					// ref+=AVcc, channel = A7
+	ADC12MCTL8 = ADC12INCH_8;        					// ref+=AVcc, channel = A8
+	ADC12MCTL9 = ADC12INCH_9;        					// ref+=AVcc, channel = A9
+	ADC12MCTL10 = ADC12INCH_10;        					// ref+=AVcc, channel = A10
+	ADC12MCTL11 = ADC12INCH_11;        					// ref+=AVcc, channel = A11
+	ADC12MCTL12 = ADC12INCH_12;        					// ref+=AVcc, channel = A12
+	ADC12MCTL13 = ADC12INCH_13;        					// ref+=AVcc, channel = A13
+	ADC12MCTL14 = ADC12INCH_14;        					// ref+=AVcc, channel = A14
+	ADC12MCTL15 = ADC12INCH_15 + ADC12EOS;   			// ref+=AVcc, channel = A15
+	ADC12CTL0 |= ADC12ENC;                    			// Enable conversions
 
 
 /*
