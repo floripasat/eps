@@ -14,12 +14,12 @@ void config_msp430(void);
 
 void main(void){
 
-	WDTCTL = WDTPW + WDTHOLD;
+ 	WDTCTL = WDTPW + WDTHOLD;
 
 	config_msp430();
-
 	config_ADS1248(6);
 	config_DS2775();
+
 	__bis_SR_register(GIE);
 	while(1);
 }

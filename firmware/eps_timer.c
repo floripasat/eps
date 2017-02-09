@@ -14,7 +14,7 @@
 volatile float duty_cycle = 0;
 volatile long t = 0;
 volatile float temperature = 0;
-volatile extern uint8_t EPS_data[23];
+volatile extern uint8_t EPS_data[69];
 
 volatile uint16_t adc0 = 0;
 volatile uint16_t adc1 = 0;
@@ -27,6 +27,7 @@ volatile uint16_t adc7 = 0;
 volatile uint16_t adc12 = 0;
 volatile uint16_t adc13 = 0;
 volatile uint16_t adc14 = 0;
+volatile uint16_t adc15 = 0;
 volatile uint16_t msp_ts = 0;
 
 volatile uint16_t negative_y_panel_current_mean = 10;				// take mean of adc0
@@ -51,6 +52,18 @@ __interrupt void timer0_a0_isr(void){
 	timer_debug_port_1s ^= timer_debug_pin_1s;		// Toggle 1s debug piun
 	#endif
 
+	adc15 = read_adc(vpanels_voltage);				// Vpanels voltage measurement
+    EPS_data[23] = (uint8_t) (adc15 >> 8);			// shift data 8 bits to get MSB
+    EPS_data[24] = (uint8_t) (adc15 & 0xff);		// bitwise and with 0xff to get LSB
+
+    adc7 = read_adc(bus_voltage);				// bus voltage measurement
+    EPS_data[25] = (uint8_t) (adc7 >> 8);		// shift data 8 bits to get MSB
+    EPS_data[26] = (uint8_t) (adc7 & 0xff);		// bitwise and with 0xff to get LSB
+
+	adc6 = read_adc(beacon_eps_current);		// beacon/eps current measurement
+    EPS_data[27] = (uint8_t) (adc6 >> 8);		// shift data 8 bits to get MSB
+    EPS_data[28] = (uint8_t) (adc6 & 0xff);		// bitwise and with 0xff to get LSB
+
 }
 
 #pragma vector=TIMER1_A0_VECTOR
@@ -61,6 +74,19 @@ __interrupt void timer1_a0_isr(void){
 	#endif
 
 	static volatile uint8_t mean_counter = 0;
+
+	if(mean_counter == 0){
+
+    	negative_y_panel_current_mean = 0;					// reset adc0
+    	positive_x_panel_current_mean = 0;					// reset adc1
+    	negative_x_panel_current_mean = 0;					// reset adc2
+    	positive_z_panel_current_mean = 0;					// reset adc3
+    	negative_z_panel_current_mean = 0;					// reset adc4
+    	positive_y_panel_current_mean = 0;					// reset adc5
+    	negative_y_positive_x_panel_voltage_mean = 0;		// reset adc12
+    	negative_x_positive_z_panel_voltage_mean = 0;		// reset adc13
+    	negative_z_positive_y_panel_voltage_mean = 0;		// reset adc14
+	}
 
     adc0 = read_adc(negative_y_panel_current);		// -Y panel current measurement
     EPS_data[3] = (uint8_t) (adc0 >> 8);			// shift data 8 bits to get MSB
@@ -108,7 +134,8 @@ __interrupt void timer1_a0_isr(void){
     negative_z_positive_y_panel_voltage_mean += adc14;			// add measurement value to mean calculation
 
     if(mean_counter == 9){
-    	mean_counter == 0;		// reset mean counter
+
+    	mean_counter = 0;		// reset mean counter
 
     	negative_y_panel_current_mean /= 10;				// take mean of adc0
     	positive_x_panel_current_mean /= 10;				// take mean of adc1
@@ -124,7 +151,6 @@ __interrupt void timer1_a0_isr(void){
     else{
     	mean_counter++;
     }
-
 }
 
 
