@@ -104,6 +104,7 @@ void config_msp430(void){
 	ADC12CTL0 |= ADC12ENC;                    			// Enable conversions
 
 
+
 /*
 
 	P1DIR |= BIT6;
