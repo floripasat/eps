@@ -82,9 +82,10 @@ void config_msp430(void){
 	 *
 	 */
 
-	P6SEL = 0xff;                             			// Enable A/D channel inputs
-	ADC12CTL0 = ADC12ON + ADC12MSC + ADC12SHT0_15; 		// Turn on ADC12, extend sampling time to avoid overflow of results
-	ADC12CTL1 = ADC12SHP + ADC12CONSEQ_1;       		// Use sampling timer, sequence of channels
+	P6SEL |= 0xff;                             			// select port 6 function as ADC
+	P7SEL |= BIT4 + BIT5 + BIT6 + BIT7;					// select p7.4,p7.5,p7.6 and p7.7 function as ADC
+	ADC12CTL0 = ADC12ON + ADC12MSC + ADC12SHT0_15; 		// turn on ADC12, enable multiple sample and conversion, extend sampling time to avoid overflow of results
+	ADC12CTL1 = ADC12SHP + ADC12CONSEQ_1;       		// use sampling timer, sequence of channels
 	ADC12MCTL0 = ADC12INCH_0;              				// ref+=AVcc, channel = A0
 	ADC12MCTL1 = ADC12INCH_1;              				// ref+=AVcc, channel = A1
 	ADC12MCTL2 = ADC12INCH_2;              				// ref+=AVcc, channel = A2
@@ -102,8 +103,6 @@ void config_msp430(void){
 	ADC12MCTL14 = ADC12INCH_14;        					// ref+=AVcc, channel = A14
 	ADC12MCTL15 = ADC12INCH_15 + ADC12EOS;   			// ref+=AVcc, channel = A15
 	ADC12CTL0 |= ADC12ENC;                    			// Enable conversions
-
-
 
 /*
 
