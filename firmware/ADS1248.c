@@ -1,6 +1,7 @@
 #include <msp430.h>
 #include "ADS1248.h"
 #include "eps_spi.h"
+#include <stdint.h>
 
 /*
  * ADS1248 initialization procedure: - send RESET command
@@ -20,7 +21,11 @@
 
 void config_ADS1248(int positive_channel)
 {
-	volatile unsigned int w=0;
+	#ifdef _DEBUG
+		volatile uint8_t initialization_data_sent_back_counter = 0;
+		volatile uint8_t initialization_data_sent_back[6] = {0};
+	#endif
+	volatile unsigned int initialization_data_counter = 0;
 	volatile unsigned int i=0;
 	const int initialization_data[] = {SDATAC_command,WREG_command,0x03,(positive_channel << 3 | negative_channel),0x00,0x20,0x33,WREG_command + 0x0A,0x01,0x02,0x60,
 			RREG_command,0x03,NOP_command,NOP_command,NOP_command,NOP_command,RREG_command + 0x0A,0x01,NOP_command,NOP_command};
@@ -30,13 +35,43 @@ void config_ADS1248(int positive_channel)
 
 	chip_select_port &= ~chip_select_pin;					// pull chip select low to start communication
 
-	for(w=0;w < 21;w++)										// send all initialization commands/data
+	for(initialization_data_counter=0;initialization_data_counter < 21;initialization_data_counter++)										// send all initialization commands/data
 	{
-		spi_send(initialization_data[w]);
-		for (i = 500; i; i--);                  // Add time between transmissions to make sure slave can keep up
+		spi_send(initialization_data[initialization_data_counter]);
+		for(i = 500; i; i--);                  // Add time between transmissions to make sure slave can keep up
+	#ifdef _DEBUG
+		switch(initialization_data_counter){
+		case 13:
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1TXBUF;
+			initialization_data_sent_back_counter++;
+			break;
+		case 14:
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1TXBUF;
+			initialization_data_sent_back_counter++;
+			break;
+		case 15:
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1TXBUF;
+			initialization_data_sent_back_counter++;
+			break;
+		case 16:
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1TXBUF;
+			initialization_data_sent_back_counter++;
+			break;
+		case 19:
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1TXBUF;
+			initialization_data_sent_back_counter++;
+			break;
+		case 20:
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1TXBUF;
+			initialization_data_sent_back_counter++;
+			break;
+		default:
+			break;
+		}
+	#endif
 	}
 
-	if(w == 21)
+	if(initialization_data_counter == 21)
 	{
 		chip_select_port |= chip_select_pin;							// pull chip select high after communication is done
 	}
