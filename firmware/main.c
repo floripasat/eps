@@ -8,6 +8,7 @@
 #include "timer.h"
 #include "uart.h"
 #include "SPI.h"
+#include "clock.h"
 
 
 
@@ -39,14 +40,18 @@ void main(void){
 
 void config_msp430(void){
 
-	/*Clock Configuration:
-	 * MCKL = default DCO = 1.045MHz
-	 * SMCKL = default DCO = 1.045MHz
-	 * ACKL = REFOCLK = 32.768kHz
-	 */
-	UCSCTL4 |= SELA_2 + SELS_3;	// SELA_2: ACLK source is REFOCLK (32768Hz), SELS_3: SMCL source is DCOCLK (1.045MHz)
+//	UCSCTL4 |= SELA_2 + SELS_3;	// SELA_2: ACLK source is REFOCLK (32768Hz), SELS_3: SMCL source is DCOCLK (1.045MHz)
+
+	clock_config();
 
 	uart_config();
+
+    P9DIR |= BIT2;                 // P5.3 set as led system output
+
+    while(1) {
+        P9OUT ^= BIT2;                          // Toggle LED_SYSTEM
+        __delay_cycles(16);
+    }
 
 	#ifdef _DEBUG
 		uart_tx("system booting\r\n");
@@ -59,18 +64,6 @@ void config_msp430(void){
 	spi_config();		// call SPI configuration function
 /*
 
-	P1DIR |= BIT6;
-	P1OUT ^= BIT6;
-	P3DIR |= BIT6;
-
-	*** SPI configuration ***
-	UCB1CTL0 |=  UCMSB + UCMST + UCSYNC;  				// 3-pin, 8-bit SPI master
-	UCB1CTL1 |= UCSSEL_2;                     			// SMCLK
-	UCB1BR0 |= 0x02;                          			// BRCLK = SMCLK/2
-	UCB1BR1 = 0;                              			//
-	UCB1CTL1 &= ~UCSWRST;                     			// **Initialize USCI state machine**
-	P5OUT &= ~BIT0;                           			// reset slave - RST - active low
-	P5OUT |= BIT0;                            			// Now with SPI signals initialized,
 
 	*** I2C Configuration ***
 	P3SEL |= 0x06;                            // Assign I2C pins to USCI_B0
