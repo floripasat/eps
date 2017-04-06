@@ -10,9 +10,9 @@
 
 #include <stdint.h>
 
-void config_adc(void);
+void adc_config(void);
 
-int16_t read_adc(uint8_t channel);
+int16_t adc_read(uint8_t channel);
 
 
 #endif /* ADC_H_ */

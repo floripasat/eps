@@ -7,13 +7,15 @@
  *      uses these guidines: http://umich.edu/~eecs381/handouts/CHeaderFileGuidelines.pdf
  */
 
-#ifndef EPS_TIMER_H_
-#define EPS_TIMER_H_
+#ifndef TIMER_H_
+#define TIMER_H_
 
 #include <stdint.h>
 
 #define PWM_DUTY_CYCLE	0.5		// absolute pwm duty cycle
 #define PWM_PERIOD	10000			// pwm period in us
+
+void timer_config();
 
 extern volatile int avc_msb;
 extern volatile int avc_lsb;
@@ -31,6 +33,4 @@ extern volatile unsigned int RG_Protection;
 extern volatile uint8_t EPSData[23];
 extern volatile long temp[3];
 
-void make_frame(void);
-
-#endif /* EPS_TIMER_H_ */
+#endif /* TIMER_H_ */

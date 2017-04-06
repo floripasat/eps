@@ -6,6 +6,8 @@
 
 /********** UART functions **********/
 
+void uart_config(void);
+
 void uart_tx(uint8_t *tx_data);
 
 

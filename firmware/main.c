@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include "eps_onewire.h"
 #include "eps_i2c.h"
-#include "eps_timer.h"
 #include "ADC.h"
 #include "ADS1248.h"
 #include "pid.h"
+#include "timer.h"
 #include "uart.h"
 
 
@@ -45,31 +45,15 @@ void config_msp430(void){
 	 */
 	UCSCTL4 |= SELA_2 + SELS_3;	// SELA_2: ACLK source is REFOCLK (32768Hz), SELS_3: SMCL source is DCOCLK (1.045MHz)
 
-	config_uart();
+	uart_config();
 
 	#ifdef _DEBUG
 		uart_tx("system booting\r\n");
 	#endif
 
-	/* Timer A0 configuration
-	 * Interrupt period: 1s
-	 */
+	timer_config();
 
-	P1DIR |= 0x01;                          // P1.0 output
-	TA0CCR0 = 32768;						// timer A0 CCR0 interrupt period = 32768 * 1/32768 = 1s
-	TA0CCTL0 = CCIE;                        // timer A0 CCR0 interrupt enabled
-	TA0CTL = TASSEL_1 + MC_1 + TACLR;       // SMCLK, upmode, timer A interrupt enable, clear TAR
-
-	/* Timer A1 configuration
-	 * Interrupt period: 100.006ms
-	 */
-
-	P3DIR |= 0x01;							// P3.0 output
-	TA1CCR0 = 3277;							// timer A1 CCR0 interrupt period = 3277 * 1/32768 = 100.006ms
-	TA1CCTL0 = CCIE;						// timer A1 CCR0 interrupt enabled
-	TA1CTL = TASSEL_1 + MC_1 + TACLR;       // SMCLK, upmode, timer A interrupt enable, clear TAR
-
-	config_adc();		// call MSP ADC configuration function
+	adc_config();		// call MSP ADC configuration function
 /*
 
 	P1DIR |= BIT6;
