@@ -5,11 +5,11 @@
  *      Author: Bruno Eiterer
  */
 
-#ifndef EPS_SPI_H_
-#define EPS_SPI_H_
+#ifndef SPI_H_
+#define SPI_H_
 
 void spi_send(int data);
 int spi_read(void);
 
 
-#endif /* EPS_SPI_H_ */
+#endif /* SPI_H_ */

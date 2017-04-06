@@ -1,7 +1,7 @@
 #include <msp430.h>
 #include "ADS1248.h"
-#include "eps_spi.h"
 #include <stdint.h>
+#include "SPI.h"
 
 /*
  * ADS1248 initialization procedure: - send RESET command

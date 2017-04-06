@@ -6,6 +6,7 @@
  */
 
 #include <msp430.h>
+#include "SPI.h"
 
 void spi_send(int data)
 {
