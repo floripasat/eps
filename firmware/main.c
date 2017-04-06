@@ -3,10 +3,10 @@
 #include "eps_onewire.h"
 #include "eps_i2c.h"
 #include "eps_timer.h"
-#include "eps_uart.h"
 #include "ADC.h"
 #include "ADS1248.h"
 #include "pid.h"
+#include "uart.h"
 
 
 
@@ -45,17 +45,7 @@ void config_msp430(void){
 	 */
 	UCSCTL4 |= SELA_2 + SELS_3;	// SELA_2: ACLK source is REFOCLK (32768Hz), SELS_3: SMCL source is DCOCLK (1.045MHz)
 
-	/* UCA2 UART configuration:
-	 * baud rate: 9600
-	 * 	 */
-	P9SEL |= 0x0C;                            // Assign P9.2 to UCA2TXD and P9.3 to UCA2RXD
-
-	UCA2CTL1 |= UCSWRST;                      // **Put state machine in reset**
-	UCA2CTL1 |= UCSSEL_1;                     // CLK = SMCLK
-	UCA2BR0 = 0x03;                           // baud rate selection 32768/UCA2BRO=9600 => UCA0BRO = 3
-	UCA2BR1 = 0x00;
-	UCA2MCTL = UCBRS_3|UCBRF_0;               // Modulation UCBRSx=3, UCBRFx=0
-	UCA2CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
+	config_uart();
 
 	#ifdef _DEBUG
 		uart_tx("system booting\r\n");

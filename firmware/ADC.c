@@ -5,7 +5,7 @@
  * main.c
  */
 
-void config_adc(void){
+void adc_config(void){
 
 	P6SEL |= 0xff;                             			// select port 6 function as ADC
 	P7SEL |= BIT4 + BIT5 + BIT6 + BIT7;					// select p7.4,p7.5,p7.6 and p7.7 function as ADC
@@ -31,7 +31,7 @@ void config_adc(void){
 
 }
 
-int16_t read_adc(uint8_t channel){
+int16_t adc_read(uint8_t channel){
 
 	ADC12CTL0 &= ~ADC12SC;
 	ADC12CTL0 |= ADC12SC;
