@@ -5,11 +5,11 @@
 #include "watchdog.h"
 #include "ADS1248.h"
 #include "pid.h"
-#include "eps_ADC.h"
 #include "eps_uart.h"
 #include "hal.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "ADC.h"
 
 volatile float duty_cycle = 0;
 volatile long t = 0;

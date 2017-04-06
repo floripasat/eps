@@ -5,12 +5,14 @@
  *      Author: Bruno Eiterer
  */
 
-#ifndef EPS_ADC_H_
-#define EPS_ADC_H_
+#ifndef ADC_H_
+#define ADC_H_
 
 #include <stdint.h>
+
+void config_adc(void);
 
 int16_t read_adc(uint8_t channel);
 
 
-#endif /* EPS_ADC_H_ */
+#endif /* ADC_H_ */
