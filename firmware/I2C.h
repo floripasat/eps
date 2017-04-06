@@ -5,11 +5,11 @@
  *      Author: Bruno Eiterer
  */
 
-#ifndef EPS_I2C_H_
-#define EPS_I2C_H_
+#ifndef I2C_H_
+#define I2C_H_
 
 #include <stdint.h>
 
 
 
-#endif /* EPS_I2C_H_ */
+#endif /* I2C_H_ */

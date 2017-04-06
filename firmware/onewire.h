@@ -5,8 +5,8 @@
  *      Author: Bruno Eiterer
  */
 
-#ifndef EPS_ONEWIRE_H_
-#define EPS_ONEWIRE_H_
+#ifndef ONEWIRE_H_
+#define ONEWIRE_H_
 
 void config_DS2775(void);
 

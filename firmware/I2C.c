@@ -1,5 +1,6 @@
+#include "I2C.h"
+
 #include <msp430.h>
-#include "eps_i2c.h"
 #include "misc.h"
 
 

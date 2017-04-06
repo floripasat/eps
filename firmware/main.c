@@ -1,9 +1,9 @@
 #include <msp430.h> 
 #include <stdlib.h>
-#include "eps_onewire.h"
-#include "eps_i2c.h"
 #include "ADC.h"
 #include "ADS1248.h"
+#include "I2C.h"
+#include "onewire.h"
 #include "pid.h"
 #include "timer.h"
 #include "uart.h"

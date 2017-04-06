@@ -1,6 +1,4 @@
 #include <msp430.h>
-#include "eps_onewire.h"
-#include "eps_i2c.h"
 #include "watchdog.h"
 #include "ADS1248.h"
 #include "pid.h"
@@ -9,6 +7,9 @@
 #include <stdio.h>
 #include "ADC.h"
 #include "timer.h"
+
+#include "I2C.h"
+#include "onewire.h"
 #include "uart.h"
 
 volatile float duty_cycle = 0;
