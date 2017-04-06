@@ -8,6 +8,7 @@
 #ifndef SPI_H_
 #define SPI_H_
 
+void spi_config(void);
 void spi_send(int data);
 int spi_read(void);
 

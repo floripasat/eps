@@ -21,6 +21,8 @@
 
 void config_ADS1248(int positive_channel)
 {
+	ADS1248_START_port |= ADS1248_START_pin;
+
 	#ifdef _DEBUG
 		volatile uint8_t initialization_data_sent_back_counter = 0;
 		volatile uint8_t initialization_data_sent_back[6] = {0};

@@ -7,6 +7,7 @@
 #include "pid.h"
 #include "timer.h"
 #include "uart.h"
+#include "SPI.h"
 
 
 
@@ -51,9 +52,11 @@ void config_msp430(void){
 		uart_tx("system booting\r\n");
 	#endif
 
-	timer_config();
+	timer_config();		// call timer configuration function
 
 	adc_config();		// call MSP ADC configuration function
+
+	spi_config();		// call SPI configuration function
 /*
 
 	P1DIR |= BIT6;
