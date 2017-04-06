@@ -42,27 +42,27 @@ void config_ADS1248(int positive_channel)
 	#ifdef _DEBUG
 		switch(initialization_data_counter){
 		case 13:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1TXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCB1RXBUF;
 			initialization_data_sent_back_counter++;
 			break;
 		case 14:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1TXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCB1RXBUF;
 			initialization_data_sent_back_counter++;
 			break;
 		case 15:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1TXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCB1RXBUF;
 			initialization_data_sent_back_counter++;
 			break;
 		case 16:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1TXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCB1RXBUF;
 			initialization_data_sent_back_counter++;
 			break;
 		case 19:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1TXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCB1RXBUF;
 			initialization_data_sent_back_counter++;
 			break;
 		case 20:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1TXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCB1RXBUF;
 			initialization_data_sent_back_counter++;
 			break;
 		default:

@@ -21,8 +21,8 @@
 
 /**** PINS and Channels ****/
 
-#define chip_select_port P5OUT
-#define chip_select_pin BIT4
+#define chip_select_port P8OUT
+#define chip_select_pin BIT5
 #define negative_channel 0x01
 
 void config_ADS1248(int channel);
