@@ -73,6 +73,12 @@ __interrupt void timer0_a0_isr(void){
     EPS_data[32] = DS2775_read_register(average_current_LSB_register);		// read battery average current LSB
 
 
+    EPS_data[33] = DS2775_read_register(temperature_MSB_register);		// read battery temperature MSB
+    EPS_data[34] = DS2775_read_register(temperature_LSB_register);		// read battery temperature LSB
+    EPS_data[34] = (EPS_data[34] >> 5) | ((EPS_data[33] << 3) & 0xf8);
+    EPS_data[33] = EPS_data[33] >> 5;
+
+
 
 }
 
