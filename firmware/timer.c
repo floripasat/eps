@@ -88,6 +88,9 @@ __interrupt void timer0_a0_isr(void){
     EPS_data[38] = (EPS_data[38] >> 5) | ((EPS_data[37] << 3) & 0xf8);
     EPS_data[37] = EPS_data[37] >> 5;
 
+    EPS_data[39] = DS2775_read_register(current_MSB_register);		// read battery current MSB
+    EPS_data[40] = DS2775_read_register(current_LSB_register);		// read battery current LSB
+
 }
 
 #pragma vector=TIMER1_A0_VECTOR
