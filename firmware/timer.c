@@ -1,13 +1,12 @@
 #include <msp430.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "watchdog.h"
 #include "ADS1248.h"
 #include "pid.h"
 #include "hal.h"
-#include <stdlib.h>
-#include <stdio.h>
 #include "ADC.h"
 #include "timer.h"
-
 #include "I2C.h"
 #include "onewire.h"
 #include "uart.h"

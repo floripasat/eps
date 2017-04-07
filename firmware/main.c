@@ -20,7 +20,7 @@ void main(void){
  	WDTCTL = WDTPW + WDTHOLD;
 
 	config_msp430();
-	config_ADS1248(6);
+	config_ADS1248(0);
 	config_DS2775();
 
 	__bis_SR_register(GIE);
@@ -45,13 +45,6 @@ void config_msp430(void){
 	clock_config();
 
 	uart_config();
-
-    P9DIR |= BIT2;                 // P5.3 set as led system output
-
-    while(1) {
-        P9OUT ^= BIT2;                          // Toggle LED_SYSTEM
-        __delay_cycles(16);
-    }
 
 	#ifdef _DEBUG
 		uart_tx("system booting\r\n");

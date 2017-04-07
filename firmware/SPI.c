@@ -9,6 +9,9 @@
 #include "SPI.h"
 
 void spi_config(void){
+    P8SEL |= BIT1 + BIT2 + BIT3;
+    P8DIR |= BIT1 + BIT2 + BIT4 + BIT5 + BIT6;
+
     UCA1CTL1 |= UCSWRST;
 	UCA1CTL0 |=  UCMSB + UCMST + UCSYNC;  				// 3-pin, 8-bit SPI master
 	UCA1CTL1 |= UCSSEL_2;                     			// SMCLK
@@ -19,11 +22,11 @@ void spi_config(void){
 }
 
 void spi_send(int data){
-	UCB1TXBUF = data;	// send data to spi buffer
+	UCA1TXBUF = data;	// send data to spi buffer
 }
 
 int spi_read(void){
-	return UCB1RXBUF;
+	return UCA1RXBUF;
 }
 
 

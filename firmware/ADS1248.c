@@ -22,6 +22,7 @@
 void config_ADS1248(int positive_channel)
 {
 	ADS1248_START_port |= ADS1248_START_pin;
+	chip_select_port &= ~chip_select_pin;					// pull chip select low to start communication
 
 	#ifdef _DEBUG
 		volatile uint8_t initialization_data_sent_back_counter = 0;
@@ -35,8 +36,6 @@ void config_ADS1248(int positive_channel)
 	spi_send(RESET_command);                     		    // Send reset command to ensure device is properly powered on
 	__delay_cycles(4800);									// delay after reset of 0.6ms
 
-	chip_select_port &= ~chip_select_pin;					// pull chip select low to start communication
-
 	for(initialization_data_counter=0;initialization_data_counter < 21;initialization_data_counter++)										// send all initialization commands/data
 	{
 		spi_send(initialization_data[initialization_data_counter]);
@@ -44,27 +43,27 @@ void config_ADS1248(int positive_channel)
 	#ifdef _DEBUG
 		switch(initialization_data_counter){
 		case 13:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCB1RXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1RXBUF;
 			initialization_data_sent_back_counter++;
 			break;
 		case 14:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCB1RXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1RXBUF;
 			initialization_data_sent_back_counter++;
 			break;
 		case 15:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCB1RXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1RXBUF;
 			initialization_data_sent_back_counter++;
 			break;
 		case 16:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCB1RXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1RXBUF;
 			initialization_data_sent_back_counter++;
 			break;
 		case 19:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCB1RXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1RXBUF;
 			initialization_data_sent_back_counter++;
 			break;
 		case 20:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCB1RXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1RXBUF;
 			initialization_data_sent_back_counter++;
 			break;
 		default:
