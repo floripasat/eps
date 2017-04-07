@@ -69,7 +69,10 @@ __interrupt void timer0_a0_isr(void){
     EPS_data[29] = (uint8_t) (adc10 >> 8);		// shift data 8 bits to get MSB
     EPS_data[30] = (uint8_t) (adc10 & 0xff);	// bitwise and with 0xff to get LSB
 
-    measurement_data_DS2775();
+    EPS_data[31] = DS2775_read_register(average_current_MSB_register);		// read battery average current MSB
+    EPS_data[32] = DS2775_read_register(average_current_LSB_register);		// read battery average current LSB
+
+
 
 }
 
