@@ -1,6 +1,5 @@
 #include <msp430.h>
 #include <stdio.h>
-#include <stdint.h>
 #include "onewire.h"
 #include "intrinsics.h"
 
@@ -195,9 +194,9 @@ void OWWriteByte(int data)
  *  - output data: int data
  ***********************************************************************/
 
-int OWReadByte(void)
+uint8_t OWReadByte(void)
 {
-	int loop, result = 0;
+	uint8_t loop, result = 0;
 	for (loop = 0; loop < 8; loop++)
 	{
 
@@ -440,7 +439,8 @@ uint8_t DS2775_read_register(uint8_t register_address){
 	reset= OneWireReset();					// reset one wire to start communication
     OWWriteByte(0xCC);						// eeprom address (only one slave on bus, CC is used)
     OWWriteByte(0x69);						// read operation
-    return OWWriteByte(register_address);	// return value read from register
+    OWWriteByte(register_address);			//
+    return OWReadByte();	// return value read from register
 
 }
 

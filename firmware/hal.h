@@ -36,6 +36,8 @@
 
 #define vpanels_voltage 15
 
+#define msp_temperature 10
+
 
 
 #endif /* HAL_H_ */

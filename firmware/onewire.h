@@ -8,6 +8,8 @@
 #ifndef ONEWIRE_H_
 #define ONEWIRE_H_
 
+#include <stdint.h>
+
 void config_DS2775(void);
 
 void measurement_data_DS2775(void);
@@ -18,7 +20,7 @@ int OneWireReset(void);
 void OneWireWrite(int bit);
 int OneWireReadBit(void);
 void OWWriteByte(int data);
-int OWReadByte(void);
+uint8_t OWReadByte(void);
 
 #endif /* EPS_ONEWIRE_TEST_H_ */
 

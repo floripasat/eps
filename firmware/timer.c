@@ -24,6 +24,7 @@ volatile uint16_t adc4 = 0;
 volatile uint16_t adc5 = 0;
 volatile uint16_t adc6 = 0;
 volatile uint16_t adc7 = 0;
+volatile uint16_t adc10 = 0;
 volatile uint16_t adc12 = 0;
 volatile uint16_t adc13 = 0;
 volatile uint16_t adc14 = 0;
@@ -63,6 +64,10 @@ __interrupt void timer0_a0_isr(void){
 	adc6 = adc_read(beacon_eps_current);		// beacon/eps current measurement
     EPS_data[27] = (uint8_t) (adc6 >> 8);		// shift data 8 bits to get MSB
     EPS_data[28] = (uint8_t) (adc6 & 0xff);		// bitwise and with 0xff to get LSB
+
+    adc10 = adc_read(msp_temperature);
+    EPS_data[29] = (uint8_t) (adc10 >> 8);		// shift data 8 bits to get MSB
+    EPS_data[30] = (uint8_t) (adc10 & 0xff);	// bitwise and with 0xff to get LSB
 
     measurement_data_DS2775();
 
