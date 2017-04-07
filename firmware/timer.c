@@ -78,6 +78,11 @@ __interrupt void timer0_a0_isr(void){
     EPS_data[34] = (EPS_data[34] >> 5) | ((EPS_data[33] << 3) & 0xf8);
     EPS_data[33] = EPS_data[33] >> 5;
 
+    EPS_data[35] = DS2775_read_register(voltage_MSB1_register);		// read battery 1 voltage MSB
+    EPS_data[36] = DS2775_read_register(voltage_LSB1_register);		// read battery 1 voltage LSB
+    EPS_data[36] = (EPS_data[36] >> 5) | ((EPS_data[35] << 3) & 0xf8);
+    EPS_data[35] = EPS_data[35] >> 5;
+
 
 
 }
