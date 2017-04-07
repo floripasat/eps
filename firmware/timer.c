@@ -64,6 +64,8 @@ __interrupt void timer0_a0_isr(void){
     EPS_data[27] = (uint8_t) (adc6 >> 8);		// shift data 8 bits to get MSB
     EPS_data[28] = (uint8_t) (adc6 & 0xff);		// bitwise and with 0xff to get LSB
 
+    measurement_data_DS2775();
+
 }
 
 #pragma vector=TIMER1_A0_VECTOR

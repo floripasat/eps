@@ -40,8 +40,6 @@ void main(void){
 
 void config_msp430(void){
 
-//	UCSCTL4 |= SELA_2 + SELS_3;	// SELA_2: ACLK source is REFOCLK (32768Hz), SELS_3: SMCL source is DCOCLK (1.045MHz)
-
 	clock_config();
 
 	uart_config();
@@ -66,14 +64,7 @@ void config_msp430(void){
 	UCB0CTL1 &= ~UCSWRST;                     // Clear SW reset, resume operation
 	IE2 |= UCB0TXIE;                          // Enable TX interrupt
 
-	*** ADS1248 configuration ***
-	P5DIR |= BIT0 + BIT4;
-	P5OUT = BIT0;                             // Set slave reset - P3.
-	P5SEL |= 0x0E;                            // P5.1,2,3 USCI_B1 option select
-	P4DIR |= BIT6;
-	P4OUT |= BIT6;
-
-	*/
+*/
 	__bis_SR_register(GIE);       // enable interrupts
 
 	#ifdef _DEBUG

@@ -1,13 +1,15 @@
-#include "onewire.h"
-
 #include <msp430.h>
 #include <stdio.h>
+#include <stdint.h>
+#include "onewire.h"
 #include "intrinsics.h"
 
-#define P_WireOUT P5OUT
-#define P_WireIN P5IN
-#define DIR_P_Wire P5DIR
-#define BitWire	BIT5
+#define clock 8000000
+
+#define P_WireOUT P9OUT
+#define P_WireIN P9IN
+#define DIR_P_Wire P9DIR
+#define BitWire	BIT1
 
 #define protection_register 0x00
 #define protector_threshold_register 0x7F
@@ -48,7 +50,6 @@ unsigned char protection_register_msb = 0x00;
 unsigned char protection_register_lsb = 0x00;
 
 volatile unsigned int count = 0;
-
 
 /************************************************************************/
 /*  - name: outp
@@ -99,17 +100,17 @@ int OneWireReset(void){
 
 	int result=0;
 
-	  outp(1);				        //drives pin to high
-	__delay_cycles(0);			    // delay of 0
-	  outp(0);				        //drives pin low
-	__delay_cycles(3897);			//delay of 480us, 8,12MHz* 480us=3897
+	  outp(1);				        		//drives pin to high
+	__delay_cycles(0);			    		// delay of 0
+	  outp(0);				        		//drives pin low
+	__delay_cycles(clock*0.000480);			//delay of 480us, 8,12MHz* 480us=3897
 
 	  outp(1);						//releases the bus
 	  result = inp();			        //prepares the result of present detection to be returned
-	  __delay_cycles(568);			//delay of 70us, 8,12MHz*70us=568
+	  __delay_cycles(clock*0.000070);			//delay of 70us, 8,12MHz*70us=568
 
 	  outp(1);
-	__delay_cycles(3329);			//delay of 410us, 8,12MHz*410us=3329
+	__delay_cycles(clock*0.000410);			//delay of 410us, 8,12MHz*410us=3329
 
 	return result;			        //returns the presence detection result
 
@@ -128,17 +129,17 @@ void OneWireWrite(int bit){
 
 		if(bit == 1){
 			outp(0);				//drives pin low
-		__delay_cycles(44);		    //delay of 6us, 8,12 MHz*6us= 44
+		__delay_cycles(clock*0.000006);		    //delay of 6us, 8,12 MHz*6us= 44
 
 			outp(1);				//releases the bus
-		__delay_cycles(517);		//delay of 64us, 8,12MHz*64us=517
+		__delay_cycles(clock*0.000064);		//delay of 64us, 8,12MHz*64us=517
 
 		}else{
 	       // Write '0' bit
 			outp(0);				//drives pin low
-		__delay_cycles(487);		//delay of 60us, 8,12MHz*60us=487
+		__delay_cycles(clock*0.000060);		//delay of 60us, 8,12MHz*60us=487
 			outp(1);				//releases the bus
-		__delay_cycles(80);			// delay of 10us, 8MHz*10us=80
+		__delay_cycles(clock*0.000080);			// delay of 10us, 8MHz*10us=80
 
 		}
 
@@ -155,13 +156,13 @@ int OneWireReadBit(void){
 
 	int result;
 	outp(0);						//drives pin low
-	__delay_cycles(44);		        //delay of 6us, 8,12 MHz*6us= 44
+	__delay_cycles(clock*0.000006);		        //delay of 6us, 8,12 MHz*6us= 44
 
 	outp(1);						//releases the bus
-	__delay_cycles(73);				//delay of 9us, 8,12MHz*9us=73
+	__delay_cycles(clock*0.000009);				//delay of 9us, 8,12MHz*9us=73
 
 	result = inp();					//sample the bit from slave
-	__delay_cycles(446);			//delay of 55us, 8,12MHz*55us=446
+	__delay_cycles(clock*0.000055);			//delay of 55us, 8,12MHz*55us=446
 
 	return result;
 
@@ -432,8 +433,14 @@ void measurement_data_DS2775(void){
     OWWriteByte(0x6C);					// write operation
     OWWriteByte(control_register);		// register address
     OWWriteByte(0x0C);					// value to be written
+}
 
-
+uint8_t DS2775_read_register(uint8_t register_address){
+	uint8_t reset = 0;						// declare variable to hold reset value
+	reset= OneWireReset();					// reset one wire to start communication
+    OWWriteByte(0xCC);						// eeprom address (only one slave on bus, CC is used)
+    OWWriteByte(0x69);						// read operation
+    return OWWriteByte(register_address);	// return value read from register
 
 }
 
