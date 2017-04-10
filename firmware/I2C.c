@@ -1,69 +1,47 @@
-#include "I2C.h"
-
 #include <msp430.h>
+#include "I2C.h"
 #include "misc.h"
 
-
-unsigned char *PTxData;                     // Pointer to TX data
-unsigned int TXByteCtr;
 volatile uint8_t EPS_data[69] = {0};
 
-unsigned char FormatedEPSData[] = {"0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00"};
-unsigned char time_string[5];
-unsigned int time=1;
+void I2C_tx(uint8_t tx_data){
+	UCB2TXBUF = tx_data;
+}
 
+void I2C_config(void){
+	P9SEL |= BIT5 + BIT6;                            // Assign P2.0 to UCB0SDA and...
+	P9DIR |= BIT5 + BIT6;                            // P2.1 to UCB0SCL
 
-
-//------------------------------------------------------------------------------
-// The USCI_B0 data ISR is used to move data from MSP430 memory to the
-// I2C master. PTxData points to the next byte to be transmitted, and TXByteCtr
-// keeps track of the number of bytes transmitted.
-//------------------------------------------------------------------------------
-/*
-#pragma vector = USCIAB0TX_VECTOR
-__interrupt void USCIAB0TX_ISR(void) {
-	P3OUT |= BIT6;
-	wdt_reset_counter();
-
-	if (TXByteCtr == 0)
-		PTxData = (unsigned char *) EPSData;      // Start of TX buffer
-
-	if (TXByteCtr++ < 23) {
-
-		UCB0TXBUF = *PTxData++;              // Transmit data at address PTxData
-		__delay_cycles(10000);
-
-		if(TXByteCtr == 23)
-			{
-				P3OUT &= ~BIT6;
-			}
-
-
-	} else {
-		TXByteCtr = 0;
-//		int_to_char(time, time_string, sizeof time_string);
-//		frame_to_string(EPSData, FormatedEPSData, sizeof FormatedEPSData);
-//		uart_tx(time_string);
-//		uart_tx(" , ");
-//		uart_tx(FormatedEPSData);
-//		uart_tx("\r\n");
-		time++;
-
-	}
+	UCB2CTL1 |= UCSWRST;                      // Enable SW reset
+	UCB2CTL0 = UCMODE_3 | UCSYNC;             // I2C Slave, synchronous mode
+	UCB2I2COA = 0x48;                         // Own Address is 048h
+	UCB2CTL1 &= ~UCSWRST;                     // Clear SW reset, resume operation
+	UCB2IE |= UCTXIE | UCSTPIE | UCSTTIE;     // Enable STT and STP interrupt
+	// Enable TX interrupt
 }
 
 
-//------------------------------------------------------------------------------
-// The USCI_B0 state ISR is used to wake up the CPU from LPM0 in order to do
-// processing in the main program after data has been transmitted. LPM0 is
-// only exit in case of a (re-)start or stop condition w hen actual data
-// was transmitted.
-//------------------------------------------------------------------------------
-#pragma vector = USCIAB0RX_VECTOR
-__interrupt void USCIAB0RX_ISR(void)
+#pragma vector = USCI_B2_VECTOR
+__interrupt void USCI_B2_ISR(void)
 {
-  UCB0STAT &= ~(UCSTPIFG + UCSTTIFG);       // Clear interrupt flags
-//  if (TXByteCtr)                            // Check TX byte counter
-  //  __bic_SR_register_on_exit(CPUOFF);      // Exit LPM0 if data was
-}                                           // transmitted
-*/
+
+	volatile static uint8_t tx_data_counter = 0;
+  switch(__even_in_range(UCB2IV,12))
+  {
+  case  0: break;                           // Vector  0: No interrupts
+  case  2: break;                           // Vector  2: ALIFG
+  case  4: break;                           // Vector  4: NACKIFG
+  case  6:                                  // Vector  6: STTIFG
+    UCB2IFG &= ~UCSTTIFG;                   // Clear start condition int flag
+    break;
+  case  8:                                  // Vector  8: STPIFG
+    UCB2IFG &= ~UCSTPIFG;                   // Clear stop condition int flag
+    break;
+  case 10: break;                           // Vector 10: RXIFG
+  case 12:                                  // Vector 12: TXIFG
+    UCB2TXBUF = EPS_data[tx_data_counter];                 // Transmit data at address PTxData
+    tx_data_counter++;
+    break;
+  default: break;
+  }
+}

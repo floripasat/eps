@@ -10,6 +10,8 @@
 
 #include <stdint.h>
 
+void I2C_config(void);
 
+void I2C_tx(uint8_t tx_data);
 
 #endif /* I2C_H_ */

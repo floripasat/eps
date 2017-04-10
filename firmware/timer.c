@@ -1,6 +1,7 @@
 #include <msp430.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <intrinsics.h>
 #include "watchdog.h"
 #include "ADS1248.h"
 #include "pid.h"
@@ -48,6 +49,8 @@ const struct Pid parameters = {0, 0, 1, 250, 20, 0 , INT_MAX, 150};
 
 #pragma vector=TIMER0_A0_VECTOR
 __interrupt void timer0_a0_isr(void){
+
+	__enable_interrupt();
 
 	volatile static uint8_t counter_30s = 0;
 
@@ -116,6 +119,8 @@ __interrupt void timer0_a0_isr(void){
 
 #pragma vector=TIMER1_A0_VECTOR
 __interrupt void timer1_a0_isr(void){
+
+	__enable_interrupt();
 
 	#ifdef _DEBUG
 	timer_debug_port_100ms ^= timer_debug_pin_100ms;	// Toggle 100ms debug pin

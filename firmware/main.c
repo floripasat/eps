@@ -53,19 +53,10 @@ void config_msp430(void){
 	adc_config();		// call MSP ADC configuration function
 
 	spi_config();		// call SPI configuration function
-/*
 
+	I2C_config();
 
-	*** I2C Configuration ***
-	P3SEL |= 0x06;                            // Assign I2C pins to USCI_B0
-	UCB0CTL1 |= UCSWRST;                      // Enable SW reset
-	UCB0CTL0 = UCMODE_3 + UCSYNC;             // I2C Slave, synchronous mode
-	UCB0I2COA = 0x13;                         // Own Address is 0ABh
-	UCB0CTL1 &= ~UCSWRST;                     // Clear SW reset, resume operation
-	IE2 |= UCB0TXIE;                          // Enable TX interrupt
-
-*/
-	__bis_SR_register(GIE);       // enable interrupts
+	__bis_SR_register(GIE);     // Enter LPM0, enable interrupts
 
 	#ifdef _DEBUG
 		uart_tx_debug("system boot complete\r\n");
