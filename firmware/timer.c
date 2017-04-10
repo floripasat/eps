@@ -49,6 +49,8 @@ const struct Pid parameters = {0, 0, 1, 250, 20, 0 , INT_MAX, 150};
 #pragma vector=TIMER0_A0_VECTOR
 __interrupt void timer0_a0_isr(void){
 
+	volatile static uint8_t counter_30s = 0;
+
     #ifdef _DEBUG
 	timer_debug_port_1s ^= timer_debug_pin_1s;		// Toggle 1s debug piun
 	#endif
@@ -90,6 +92,19 @@ __interrupt void timer0_a0_isr(void){
 
     EPS_data[39] = DS2775_read_register(current_MSB_register);		// read battery current MSB
     EPS_data[40] = DS2775_read_register(current_LSB_register);		// read battery current LSB
+
+    if(counter_30s == 29){
+    	counter_30s = 0;
+    	uart_tx_beacon(0x7E);
+    	uart_tx_beacon(EPS_data[36]);
+    	uart_tx_beacon(EPS_data[35]);
+    	uart_tx_beacon(EPS_data[38]);
+    	uart_tx_beacon(EPS_data[37]);
+    	uart_tx_beacon(0x3C);
+    }
+    else{
+    	counter_30s++;
+    }
 
 }
 

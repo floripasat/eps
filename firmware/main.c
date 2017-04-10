@@ -9,7 +9,7 @@
 #include "uart.h"
 #include "SPI.h"
 #include "clock.h"
-
+#include "hal.h"
 
 
 void config_msp430(void);
@@ -45,7 +45,7 @@ void config_msp430(void){
 	uart_config();
 
 	#ifdef _DEBUG
-		uart_tx("system booting\r\n");
+		uart_tx_debug("system booting\r\n");
 	#endif
 
 	timer_config();		// call timer configuration function
@@ -68,7 +68,7 @@ void config_msp430(void){
 	__bis_SR_register(GIE);       // enable interrupts
 
 	#ifdef _DEBUG
-		uart_tx("system boot complete\r\n");
+		uart_tx_debug("system boot complete\r\n");
 	#endif
 }
 

@@ -38,6 +38,14 @@
 
 #define msp_temperature 10
 
+/**** USCI ****/
+
+#define A0 0
+#define A1 1
+#define A2 2
+#define B0 3
+#define B1 4
+#define B2 5
 
 
 #endif /* HAL_H_ */
