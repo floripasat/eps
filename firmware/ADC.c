@@ -32,8 +32,6 @@ void adc_config(void){
 	ADC12MCTL15 = ADC12INCH_15 + ADC12EOS;   			// ref+=AVcc, channel = A15
 	ADC12CTL0 |= ADC12ENC;                    			// Enable conversions
 
-	__delay_cycles(8000000);
-
 }
 
 int16_t adc_read(uint8_t channel){

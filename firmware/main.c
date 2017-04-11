@@ -53,10 +53,6 @@ void config_msp430(void){
 		uart_tx_debug("system booting\r\n");
 	#endif
 
-	timer_config();		// call timer configuration function
-
-	watchdog_reset_counter();
-
 	adc_config();		// call MSP ADC configuration function
 
 	watchdog_reset_counter();
@@ -69,11 +65,16 @@ void config_msp430(void){
 
 	watchdog_reset_counter();
 
+	timer_config();		// call timer configuration function
+
+	watchdog_reset_counter();
+
 	__bis_SR_register(GIE);     // Enter LPM0, enable interrupts
 
 	#ifdef _DEBUG
 		uart_tx_debug("system boot complete\r\n");
 	#endif
+
 }
 
 
