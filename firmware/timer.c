@@ -62,44 +62,63 @@ __interrupt void timer0_a0_isr(void){
 	EPS_data[23] = (uint8_t) (adc15 & 0xff);		// bitwise and with 0xff to get LSB
     EPS_data[24] = (uint8_t) (adc15 >> 8);			// shift data 8 bits to get MSB
 
+    watchdog_reset_counter();
+
     adc7 = adc_read(bus_voltage);				// bus voltage measurement
     EPS_data[25] = (uint8_t) (adc7 & 0xff);		// bitwise and with 0xff to get LSB
     EPS_data[26] = (uint8_t) (adc7 >> 8);		// shift data 8 bits to get MSB
+
+    watchdog_reset_counter();
 
 
 	adc6 = adc_read(beacon_eps_current);		// beacon/eps current measurement
     EPS_data[27] = (uint8_t) (adc6 & 0xff);		// bitwise and with 0xff to get LSB
     EPS_data[28] = (uint8_t) (adc6 >> 8);		// shift data 8 bits to get MSB
 
+    watchdog_reset_counter();
 
     adc10 = adc_read(msp_temperature);
     EPS_data[29] = (uint8_t) (adc10 & 0xff);	// bitwise and with 0xff to get LSB
     EPS_data[30] = (uint8_t) (adc10 >> 8);		// shift data 8 bits to get MSB
 
+    watchdog_reset_counter();
 
     EPS_data[31] = DS2775_read_register(average_current_LSB_register);		// read battery average current LSB
     EPS_data[32] = DS2775_read_register(average_current_MSB_register);		// read battery average current MSB
 
+    watchdog_reset_counter();
 
     EPS_data[33] = DS2775_read_register(temperature_LSB_register);		// read battery temperature LSB
     EPS_data[34] = DS2775_read_register(temperature_MSB_register);		// read battery temperature MSB
 
+    watchdog_reset_counter();
+
     EPS_data[33] = (EPS_data[33] >> 5) | ((EPS_data[34] << 3) & 0xf8);
     EPS_data[34] = EPS_data[34] >> 5;
+
+    watchdog_reset_counter();
 
     EPS_data[35] = DS2775_read_register(voltage_LSB1_register);		// read battery 1 voltage LSB
     EPS_data[36] = DS2775_read_register(voltage_MSB1_register);		// read battery 1 voltage MSB
 
+    watchdog_reset_counter();
+
     EPS_data[35] = (EPS_data[35] >> 5) | ((EPS_data[36] << 3) & 0xf8);
     EPS_data[36] = EPS_data[36] >> 5;
+
+    watchdog_reset_counter();
 
     EPS_data[37] = DS2775_read_register(voltage_LSB2_register);		// read battery 2 voltage LSB
     EPS_data[38] = DS2775_read_register(voltage_MSB2_register);		// read battery 2 voltage MSB
     EPS_data[37] = (EPS_data[37] >> 5) | ((EPS_data[38] << 3) & 0xf8);
     EPS_data[38] = EPS_data[38] >> 5;
 
+    watchdog_reset_counter();
+
     EPS_data[39] = DS2775_read_register(current_LSB_register);		// read battery current LSB
     EPS_data[40] = DS2775_read_register(current_MSB_register);		// read battery current MSB
+
+    watchdog_reset_counter();
 
 
     if(counter_30s == 29){
@@ -120,13 +139,13 @@ __interrupt void timer0_a0_isr(void){
 #pragma vector=TIMER1_A0_VECTOR
 __interrupt void timer1_a0_isr(void){
 
-	__enable_interrupt();
-
 	#ifdef _DEBUG
 	timer_debug_port_100ms ^= timer_debug_pin_100ms;	// Toggle 100ms debug pin
 	#endif
 
 	static volatile uint8_t mean_counter = 0;
+
+	watchdog_reset_counter();
 
 	if(mean_counter == 0){
 
@@ -146,45 +165,63 @@ __interrupt void timer1_a0_isr(void){
     EPS_data[4] = (uint8_t) (adc0 >> 8);			// shift data 8 bits to get MSB
     negative_y_panel_current_mean += adc0;			// add measurement value to mean calculation
 
+    watchdog_reset_counter();
+
     adc1 = adc_read(positive_x_panel_current);		// +X panel current measurement
     EPS_data[5] = (uint8_t) (adc1 & 0xff);			// bitwise and with 0xff to get LSB
     EPS_data[6] = (uint8_t) (adc1 >> 8);			// shift data 8 bits to get MSB
     positive_x_panel_current_mean += adc1;			// add measurement value to mean calculation
+
+    watchdog_reset_counter();
 
     adc2 = adc_read(negative_x_panel_current);		// -X panel current measurement
     EPS_data[7] = (uint8_t) (adc2 & 0xff);			// bitwise and with 0xff to get LSB
     EPS_data[8] = (uint8_t) (adc2 >> 8);			// shift data 8 bits to get MSB
     negative_x_panel_current_mean += adc2;			// add measurement value to mean calculation
 
+    watchdog_reset_counter();
+
     adc3 = adc_read(positive_z_panel_current);		// +Z panel current measurement
     EPS_data[9] = (uint8_t) (adc3 & 0xff);			// bitwise and with 0xff to get LSB
     EPS_data[10] = (uint8_t) (adc3 >> 8);			// shift data 8 bits to get MSB
     positive_z_panel_current_mean += adc3;			// add measurement value to mean calculation
+
+    watchdog_reset_counter();
 
     adc4 = adc_read(negative_z_panel_current);		// -Z panel current measurement
     EPS_data[11] = (uint8_t) (adc4 & 0xff);			// bitwise and with 0xff to get LSB
     EPS_data[12] = (uint8_t) (adc4 >> 8);			// shift data 8 bits to get MSB
     negative_z_panel_current_mean += adc4;			// add measurement value to mean calculation
 
+    watchdog_reset_counter();
+
     adc5 = adc_read(positive_y_panel_current);		// +Y panel current measurement
     EPS_data[13] = (uint8_t) (adc5 & 0xff);			// bitwise and with 0xff to get LSB
     EPS_data[14] = (uint8_t) (adc5 >> 8);			// shift data 8 bits to get MSB
     positive_y_panel_current_mean += adc5;			// add measurement value to mean calculation
+
+    watchdog_reset_counter();
 
     adc12 = adc_read(negative_y_positive_x_panel_voltage);		// -Y and +X panels voltage
     EPS_data[17] = (uint8_t) (adc12 & 0xff);					// bitwise and with 0xff to get LSB
     EPS_data[18] = (uint8_t) (adc12 >> 8);						// shift data 8 bits to get MSB
     negative_y_positive_x_panel_voltage_mean += adc12;			// add measurement value to mean calculation
 
+    watchdog_reset_counter();
+
     adc13 = adc_read(negative_x_positive_z_panel_voltage);		// -X and +Z panels voltage
     EPS_data[19] = (uint8_t) (adc13 & 0xff);					// bitwise and with 0xff to get LSB
     EPS_data[20] = (uint8_t) (adc13 >> 8);						// shift data 8 bits to get MSB
     negative_x_positive_z_panel_voltage_mean += adc13;			// add measurement value to mean calculation
 
+    watchdog_reset_counter();
+
     adc14 = adc_read(negative_z_positive_y_panel_voltage);		// -Z and +Y panels voltage
     EPS_data[21] = (uint8_t) (adc14 & 0xff);					// bitwise and with 0xff to get LSB
     EPS_data[22] = (uint8_t) (adc14 >> 8);						// shift data 8 bits to get MSB
     negative_z_positive_y_panel_voltage_mean += adc14;			// add measurement value to mean calculation
+
+    watchdog_reset_counter();
 
     if(mean_counter == 9){
 
