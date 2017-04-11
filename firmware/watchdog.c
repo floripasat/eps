@@ -7,11 +7,9 @@
 
 #include "watchdog.h"
 
-/*
-void watchdog_setup(char mode, char time2trigger) {
-	WDTCTL = WDTPW + mode + time2trigger;
-	if (mode == INTERVAL)
-		 IE1 |= WDTIE;                             // Enable WDT interrupt
+
+void watchdog_config(void) {
+	WDTCTL = WDTPW + WDTSSEL_1 + WDTIS_4;
 }
 
 void wdt_reset_counter(void){
@@ -31,15 +29,3 @@ void wdt_release_counter(void){
 void reboot(void){
 	WDTCTL = 0x00;
 }
-
-// Watchdog Timer interrupt service routine
-#pragma vector=WDT_VECTOR
-__interrupt void watchdog_timer(void){
-	P1OUT ^= BIT6;
-
-//	if(IFG1 & WDTIFG){
-//	}else if(IFG1 & NMIIFG){
-//
-//	}
-}
-*/

@@ -10,6 +10,7 @@
 #include "SPI.h"
 #include "clock.h"
 #include "hal.h"
+#include "watchdog.h"
 
 
 void config_msp430(void);
@@ -41,6 +42,8 @@ void main(void){
 void config_msp430(void){
 
 	clock_config();
+
+	watchdog_config();
 
 	uart_config();
 

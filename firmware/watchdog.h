@@ -26,7 +26,7 @@
 
 #include <msp430.h>
 
-void watchdog_setup(char mode, char time2trigger);
+void watchdog_config();
 void wdt_reset_counter(void);
 void wdt_hold_counter(void);
 void reboot(void);
