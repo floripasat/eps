@@ -47,17 +47,27 @@ void config_msp430(void){
 
 	uart_config();
 
+	watchdog_reset_counter();
+
 	#ifdef _DEBUG
 		uart_tx_debug("system booting\r\n");
 	#endif
 
 	timer_config();		// call timer configuration function
 
+	watchdog_reset_counter();
+
 	adc_config();		// call MSP ADC configuration function
+
+	watchdog_reset_counter();
 
 	spi_config();		// call SPI configuration function
 
+	watchdog_reset_counter();
+
 	I2C_config();
+
+	watchdog_reset_counter();
 
 	__bis_SR_register(GIE);     // Enter LPM0, enable interrupts
 
