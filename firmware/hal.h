@@ -47,5 +47,11 @@
 #define B1 4
 #define B2 5
 
+/**** LED ****/
+
+#define system_on_dir P5DIR
+#define system_on_port P5OUT
+#define system_on_pin BIT4
+
 
 #endif /* HAL_H_ */

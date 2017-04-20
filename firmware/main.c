@@ -75,6 +75,10 @@ void config_msp430(void){
 		uart_tx_debug("system boot complete\r\n");
 	#endif
 
+	#ifdef _DEBUG
+	system_on_dir |= system_on_pin;
+	system_on_port |= system_on_pin;
+	#endif
 }
 
 
