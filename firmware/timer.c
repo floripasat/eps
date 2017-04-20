@@ -250,7 +250,7 @@ void timer_config(void){
 	TA0CCTL0 = CCIE;                        		// timer A0 CCR0 interrupt enabled
 	TA0CTL = TASSEL_1 + MC_1 + TACLR;       		// SMCLK, upmode, timer A interrupt enable, clear TAR
 
-	timer_debug_port_dir |= timer_debug_pin_100ms	// P1.1 output
+	timer_debug_port_dir |= timer_debug_pin_100ms;	// P1.1 output
 	TA1CCR0 = 3277;									// timer A1 CCR0 interrupt period = 3277 * 1/32768 = 100.006ms
 	TA1CCTL0 = CCIE;								// timer A1 CCR0 interrupt enabled
 	TA1CTL = TASSEL_1 + MC_1 + TACLR;       		// SMCLK, upmode, timer A interrupt enable, clear TAR

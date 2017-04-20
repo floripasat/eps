@@ -12,6 +12,7 @@
 
 /**** Timer Debug ****/
 
+#define timer_debug_port_dir P1DIR
 #define timer_debug_port_1s P1OUT
 #define timer_debug_pin_1s BIT0
 #define timer_debug_port_100ms P1OUT
