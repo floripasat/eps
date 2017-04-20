@@ -1,7 +1,9 @@
 #include <msp430.h>
-#include "ADS1248.h"
 #include <stdint.h>
+#include <stdio.h>
+#include "ADS1248.h"
 #include "SPI.h"
+#include "uart.h"
 
 /*
  * ADS1248 initialization procedure: - send RESET command
@@ -74,6 +76,22 @@ void config_ADS1248(int positive_channel)
 
 	if(initialization_data_counter == 21)
 	{
+		#ifdef _DEBUG
+		uint8_t string[4];
+		uint8_t i;
+		uart_tx_debug("ADS1248 data:");
+		for(i = 0; i < 6; i++){
+			sprintf(string, "%#04x", initialization_data_sent_back[i]);
+			uart_tx_debug(string);
+			if(i != 5){
+			uart_tx_debug(", ");
+			}
+			else{
+			uart_tx_debug("\r\n");
+			}
+		}
+		#endif
+
 		chip_select_port |= chip_select_pin;							// pull chip select high after communication is done
 	}
 }
