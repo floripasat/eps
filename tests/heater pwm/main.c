@@ -23,17 +23,17 @@ int main(void) {
 
 	  while(1){
 
-	  __delay_cycles(480000000);
+	  __delay_cycles(120000000);
 
 	  TA1CCR1 = 80;
 	  TA1CCR2 = 80;
 
-	  __delay_cycles(480000000);
+	  __delay_cycles(120000000);
 
 	  TA1CCR1 = 120;
 	  TA1CCR2 = 120;
 
-	  __delay_cycles(480000000);
+	  __delay_cycles(120000000);
 
 	  TA1CCR1 = 40;
 	  TA1CCR2 = 40;
