@@ -4,6 +4,9 @@
 int main(void) {
 	  WDTCTL = WDTPW|WDTHOLD;                   // Stop WDT
 
+	  P5DIR |= BIT4;
+	  P5OUT |= BIT4;
+
 	  clock_config();
 
 	  TA1CTL |= TASSEL_2 + MC_1;
