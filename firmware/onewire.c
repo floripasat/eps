@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "onewire.h"
 #include "intrinsics.h"
+#include "uart.h"
 
 #define clock 8000000
 
@@ -248,7 +249,31 @@ void config_DS2775(void){
 	OWWriteByte(accumulated_current_LSB_register);		// register address
 	OWWriteByte(0x50);									// value to be written
 
+	#ifdef _DEBUG
+	uint8_t one_wire_data_sent_back[8] = {0};
+	one_wire_data_sent_back[0] = DS2775_read_register(protection_register);
+	one_wire_data_sent_back[1] = DS2775_read_register(protector_threshold_register);
+	one_wire_data_sent_back[2] = DS2775_read_register(status_register) & 0xf0;
+	one_wire_data_sent_back[3] = DS2775_read_register(control_register);
+	one_wire_data_sent_back[4] = DS2775_read_register(overcurrent_thresholds_register);
+	one_wire_data_sent_back[5] = DS2775_read_register(current_gain_LSB_register);
+	one_wire_data_sent_back[6] = DS2775_read_register(accumulated_current_MSB_register);
+	one_wire_data_sent_back[7] = DS2775_read_register(accumulated_current_LSB_register);
 
+	uint8_t string[4];
+	uint8_t i = 0;
+	uart_tx_debug("DS2775 data:");
+	for(i = 0; i < 8; i++){
+		sprintf(string, "%#04x", one_wire_data_sent_back[i]);
+		uart_tx_debug(string);
+		if(i != 7){
+			uart_tx_debug(", ");
+		}
+		else{
+			uart_tx_debug("\r\n");
+		}
+	}
+	#endif
 }
 
 
