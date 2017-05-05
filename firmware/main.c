@@ -21,8 +21,12 @@ void main(void){
  	WDTCTL = WDTPW + WDTHOLD;
 
 	config_msp430();
-	config_ADS1248(0);
+	config_ADS1248(6);
 	config_DS2775();
+
+	#ifdef _DEBUG
+		uart_tx_debug("system boot complete\r\n");
+	#endif
 
 	__bis_SR_register(GIE);
 	while(1);
@@ -70,10 +74,6 @@ void config_msp430(void){
 	watchdog_reset_counter();
 
 	__bis_SR_register(GIE);     // Enter LPM0, enable interrupts
-
-	#ifdef _DEBUG
-		uart_tx_debug("system boot complete\r\n");
-	#endif
 
 	#ifdef _DEBUG
 	system_on_dir |= system_on_pin;
