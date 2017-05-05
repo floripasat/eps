@@ -2,7 +2,7 @@
 #include "I2C.h"
 #include "misc.h"
 
-volatile uint8_t EPS_data[69] = {0};
+volatile uint8_t EPS_data[69] = {0x7E, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68};
 
 void I2C_tx(uint8_t tx_data){
 	UCB2TXBUF = tx_data;
@@ -16,8 +16,7 @@ void I2C_config(void){
 	UCB2CTL0 = UCMODE_3 | UCSYNC;             // I2C Slave, synchronous mode
 	UCB2I2COA = 0x48;                         // Own Address is 048h
 	UCB2CTL1 &= ~UCSWRST;                     // Clear SW reset, resume operation
-	UCB2IE |= UCTXIE | UCSTPIE | UCSTTIE;     // Enable STT and STP interrupt
-	// Enable TX interrupt
+	UCB2IE |= UCTXIE | UCRXIE | UCSTPIE | UCSTTIE;     // Enable STT, STP, TX, RX interrupt
 }
 
 
@@ -37,7 +36,11 @@ __interrupt void USCI_B2_ISR(void)
   case  8:                                  // Vector  8: STPIFG
     UCB2IFG &= ~UCSTPIFG;                   // Clear stop condition int flag
     break;
-  case 10: break;                           // Vector 10: RXIFG
+  case 10: 									// Vector 10: RXIFG
+	  if(UCB2RXBUF == 0x0F){
+		  tx_data_counter = 0;
+	  }
+	  break;
   case 12:                                  // Vector 12: TXIFG
     UCB2TXBUF = EPS_data[tx_data_counter];                 // Transmit data at address PTxData
     tx_data_counter++;
