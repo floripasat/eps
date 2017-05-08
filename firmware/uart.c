@@ -66,6 +66,11 @@ void float_send(float c){
 	volatile long int remainder;
     unsigned char string[30];
 
+    if(c < 0){
+    	uart_tx_debug("-");
+    	c = -c;
+    }
+
     c *= 10000;
     d = (long int)c;
     tens = d/100000;
