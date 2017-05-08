@@ -10,6 +10,8 @@
 
 #include <stdint.h>
 
+/************ REGISTERS *********/
+
 #define protection_register 0x00
 #define protector_threshold_register 0x7F
 #define status_register 0x01
@@ -28,6 +30,12 @@
 #define voltage_LSB1_register 0x0D
 #define voltage_MSB2_register 0x1C
 #define voltage_LSB2_register 0x1D
+
+/*********** UNITS ***********/
+
+#define	rsense			0.01
+#define voltage_unit	0.004883
+#define current_unit	0.0000015625/rsense
 
 void config_DS2775(void);
 

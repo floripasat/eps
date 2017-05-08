@@ -140,10 +140,13 @@ __interrupt void timer0_a0_isr(void){
 	#ifdef _DEBUG
     uart_tx_debug("**** DS2775 Measurements: ****\r\n");
     uart_tx_debug("Battery I voltage: ");
-    float_send(0.004883*((EPS_data[36] << 8) + EPS_data[35]));
+    float_send(voltage_unit*((EPS_data[36] << 8) + EPS_data[35]));
     uart_tx_debug("\r\n");
     uart_tx_debug("Battery II voltage: ");
-    float_send(0.004883*((EPS_data[38] << 8) + EPS_data[37]));
+    float_send(voltage_unit*((EPS_data[38] << 8) + EPS_data[37]));
+    uart_tx_debug("\r\n");
+    uart_tx_debug("Battery Current ");
+    float_send(current_unit*((EPS_data[40] << 8) + EPS_data[39]));
     uart_tx_debug("\r\n");
 	#endif
 
