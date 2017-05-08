@@ -13,4 +13,6 @@ void uart_config(void);
 void uart_tx_debug(uint8_t *tx_data);
 void uart_tx_beacon(uint8_t tx_data);
 
+void float_send(float c);
+
 #endif /* EPS_SERIAL_TEST_H_ */
