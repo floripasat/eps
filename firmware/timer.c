@@ -120,6 +120,9 @@ __interrupt void timer0_a0_isr(void){
 
     watchdog_reset_counter();
 
+    read_ADS1248(6);
+
+    watchdog_reset_counter();
 
     if(counter_30s == 29){
     	counter_30s = 0;
@@ -133,6 +136,16 @@ __interrupt void timer0_a0_isr(void){
     else{
     	counter_30s++;
     }
+
+	#ifdef _DEBUG
+    uart_tx_debug("**** DS2775 Measurements: ****\r\n");
+    uart_tx_debug("Battery I voltage: ");
+    float_send(0.004883*((EPS_data[36] << 8) + EPS_data[35]));
+    uart_tx_debug("\r\n");
+    uart_tx_debug("Battery II voltage: ");
+    float_send(0.004883*((EPS_data[38] << 8) + EPS_data[37]));
+    uart_tx_debug("\r\n");
+	#endif
 
 }
 
