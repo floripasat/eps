@@ -74,6 +74,10 @@ void config_msp430(void){
 
 	watchdog_reset_counter();
 
+    P1DIR |= BIT6;
+    P1OUT &= ~BIT6;		// disable 555
+
+
 	__bis_SR_register(GIE);     // Enter LPM0, enable interrupts
 
 	#ifdef _DEBUG

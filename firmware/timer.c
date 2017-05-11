@@ -185,7 +185,7 @@ __interrupt void timer0_a0_isr(void){
     sprintf(protection_register_string, "%#04x", EPS_data[43] & 0x0f);
     uart_tx_debug("Protection Register: ");
     uart_tx_debug(protection_register_string);
-    uart_tx_debug("\r\n");
+    uart_tx_debug("\r\n\n");
 
 
 	#endif
@@ -293,6 +293,14 @@ __interrupt void timer1_a0_isr(void){
     	negative_x_positive_z_panel_voltage_mean /= 10;		// take mean of adc13
     	negative_z_positive_y_panel_voltage_mean /= 10;		// take mean of adc14
 
+#ifdef _DEBUG
+    uart_tx_debug("**** Solar Panel Currents ****");
+    uart_tx_debug("\r\n");
+    uart_tx_debug("-Y panel current: ");
+    float_send(negative_y_panel_current_mean*.0001479640152);
+    uart_tx_debug("\r\n\n");
+#endif
+
     }
     else{
     	mean_counter++;
@@ -310,5 +318,8 @@ void timer_config(void){
 	TA1CCR0 = 3277;									// timer A1 CCR0 interrupt period = 3277 * 1/32768 = 100.006ms
 	TA1CCTL0 = CCIE;								// timer A1 CCR0 interrupt enabled
 	TA1CTL = TASSEL_1 + MC_1 + TACLR;       		// SMCLK, upmode, timer A interrupt enable, clear TAR
+
+    P4DIR |= BIT1 + BIT2 + BIT3;
+    P4OUT &= ~(BIT1 + BIT2 + BIT3);		// turn off all MPPT mosfets
 }
 
