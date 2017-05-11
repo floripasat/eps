@@ -124,7 +124,12 @@ __interrupt void timer0_a0_isr(void){
     EPS_data[41] = DS2775_read_register(accumulated_current_LSB_register);		// read battery current LSB
     EPS_data[42] = DS2775_read_register(accumulated_current_MSB_register);		// read battery current MSB
 
+    watchdog_reset_counter();
+
+	EPS_data[43] = DS2775_read_register(protection_register);		// read protection register
+
     temp_1 = read_ADS1248(2);
+
 
     /*
 
