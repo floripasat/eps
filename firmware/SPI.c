@@ -22,10 +22,13 @@ void spi_config(void){
 }
 
 void spi_send(int data){
+	while(!(UCA1IFG & UCTXIFG));
 	UCA1TXBUF = data;	// send data to spi buffer
+	while(!(UCA1IFG & UCRXIFG));
 }
 
 int spi_read(void){
+	while(!(UCA1IFG & UCRXIFG));
 	return UCA1RXBUF;
 }
 

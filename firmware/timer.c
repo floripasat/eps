@@ -31,6 +31,7 @@ volatile uint16_t adc13 = 0;
 volatile uint16_t adc14 = 0;
 volatile uint16_t adc15 = 0;
 volatile uint16_t msp_ts = 0;
+volatile uint32_t temp_1 = 0;
 
 volatile uint16_t negative_y_panel_current_mean = 10;				// take mean of adc0
 volatile uint16_t positive_x_panel_current_mean = 10;				// take mean of adc1
@@ -120,7 +121,23 @@ __interrupt void timer0_a0_isr(void){
 
     watchdog_reset_counter();
 
-    read_ADS1248(6);
+    temp_1 = read_ADS1248(2);
+
+    /*
+
+    EPS_data[47] = temp_1 & 0xff;
+    EPS_data[48] = (temp_1 & 0xff00) >> 8;
+    EPS_data[49] = (temp_1 & 0xff0000) >> 16;
+
+
+
+	#ifdef _DEBUG
+    	uart_tx_debug("**** ADS1248 Mesurements ****\r\n");
+    	uart_tx_debug("channel 6: ");
+    	float_send(2*1650*0.000002/(2^24)*temp_1);
+	#endif
+
+*/
 
     watchdog_reset_counter();
 
@@ -138,6 +155,7 @@ __interrupt void timer0_a0_isr(void){
     }
 
 	#ifdef _DEBUG
+    watchdog_reset_counter();
     uart_tx_debug("**** DS2775 Measurements: ****\r\n");
     uart_tx_debug("Battery I voltage: ");
     float_send(voltage_unit*((EPS_data[36] << 8) + EPS_data[35]));

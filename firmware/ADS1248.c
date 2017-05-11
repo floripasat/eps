@@ -24,6 +24,10 @@
 void config_ADS1248(int positive_channel)
 {
 	ADS1248_START_port |= ADS1248_START_pin;
+
+	P8OUT &= ~BIT4;
+	P8OUT |= BIT4;
+
 	chip_select_port &= ~chip_select_pin;					// pull chip select low to start communication
 
 	#ifdef _DEBUG
@@ -32,7 +36,7 @@ void config_ADS1248(int positive_channel)
 	#endif
 	volatile unsigned int initialization_data_counter = 0;
 	volatile unsigned int i=0;
-	const int initialization_data[] = {SDATAC_command,WREG_command,0x03,(positive_channel << 3 | negative_channel),0x00,0x20,0x33,WREG_command + 0x0A,0x01,0x02,0x60,
+	const int initialization_data[] = {SDATAC_command,WREG_command,0x03,(positive_channel << 3 | negative_channel),0x00,0x35,0x03,WREG_command + 0x0A,0x01,0x02,0x22,
 			RREG_command,0x03,NOP_command,NOP_command,NOP_command,NOP_command,RREG_command + 0x0A,0x01,NOP_command,NOP_command};
 
 	spi_send(RESET_command);                     		    // Send reset command to ensure device is properly powered on
@@ -41,31 +45,31 @@ void config_ADS1248(int positive_channel)
 	for(initialization_data_counter=0;initialization_data_counter < 21;initialization_data_counter++)										// send all initialization commands/data
 	{
 		spi_send(initialization_data[initialization_data_counter]);
-		for(i = 500; i; i--);                  // Add time between transmissions to make sure slave can keep up
+		for(i = 500; i > 0; i--);                  // Add time between transmissions to make sure slave can keep up
 	#ifdef _DEBUG
 		switch(initialization_data_counter){
 		case 13:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1RXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = spi_read();
 			initialization_data_sent_back_counter++;
 			break;
 		case 14:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1RXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = spi_read();
 			initialization_data_sent_back_counter++;
 			break;
 		case 15:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1RXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = spi_read();
 			initialization_data_sent_back_counter++;
 			break;
 		case 16:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1RXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = spi_read();
 			initialization_data_sent_back_counter++;
 			break;
 		case 19:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1RXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = spi_read();
 			initialization_data_sent_back_counter++;
 			break;
 		case 20:
-			initialization_data_sent_back[initialization_data_sent_back_counter] = UCA1RXBUF;
+			initialization_data_sent_back[initialization_data_sent_back_counter] = spi_read();
 			initialization_data_sent_back_counter++;
 			break;
 		default:
@@ -118,7 +122,7 @@ long read_ADS1248(int channel)
 	__delay_cycles(7);					// delay of 7 tclk
 	chip_select_port |= chip_select_pin;						// pull chip select high after communication is done
 
-	__delay_cycles(250000);				// dealy to wait the conversion
+	__delay_cycles(500000);				// dealy to wait the conversion
 	chip_select_port &= ~chip_select_pin;						// pull chips select low to start communication
 	__delay_cycles(7);					// delay of 7 tclk
 	spi_send(RDATA_command);			// send command to read conversion result
@@ -140,7 +144,11 @@ long read_ADS1248(int channel)
 
 	chip_select_port |= chip_select_pin;						// pull chip select high after communcation is done
 
-	return temp;
+	volatile float b = 0.0003051757813;
+	//volatile float teste = (2.0*2.048*temp)/((float)(1<<24)*4.0*0.0002);
+	volatile float teste = b*temp;
+
+   	return temp;
 
 
 }

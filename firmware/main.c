@@ -21,7 +21,7 @@ void main(void){
  	WDTCTL = WDTPW + WDTHOLD;
 
 	config_msp430();
-	config_ADS1248(6);
+	config_ADS1248(2);
 	config_DS2775();
 
 	#ifdef _DEBUG
@@ -44,6 +44,7 @@ void main(void){
 
 
 void config_msp430(void){
+
 
 	clock_config();
 
