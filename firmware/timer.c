@@ -166,6 +166,9 @@ __interrupt void timer0_a0_isr(void){
     uart_tx_debug("Battery Current ");
     float_send(current_unit*((EPS_data[40] << 8) + EPS_data[39]));
     uart_tx_debug("\r\n");
+    uart_tx_debug("Battery Average Current ");
+    float_send(current_unit*((EPS_data[32] << 8) + EPS_data[31]));
+    uart_tx_debug("\r\n");
 	#endif
 
 }
