@@ -13,23 +13,23 @@ void adc_config(void){
 	REFCTL0 &= ~REFMSTR;
 
 	ADC12CTL0 = ADC12ON + ADC12MSC + ADC12SHT0_15 + ADC12REFON; 		// turn on ADC12, enable multiple sample and conversion, extend sampling time to avoid overflow of results
-	ADC12CTL1 = ADC12SHP + ADC12CONSEQ_1;       		// use sampling timer, sequence of channels
-	ADC12MCTL0 = ADC12INCH_0;              				// ref+=AVcc, channel = A0
-	ADC12MCTL1 = ADC12INCH_1;              				// ref+=AVcc, channel = A1
-	ADC12MCTL2 = ADC12INCH_2;              				// ref+=AVcc, channel = A2
-	ADC12MCTL3 = ADC12INCH_3;        					// ref+=AVcc, channel = A3
-	ADC12MCTL4 = ADC12INCH_4;        					// ref+=AVcc, channel = A4
-	ADC12MCTL5 = ADC12INCH_5;        					// ref+=AVcc, channel = A5
-	ADC12MCTL6 = ADC12INCH_6;        					// ref+=AVcc, channel = A6
-	ADC12MCTL7 = ADC12INCH_7;        					// ref+=AVcc, channel = A7
-	ADC12MCTL8 = ADC12INCH_8;        					// ref+=AVcc, channel = A8
-	ADC12MCTL9 = ADC12INCH_9;        					// ref+=AVcc, channel = A9
-	ADC12MCTL10 = ADC12INCH_10;        					// ref+=AVcc, channel = A10
-	ADC12MCTL11 = ADC12INCH_11;        					// ref+=AVcc, channel = A11
-	ADC12MCTL12 = ADC12INCH_12;        					// ref+=AVcc, channel = A12
-	ADC12MCTL13 = ADC12INCH_13;        					// ref+=AVcc, channel = A13
-	ADC12MCTL14 = ADC12INCH_14;        					// ref+=AVcc, channel = A14
-	ADC12MCTL15 = ADC12INCH_15 + ADC12EOS;   			// ref+=AVcc, channel = A15
+	ADC12CTL1 = ADC12SHP + ADC12CONSEQ_1;       			// use sampling timer, sequence of channels
+	ADC12MCTL0 = ADC12INCH_0 + ADC12SREF_2;             		// ref+=VeRef, channel = A0
+	ADC12MCTL1 = ADC12INCH_1 + ADC12SREF_2;              		// ref+=VeRef, channel = A1
+	ADC12MCTL2 = ADC12INCH_2 + ADC12SREF_2;              		// ref+=VeRef, channel = A2
+	ADC12MCTL3 = ADC12INCH_3 + ADC12SREF_2;        				// ref+=VeRef, channel = A3
+	ADC12MCTL4 = ADC12INCH_4 + ADC12SREF_2;        				// ref+=VeRef, channel = A4
+	ADC12MCTL5 = ADC12INCH_5 + ADC12SREF_2;        				// ref+=VeRef, channel = A5
+	ADC12MCTL6 = ADC12INCH_6 + ADC12SREF_2;        				// ref+=VeRef, channel = A6
+	ADC12MCTL7 = ADC12INCH_7 + ADC12SREF_2;        				// ref+=VeRef, channel = A7
+	ADC12MCTL8 = ADC12INCH_8 + ADC12SREF_2;        				// ref+=VeRef, channel = A8
+	ADC12MCTL9 = ADC12INCH_9 + ADC12SREF_2;        				// ref+=VeRef, channel = A9
+	ADC12MCTL10 = ADC12INCH_10 + ADC12SREF_2;        			// ref+=VeRef, channel = A10
+	ADC12MCTL11 = ADC12INCH_11 + ADC12SREF_2;        			// ref+=VeRef, channel = A11
+	ADC12MCTL12 = ADC12INCH_12 + ADC12SREF_2;        			// ref+=VeRef, channel = A12
+	ADC12MCTL13 = ADC12INCH_13 + ADC12SREF_2;        			// ref+=VeRef, channel = A13
+	ADC12MCTL14 = ADC12INCH_14 + ADC12SREF_2;        			// ref+=VeRef, channel = A14
+	ADC12MCTL15 = ADC12INCH_15 + ADC12EOS + ADC12SREF_2;   		// ref+=VeRef, channel = A15
 	ADC12CTL0 |= ADC12ENC;                    			// Enable conversions
 
 }
