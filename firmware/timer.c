@@ -298,6 +298,23 @@ __interrupt void timer1_a0_isr(void){
     uart_tx_debug("\r\n");
     uart_tx_debug("-Y panel current: ");
     float_send(negative_y_panel_current_mean*.0001479640152);
+    uart_tx_debug("\r\n");
+    uart_tx_debug("+X panel current: ");
+    float_send(positive_x_panel_current_mean*.0001479640152);
+    uart_tx_debug("\r\n");
+    uart_tx_debug("-X panel current: ");
+    float_send(negative_x_panel_current_mean*.0001479640152);
+    uart_tx_debug("\r\n");
+    uart_tx_debug("+Z panel current: ");
+    float_send(positive_z_panel_current_mean*.0001479640152);
+    uart_tx_debug("\r\n");
+    uart_tx_debug("-Z panel current: ");
+    float_send(negative_z_panel_current_mean*.0001479640152);
+    uart_tx_debug("\r\n");
+    uart_tx_debug("+Y panel current: ");
+    float_send(positive_y_panel_current_mean*.0001479640152);
+    uart_tx_debug("\r\n");
+
     uart_tx_debug("\r\n\n");
 #endif
 
