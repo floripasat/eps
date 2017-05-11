@@ -182,7 +182,7 @@ __interrupt void timer0_a0_isr(void){
     uart_tx_debug("Battery Accumulated Current: ");
     float_send(accumulated_current_unit*((EPS_data[42] << 8) + EPS_data[41]));
     uart_tx_debug("\r\n");
-    sprintf(protection_register_string, "%#04x", EPS_data[43]);
+    sprintf(protection_register_string, "%#04x", EPS_data[43] & 0x0f);
     uart_tx_debug("Protection Register: ");
     uart_tx_debug(protection_register_string);
     uart_tx_debug("\r\n");
