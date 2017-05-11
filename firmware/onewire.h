@@ -36,6 +36,7 @@
 #define	rsense			0.01
 #define voltage_unit	0.004883
 #define current_unit	0.0000015625/rsense
+#define accumulated_current_unit	6.25*0.000001/rsense
 
 void config_DS2775(void);
 
