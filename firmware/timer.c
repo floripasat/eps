@@ -163,6 +163,8 @@ __interrupt void timer0_a0_isr(void){
     }
 
 	#ifdef _DEBUG
+    uint8_t protection_register_string[30] = {0};
+
     watchdog_reset_counter();
     uart_tx_debug("**** DS2775 Measurements: ****\r\n");
     uart_tx_debug("Battery I voltage: ");
@@ -171,15 +173,21 @@ __interrupt void timer0_a0_isr(void){
     uart_tx_debug("Battery II voltage: ");
     float_send(voltage_unit*((EPS_data[38] << 8) + EPS_data[37]));
     uart_tx_debug("\r\n");
-    uart_tx_debug("Battery Current ");
+    uart_tx_debug("Battery Current: ");
     float_send(current_unit*((EPS_data[40] << 8) + EPS_data[39]));
     uart_tx_debug("\r\n");
-    uart_tx_debug("Battery Average Current ");
+    uart_tx_debug("Battery Average Current: ");
     float_send(current_unit*((EPS_data[32] << 8) + EPS_data[31]));
     uart_tx_debug("\r\n");
-    uart_tx_debug("Battery Accumulated Current ");
+    uart_tx_debug("Battery Accumulated Current: ");
     float_send(accumulated_current_unit*((EPS_data[42] << 8) + EPS_data[41]));
     uart_tx_debug("\r\n");
+    sprintf(protection_register_string, "%#04x", EPS_data[43]);
+    uart_tx_debug("Protection Register: ");
+    uart_tx_debug(protection_register_string);
+    uart_tx_debug("\r\n");
+
+
 	#endif
 
 }
