@@ -128,7 +128,7 @@ __interrupt void timer0_a0_isr(void){
 
 	EPS_data[43] = DS2775_read_register(protection_register);		// read protection register
 
-    temp_1 = read_ADS1248(2);
+    temp_1 = read_ADS1248(6);
 
 
     /*
@@ -313,9 +313,19 @@ __interrupt void timer1_a0_isr(void){
     uart_tx_debug("\r\n");
     uart_tx_debug("+Y panel current: ");
     float_send(positive_y_panel_current_mean*.0001479640152);
-    uart_tx_debug("\r\n");
-
     uart_tx_debug("\r\n\n");
+
+    uart_tx_debug("**** Solar Panel Voltages ****");
+    uart_tx_debug("\r\n");
+    uart_tx_debug("-Y/+X panel voltage: ");
+    float_send(negative_y_positive_x_panel_voltage_mean*0.001178588867);
+    uart_tx_debug("\r\n");
+    uart_tx_debug("-X/+Z panel voltage: ");
+    float_send(negative_x_positive_z_panel_voltage_mean*0.001178588867);
+    uart_tx_debug("\r\n");
+    uart_tx_debug("-Z/+Y panel voltage: ");
+    float_send(negative_z_positive_y_panel_voltage_mean*0.001178588867);
+    uart_tx_debug("\r\n");
 #endif
 
     }
