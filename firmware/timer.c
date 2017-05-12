@@ -63,6 +63,14 @@ __interrupt void timer0_a0_isr(void){
 	EPS_data[23] = (uint8_t) (adc15 & 0xff);		// bitwise and with 0xff to get LSB
     EPS_data[24] = (uint8_t) (adc15 >> 8);			// shift data 8 bits to get MSB
 
+#ifdef _DEBUG
+    uart_tx_debug("**** Misc ADC ****");
+    uart_tx_debug("\r\n");
+    uart_tx_debug("Vpanels Voltage: ");
+    float_send(adc15*0.00244140625);
+    uart_tx_debug("\r\n");
+#endif
+
     watchdog_reset_counter();
 
     adc7 = adc_read(bus_voltage);				// bus voltage measurement
