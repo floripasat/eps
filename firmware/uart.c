@@ -60,32 +60,14 @@ void port_mapping(void){
 }
 
 void float_send(volatile float c){
-
-    volatile long int d;
-	volatile  unsigned long int hundreds, tens, units, tenths, hundredths, thousandths, tenthousandths,thousandth, ten_thousandths;
-	volatile unsigned long int remainder;
-    unsigned char string[30];
+    uint8_t string[30];
 
     if(c < 0){
     	uart_tx_debug("-");
     	c = -c;
     }
 
-    c *= 10000;
-    d = (long long int)c;
-    tens = d/100000;
-    remainder =d - tens*100000;
-    units = remainder/10000;
-    remainder = remainder - units*10000;
-	tenths = remainder/1000;
-    remainder = remainder - tenths*1000;
-    hundredths = remainder/100;
-    remainder = remainder - hundredths *100;
-    thousandth = remainder/10;
-	remainder = remainder -thousandth*10;
-	ten_thousandths=remainder;
-    sprintf(string, "%d%d.%d%d%d%d", tens, units, tenths, hundredths,thousandth,ten_thousandths);
+    sprintf(string, "%f", c);
 	uart_tx_debug(string);
-
 }
 
