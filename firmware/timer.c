@@ -77,6 +77,12 @@ __interrupt void timer0_a0_isr(void){
     EPS_data[25] = (uint8_t) (adc7 & 0xff);		// bitwise and with 0xff to get LSB
     EPS_data[26] = (uint8_t) (adc7 >> 8);		// shift data 8 bits to get MSB
 
+#ifdef _DEBUG
+    uart_tx_debug("Vbus Voltage: ");
+    float_send(adc7*0.00244140625);
+    uart_tx_debug("\r\n");
+#endif
+
     watchdog_reset_counter();
 
 
