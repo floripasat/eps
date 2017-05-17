@@ -59,11 +59,11 @@ void port_mapping(void){
 
 }
 
-void float_send(float c){
+void float_send(volatile float c){
 
     volatile long int d;
-	volatile  unsigned int hundreds, tens, units, tenths, hundredths, thousandths, tenthousandths,thousandth, ten_thousandths;
-	volatile long int remainder;
+	volatile  unsigned long int hundreds, tens, units, tenths, hundredths, thousandths, tenthousandths,thousandth, ten_thousandths;
+	volatile unsigned long int remainder;
     unsigned char string[30];
 
     if(c < 0){
@@ -72,7 +72,7 @@ void float_send(float c){
     }
 
     c *= 10000;
-    d = (long int)c;
+    d = (long long int)c;
     tens = d/100000;
     remainder =d - tens*100000;
     units = remainder/10000;
