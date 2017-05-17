@@ -21,12 +21,17 @@ void main(void){
  	WDTCTL = WDTPW + WDTHOLD;
 
 	config_msp430();
-	config_ADS1248(2);
+	config_ADS1248(6);
 	config_DS2775();
 
 	#ifdef _DEBUG
 		uart_tx_debug("system boot complete\r\n");
 	#endif
+
+
+#ifdef _DEBUG_WATCHDOG
+    while(1);
+#endif
 
 	__bis_SR_register(GIE);
 	while(1);
@@ -44,7 +49,6 @@ void main(void){
 
 
 void config_msp430(void){
-
 
 	clock_config();
 
@@ -76,9 +80,6 @@ void config_msp430(void){
 
     P1DIR |= BIT6;
     P1OUT &= ~BIT6;		// disable 555
-
-
-	__bis_SR_register(GIE);     // Enter LPM0, enable interrupts
 
 	#ifdef _DEBUG
 	system_on_dir |= system_on_pin;

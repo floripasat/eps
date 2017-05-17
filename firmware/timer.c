@@ -201,7 +201,6 @@ __interrupt void timer0_a0_isr(void){
     uart_tx_debug(protection_register_string);
     uart_tx_debug("\r\n\n");
 
-
 	#endif
 
 }
