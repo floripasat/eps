@@ -92,6 +92,15 @@ __interrupt void timer0_a0_isr(void){
 
     watchdog_reset_counter();
 
+#ifdef _DEBUG
+
+    uart_tx_debug("Beacon/EPS Current: ");
+    float_send(adc6*0.0001229927582);
+    uart_tx_debug("\r\n");
+
+#endif
+
+
     adc10 = adc_read(msp_temperature);
     EPS_data[29] = (uint8_t) (adc10 & 0xff);	// bitwise and with 0xff to get LSB
     EPS_data[30] = (uint8_t) (adc10 >> 8);		// shift data 8 bits to get MSB
