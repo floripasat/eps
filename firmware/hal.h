@@ -54,8 +54,8 @@
 #define system_on_port P5OUT
 #define system_on_pin BIT4
 
-#define HWREG8(x)                                                             \
-    (*((volatile uint8_t *)((uint16_t)x)))
+#define HWREG16(x)                                                             \
+    (*((volatile uint16_t *)((uint16_t)x)))
 
 /**** MPPT PWM ****/
 
