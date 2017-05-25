@@ -54,5 +54,14 @@
 #define system_on_port P5OUT
 #define system_on_pin BIT4
 
+#define HWREG8(x)                                                             \
+    (*((volatile uint8_t *)((uint16_t)x)))
+
+/**** MPPT PWM ****/
+
+#define clock 8000000
+#define mppt_pwm_frequency 500000
+#define mppt_pwm_duty_cycle_step (clock/mppt_pwm_frequency)*0.0625
+
 
 #endif /* HAL_H_ */

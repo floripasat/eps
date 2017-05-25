@@ -11,6 +11,7 @@
 #include "I2C.h"
 #include "onewire.h"
 #include "uart.h"
+#include "mppt.h"
 
 volatile float duty_cycle = 0;
 volatile long t = 0;
@@ -349,6 +350,8 @@ __interrupt void timer1_a0_isr(void){
     float_send(negative_z_positive_y_panel_voltage_mean*0.001178588867);
     uart_tx_debug("\r\n");
 #endif
+
+    mppt_algorithm((negative_y_panel_current_mean + positive_x_panel_current_mean), negative_y_positive_x_panel_voltage_mean, 0x03D4);
 
     }
     else{
