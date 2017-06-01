@@ -17,7 +17,7 @@ void clock_config(void){
     UCSCTL6 &= ~(XT1OFF | XT2OFF);            // Enable XT1 & XT2
     UCSCTL6 |= XCAP_3;                        // Internal load cap
 
-    UCSCTL5 |= DIVM_2 + DIVS_2;
+    UCSCTL5 |= DIVM_2 + DIVS_0;
     UCSCTL4 |= SELA_0 + SELS_5 + SELM_5;        // SMCLK = MCLK = XT2 , ACLK = XT1
 
     do {

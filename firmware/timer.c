@@ -16,7 +16,7 @@
 volatile float duty_cycle = 0;
 volatile long t = 0;
 volatile float temperature = 0;
-volatile extern uint8_t EPS_data[69];
+volatile extern uint8_t EPS_data[70];
 
 volatile uint16_t adc0 = 0;
 volatile uint16_t adc1 = 0;
@@ -34,15 +34,15 @@ volatile uint16_t adc15 = 0;
 volatile uint16_t msp_ts = 0;
 volatile uint32_t temp_1 = 0;
 
-volatile uint16_t negative_y_panel_current_mean = 10;				// take mean of adc0
-volatile uint16_t positive_x_panel_current_mean = 10;				// take mean of adc1
-volatile uint16_t negative_x_panel_current_mean = 10;				// take mean of adc2
-volatile uint16_t positive_z_panel_current_mean = 10;				// take mean of adc3
-volatile uint16_t negative_z_panel_current_mean = 10;				// take mean of adc4
-volatile uint16_t positive_y_panel_current_mean = 10;				// take mean of adc5
-volatile uint16_t negative_y_positive_x_panel_voltage_mean = 10;		// take mean of adc12
-volatile uint16_t negative_x_positive_z_panel_voltage_mean = 10;		// take mean of adc13
-volatile uint16_t negative_z_positive_y_panel_voltage_mean = 10;		// take mean of adc14
+volatile uint16_t negative_y_panel_current_mean = 0;				// take mean of adc0
+volatile uint16_t positive_x_panel_current_mean = 0;				// take mean of adc1
+volatile uint16_t negative_x_panel_current_mean = 0;				// take mean of adc2
+volatile uint16_t positive_z_panel_current_mean = 0;				// take mean of adc3
+volatile uint16_t negative_z_panel_current_mean = 0;				// take mean of adc4
+volatile uint16_t positive_y_panel_current_mean = 0;				// take mean of adc5
+volatile uint16_t negative_y_positive_x_panel_voltage_mean = 0;		// take mean of adc12
+volatile uint16_t negative_x_positive_z_panel_voltage_mean = 0;		// take mean of adc13
+volatile uint16_t negative_z_positive_y_panel_voltage_mean = 0;		// take mean of adc14
 
 const struct Pid parameters = {0, 0, 1, 250, 20, 0 , INT_MAX, 150};
 
@@ -371,7 +371,18 @@ void timer_config(void){
 	TA1CCTL0 = CCIE;								// timer A1 CCR0 interrupt enabled
 	TA1CTL = TASSEL_1 + MC_1 + TACLR;       		// SMCLK, upmode, timer A interrupt enable, clear TAR
 
-    P4DIR |= BIT1 + BIT2 + BIT3;
-    P4OUT &= ~(BIT1 + BIT2 + BIT3);		// turn off all MPPT mosfets
+	TBCTL |= TBSSEL_2 + MC_1;
+	TBCTL |= TBCLR;
+
+	P4SEL |= BIT1 | BIT2 | BIT3;   // P4.1, P4.2 and P4.3 option select
+	P4DIR |= BIT1 | BIT2 | BIT3;   // P4.1, P4.2 and P4.3 outputs
+
+	TBCCR0 = 64;                      		// PWM Period
+	TBCCTL1 = OUTMOD_7;                       // CCR1 reset/set
+	TBCCR1 = 0;                  				// CCR1 PWM duty cycle
+	TBCCTL2 = OUTMOD_7;                       // CCR2 reset/set
+	TBCCR2 = 0;                  				// CCR2 PWM duty cycle
+	TBCCTL3 = OUTMOD_7;						// CCR3 reset/set
+	TBCCR3 = 0;								// CCR3 PWM duty cycle
 }
 
