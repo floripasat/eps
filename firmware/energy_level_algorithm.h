@@ -9,6 +9,9 @@
 #define ENERGY_LEVEL_ALGORITHM_C_
 
 #include <msp430.h>
+#include <stdint.h>
+
+#define maxChargeLevel 0x1300
 
 uint8_t energyLevelAlgorithm(uint16_t chargeLevel);
 

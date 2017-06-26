@@ -10,7 +10,7 @@
 
 uint8_t energyLevelAlgorithm(uint16_t chargeLevel){
 
-	if(chargeLeveL >= 0.75*maxChargeLevel)
+	if(chargeLevel >= 0.75*maxChargeLevel)
 		return 0x10;
 	else if(chargeLevel >= 0.5*maxChargeLevel)
 		return 0x20;
