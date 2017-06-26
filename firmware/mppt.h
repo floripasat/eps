@@ -9,6 +9,7 @@
 #define MPPT_H_
 
 #include <msp430.h>
+#include "uart.h"
 
 #define HWREG16(x)                                                             \
     (*((volatile uint16_t *)((uint16_t)x)))
