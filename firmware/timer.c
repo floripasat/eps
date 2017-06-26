@@ -176,10 +176,36 @@ __interrupt void timer0_a0_isr(void){
     if(counter_30s == 29){
     	counter_30s = 0;
     	uart_tx_beacon(0x7E);
-    	uart_tx_beacon(EPS_data[35]);
-    	uart_tx_beacon(EPS_data[36]);
-    	uart_tx_beacon(EPS_data[37]);
-    	uart_tx_beacon(EPS_data[38]);
+    	uart_tx_beacon(EPS_data[35]);		// VBat1 LSB
+    	uart_tx_beacon(EPS_data[36]);		// VBat1 MSB
+    	uart_tx_beacon(EPS_data[37]);		// VBat2 LSB
+    	uart_tx_beacon(EPS_data[38]);		// VBAT2 MSB
+    	uart_tx_beacon(EPS_data[3]);		// -Y Solar panel current LSB
+    	uart_tx_beacon(EPS_data[4]);		// -Y Solar panel current MSB
+    	uart_tx_beacon(EPS_data[5]);		// +X Solar panel current LSB
+    	uart_tx_beacon(EPS_data[6]);		// +X Solar panel current MSB
+    	uart_tx_beacon(EPS_data[7]);		// -X Solar panel current LSB
+    	uart_tx_beacon(EPS_data[8]);		// -X Solar panel current MSB
+    	uart_tx_beacon(EPS_data[9]);		// +Z Solar panel current LSB
+    	uart_tx_beacon(EPS_data[10]);		// +Z Solar panel current MSB
+    	uart_tx_beacon(EPS_data[11]);		// -Z Solar panel current LSB
+    	uart_tx_beacon(EPS_data[12]);		// -Z Solar panel current MSB
+    	uart_tx_beacon(EPS_data[13]);		// +Y Solar panel current LSB
+    	uart_tx_beacon(EPS_data[14]);		// +Y Solar panel current MSB
+    	uart_tx_beacon(EPS_data[15]);		// -Y +X Solar panels voltage LSB
+    	uart_tx_beacon(EPS_data[16]);		// -Y +X Solar panels voltage MSB
+    	uart_tx_beacon(EPS_data[17]);		// -X +Z Solar panels voltage LSB
+    	uart_tx_beacon(EPS_data[18]);		// -X +Z Solar panels voltage MSB
+    	uart_tx_beacon(EPS_data[19]);		// -Z +Y Solar panels voltage LSB
+    	uart_tx_beacon(EPS_data[20]);		// -Z +Y Solar panels voltage MSB
+    	uart_tx_beacon(EPS_data[50]);		// Bat1 Temperature
+    	uart_tx_beacon(EPS_data[51]);		// Bat1 Temperature
+    	uart_tx_beacon(EPS_data[52]);		// Bat1 Temperature
+    	uart_tx_beacon(EPS_data[53]);		// Bat2 Temperature
+    	uart_tx_beacon(EPS_data[54]);		// Bat2 Temperature
+    	uart_tx_beacon(EPS_data[55]);		// Bat2 Temperature
+    	uart_tx_beacon(EPS_data[39]);		// Battery accumulated current LSB
+    	uart_tx_beacon(EPS_data[40]);		// Battery accumulated current MSB
     	uart_tx_beacon(0x3C);
     }
     else{
@@ -377,9 +403,9 @@ void timer_config(void){
 	P4SEL |= BIT1 | BIT2 | BIT3;   // P4.1, P4.2 and P4.3 option select
 	P4DIR |= BIT1 | BIT2 | BIT3;   // P4.1, P4.2 and P4.3 outputs
 
-	TBCCR0 = 64;                      		// PWM Period
+	TBCCR0 = 70;                      		// PWM Period
 	TBCCTL1 = OUTMOD_7;                       // CCR1 reset/set
-	TBCCR1 = 0;                  				// CCR1 PWM duty cycle
+	TBCCR1 = 32;                  				// CCR1 PWM duty cycle
 	TBCCTL2 = OUTMOD_7;                       // CCR2 reset/set
 	TBCCR2 = 0;                  				// CCR2 PWM duty cycle
 	TBCCTL3 = OUTMOD_7;						// CCR3 reset/set
