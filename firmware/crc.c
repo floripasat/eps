@@ -5,6 +5,8 @@
  *      Author: Bruno Eiterer
  */
 
+#include "crc.h"
+
 uint8_t crc8(uint8_t initial_value, uint8_t polynomial, uint8_t *data, uint8_t len){
     uint8_t crc = initial_value;
     while(len--)

@@ -244,6 +244,8 @@ __interrupt void timer0_a0_isr(void){
 #pragma vector=TIMER1_A0_VECTOR
 __interrupt void timer1_a0_isr(void){
 
+	__enable_interrupt();
+
 	#ifdef _DEBUG
 	timer_debug_port_100ms ^= timer_debug_pin_100ms;	// Toggle 100ms debug pin
 	#endif

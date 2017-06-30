@@ -9,6 +9,7 @@
 #define I2C_H_
 
 #include <stdint.h>
+#include "crc.h"
 
 void I2C_config(void);
 
