@@ -12,6 +12,11 @@
 #include <stdint.h>
 
 #define maxChargeLevel 0x1300
+#define level1 0x10
+#define level2 0x20
+#define level3 0x30
+#define level4 0x40
+#define level5 0x50
 
 uint8_t energyLevelAlgorithm(uint16_t chargeLevel);
 
