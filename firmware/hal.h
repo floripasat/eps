@@ -18,6 +18,87 @@
 #define timer_debug_port_100ms P1OUT
 #define timer_debug_pin_100ms BIT1
 
+/**** Data Packet Offsets ****/
+
+#define negative_y_panel_current_LSB 0
+#define negative_y_panel_current_MSB 1
+#define positive_x_panel_current_LSB 2
+#define positive_x_panel_current_MSB 3
+#define negative_x_panel_current_LSB 4
+#define negative_x_panel_current_MSB 5
+#define positive_z_panel_current_LSB 6
+#define positive_z_panel_current_MSB 7
+#define negative_z_panel_current_LSB 8
+#define negative_z_panel_current_MSB 9
+#define positive_y_panel_current_LSB 10
+#define positive_y_panel_current_MSB 11
+#define negative_y_positive_x_panel_voltage_LSB 12
+#define negative_y_positive_x_panel_voltage_MSB 13
+#define negative_x_positive_z_panel_voltage_LSB 14
+#define negative_x_positive_z_panel_voltage_MSB 15
+#define negative_z_positive_y_panel_voltage_LSB 16
+#define negative_z_positive_y_panel_voltage_MSB 17
+
+#define vpanels_voltage_LSB 18
+#define vpanels_voltage_MSB 19
+#define bus_voltage_LSB 20
+#define bus_voltage_MSB 21
+#define beacon_eps_current_LSB 22
+#define beacon_eps_current_MSB 23
+#define msp_temperature_LSB 24
+#define msp_temperature_MSB 25
+
+#define battery_average_current_LSB 26
+#define battery_average_current_MSB 27
+#define battery_monitor_temeperature_LSB 28
+#define battery_monitor_temeperature_MSB 29
+#define battery1_voltage LSB_30
+#define battery1_voltage MSB_31
+#define battery2_voltage LSB_32
+#define battery2_voltage MSB_33
+#define battery_current LSB_34
+#define battery_current MSB_35
+#define battery_accumulated_current_LSB 36
+#define battery_accumulated_current_MSB 37
+#define protection_register_LSB 38
+#define status_register_LSB 39
+#define cycle_counter_LSB 40
+#define RAAC_LSB 41
+#define RAAC_MSB 42
+#define RSAC_LSB 43
+#define RSAC_MSB 44
+#define RARC_LSB 45
+#define RSRC_LSB 46
+
+#define RTD1_B1 47
+#define RTD1_B2 48
+#define RTD1_B3 49
+#define RTD2_B1 50
+#define RTD2_B2 51
+#define RTD2_B3 52
+#define RTD3_B1 53
+#define RTD3_B2 54
+#define RTD3_B3 55
+#define RTD4_B1 56
+#define RTD4_B2 57
+#define RTD4_B3 58
+#define RTD5_B1 59
+#define RTD5_B2 60
+#define RTD5_B3 61
+#define RTD6_B1 62
+#define RTD6_B2 63
+#define RTD6_B3 64
+#define RTD7_B1 65
+#define RTD7_B2 66
+#define RTD7_B3 67
+
+#define eps_status 68
+
+#define CRC 69
+
+
+
+
 /**** ADC ****/
 
 #define negative_y_panel_current 0
