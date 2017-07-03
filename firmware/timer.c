@@ -61,8 +61,8 @@ __interrupt void timer0_a0_isr(void){
 	#endif
 
 	adc15 = adc_read(vpanels_voltage);				// Vpanels voltage measurement
-	EPS_data[23] = (uint8_t) (adc15 & 0xff);		// bitwise and with 0xff to get LSB
-    EPS_data[24] = (uint8_t) (adc15 >> 8);			// shift data 8 bits to get MSB
+	EPS_data[vpanels_voltage_LSB] = (uint8_t) (adc15 & 0xff);		// bitwise and with 0xff to get LSB
+    EPS_data[vpanels_voltage_MSB] = (uint8_t) (adc15 >> 8);			// shift data 8 bits to get MSB
 
 #ifdef _DEBUG
     uart_tx_debug("**** Misc ADC ****");
@@ -75,8 +75,8 @@ __interrupt void timer0_a0_isr(void){
     watchdog_reset_counter();
 
     adc7 = adc_read(bus_voltage);				// bus voltage measurement
-    EPS_data[25] = (uint8_t) (adc7 & 0xff);		// bitwise and with 0xff to get LSB
-    EPS_data[26] = (uint8_t) (adc7 >> 8);		// shift data 8 bits to get MSB
+    EPS_data[bus_voltage_LSB] = (uint8_t) (adc7 & 0xff);		// bitwise and with 0xff to get LSB
+    EPS_data[bus_voltage_MSB] = (uint8_t) (adc7 >> 8);		// shift data 8 bits to get MSB
 
 #ifdef _DEBUG
     uart_tx_debug("Vbus Voltage: ");
@@ -88,8 +88,8 @@ __interrupt void timer0_a0_isr(void){
 
 
 	adc6 = adc_read(beacon_eps_current);		// beacon/eps current measurement
-    EPS_data[27] = (uint8_t) (adc6 & 0xff);		// bitwise and with 0xff to get LSB
-    EPS_data[28] = (uint8_t) (adc6 >> 8);		// shift data 8 bits to get MSB
+    EPS_data[beacon_eps_current_LSB] = (uint8_t) (adc6 & 0xff);		// bitwise and with 0xff to get LSB
+    EPS_data[beacon_eps_current_MSB] = (uint8_t) (adc6 >> 8);		// shift data 8 bits to get MSB
 
     watchdog_reset_counter();
 
@@ -103,54 +103,42 @@ __interrupt void timer0_a0_isr(void){
 
 
     adc10 = adc_read(msp_temperature);
-    EPS_data[29] = (uint8_t) (adc10 & 0xff);	// bitwise and with 0xff to get LSB
-    EPS_data[30] = (uint8_t) (adc10 >> 8);		// shift data 8 bits to get MSB
+    EPS_data[msp_temperature_LSB] = (uint8_t) (adc10 & 0xff);	// bitwise and with 0xff to get LSB
+    EPS_data[msp_temperature_MSB] = (uint8_t) (adc10 >> 8);		// shift data 8 bits to get MSB
 
     watchdog_reset_counter();
 
-    EPS_data[31] = DS2775_read_register(average_current_LSB_register);		// read battery average current LSB
-    EPS_data[32] = DS2775_read_register(average_current_MSB_register);		// read battery average current MSB
+    EPS_data[battery_average_current_LSB] = DS2775_read_register(average_current_LSB_register);		// read battery average current LSB
+    EPS_data[battery_average_current_MSB] = DS2775_read_register(average_current_MSB_register);		// read battery average current MSB
 
     watchdog_reset_counter();
 
-    EPS_data[33] = DS2775_read_register(temperature_LSB_register);		// read battery temperature LSB
-    EPS_data[34] = DS2775_read_register(temperature_MSB_register);		// read battery temperature MSB
+    EPS_data[battery_monitor_temeperature_LSB] = DS2775_read_register(temperature_LSB_register);		// read battery temperature LSB
+    EPS_data[battery_monitor_temeperature_MSB] = DS2775_read_register(temperature_MSB_register);		// read battery temperature MSB
 
     watchdog_reset_counter();
 
-    EPS_data[33] = (EPS_data[33] >> 5) | ((EPS_data[34] << 3) & 0xf8);
-    EPS_data[34] = EPS_data[34] >> 5;
+    EPS_data[battery1_voltage_LSB] = DS2775_read_register(voltage_LSB1_register);		// read battery 1 voltage LSB
+    EPS_data[battery1_voltage_MSB] = DS2775_read_register(voltage_MSB1_register);		// read battery 1 voltage MSB
 
     watchdog_reset_counter();
 
-    EPS_data[35] = DS2775_read_register(voltage_LSB1_register);		// read battery 1 voltage LSB
-    EPS_data[36] = DS2775_read_register(voltage_MSB1_register);		// read battery 1 voltage MSB
+    EPS_data[battery2_voltage_LSB] = DS2775_read_register(voltage_LSB2_register);		// read battery 2 voltage LSB
+    EPS_data[battery2_voltage_MSB] = DS2775_read_register(voltage_MSB2_register);		// read battery 2 voltage MSB
 
     watchdog_reset_counter();
 
-    EPS_data[35] = (EPS_data[35] >> 5) | ((EPS_data[36] << 3) & 0xf8);
-    EPS_data[36] = EPS_data[36] >> 5;
+    EPS_data[battery_current_LSB] = DS2775_read_register(current_LSB_register);		// read battery current LSB
+    EPS_data[battery_current_MSB] = DS2775_read_register(current_MSB_register);		// read battery current MSB
 
     watchdog_reset_counter();
 
-    EPS_data[37] = DS2775_read_register(voltage_LSB2_register);		// read battery 2 voltage LSB
-    EPS_data[38] = DS2775_read_register(voltage_MSB2_register);		// read battery 2 voltage MSB
-    EPS_data[37] = (EPS_data[37] >> 5) | ((EPS_data[38] << 3) & 0xf8);
-    EPS_data[38] = EPS_data[38] >> 5;
+    EPS_data[battery_accumulated_current_LSB] = DS2775_read_register(accumulated_current_LSB_register);		// read battery current LSB
+    EPS_data[battery_accumulated_current_MSB] = DS2775_read_register(accumulated_current_MSB_register);		// read battery current MSB
 
     watchdog_reset_counter();
 
-    EPS_data[39] = DS2775_read_register(current_LSB_register);		// read battery current LSB
-    EPS_data[40] = DS2775_read_register(current_MSB_register);		// read battery current MSB
-
-    watchdog_reset_counter();
-
-    EPS_data[41] = DS2775_read_register(accumulated_current_LSB_register);		// read battery current LSB
-    EPS_data[42] = DS2775_read_register(accumulated_current_MSB_register);		// read battery current MSB
-
-    watchdog_reset_counter();
-
-	EPS_data[43] = DS2775_read_register(protection_register);		// read protection register
+	EPS_data[protection_register_LSB] = DS2775_read_register(protection_register);		// read protection register
 
     temp_1 = read_ADS1248(6);
 
@@ -174,39 +162,45 @@ __interrupt void timer0_a0_isr(void){
     watchdog_reset_counter();
 
     if(counter_30s == 29){
+    	volatile uint8_t beacon_packet[32] = {0};
     	counter_30s = 0;
-    	uart_tx_beacon(0x7E);
-    	uart_tx_beacon(EPS_data[35]);		// VBat1 LSB
-    	uart_tx_beacon(EPS_data[36]);		// VBat1 MSB
-    	uart_tx_beacon(EPS_data[37]);		// VBat2 LSB
-    	uart_tx_beacon(EPS_data[38]);		// VBAT2 MSB
-    	uart_tx_beacon(EPS_data[3]);		// -Y Solar panel current LSB
-    	uart_tx_beacon(EPS_data[4]);		// -Y Solar panel current MSB
-    	uart_tx_beacon(EPS_data[5]);		// +X Solar panel current LSB
-    	uart_tx_beacon(EPS_data[6]);		// +X Solar panel current MSB
-    	uart_tx_beacon(EPS_data[7]);		// -X Solar panel current LSB
-    	uart_tx_beacon(EPS_data[8]);		// -X Solar panel current MSB
-    	uart_tx_beacon(EPS_data[9]);		// +Z Solar panel current LSB
-    	uart_tx_beacon(EPS_data[10]);		// +Z Solar panel current MSB
-    	uart_tx_beacon(EPS_data[11]);		// -Z Solar panel current LSB
-    	uart_tx_beacon(EPS_data[12]);		// -Z Solar panel current MSB
-    	uart_tx_beacon(EPS_data[13]);		// +Y Solar panel current LSB
-    	uart_tx_beacon(EPS_data[14]);		// +Y Solar panel current MSB
-    	uart_tx_beacon(EPS_data[15]);		// -Y +X Solar panels voltage LSB
-    	uart_tx_beacon(EPS_data[16]);		// -Y +X Solar panels voltage MSB
-    	uart_tx_beacon(EPS_data[17]);		// -X +Z Solar panels voltage LSB
-    	uart_tx_beacon(EPS_data[18]);		// -X +Z Solar panels voltage MSB
-    	uart_tx_beacon(EPS_data[19]);		// -Z +Y Solar panels voltage LSB
-    	uart_tx_beacon(EPS_data[20]);		// -Z +Y Solar panels voltage MSB
-    	uart_tx_beacon(EPS_data[50]);		// Bat1 Temperature
-    	uart_tx_beacon(EPS_data[51]);		// Bat1 Temperature
-    	uart_tx_beacon(EPS_data[52]);		// Bat1 Temperature
-    	uart_tx_beacon(EPS_data[53]);		// Bat2 Temperature
-    	uart_tx_beacon(EPS_data[54]);		// Bat2 Temperature
-    	uart_tx_beacon(EPS_data[55]);		// Bat2 Temperature
-    	uart_tx_beacon(EPS_data[39]);		// Battery accumulated current LSB
-    	uart_tx_beacon(EPS_data[40]);		// Battery accumulated current MSB
-    	uart_tx_beacon(0x3C);
+
+    	beacon_packet[0] = 0x7E;
+    	beacon_packet[1] = EPS_data[battery1_voltage_LSB];
+    	beacon_packet[2] = EPS_data[battery1_voltage_MSB];
+    	beacon_packet[3] = EPS_data[battery2_voltage_LSB];
+    	beacon_packet[4] = EPS_data[battery2_voltage_MSB];
+    	beacon_packet[5] = EPS_data[negative_y_panel_current_LSB];
+    	beacon_packet[6] = EPS_data[negative_y_panel_current_MSB];
+    	beacon_packet[7] = EPS_data[positive_x_panel_current_LSB];
+    	beacon_packet[8] = EPS_data[positive_x_panel_current_MSB];
+    	beacon_packet[9] = EPS_data[negative_x_panel_current_LSB];
+    	beacon_packet[10] = EPS_data[negative_x_panel_current_MSB];
+    	beacon_packet[11] = EPS_data[positive_z_panel_current_LSB];
+    	beacon_packet[12] = EPS_data[positive_z_panel_current_MSB];
+    	beacon_packet[13] = EPS_data[negative_z_panel_current_LSB];
+    	beacon_packet[14] = EPS_data[negative_z_panel_current_MSB];
+    	beacon_packet[15] = EPS_data[positive_y_panel_current_LSB];
+    	beacon_packet[16] = EPS_data[positive_y_panel_current_MSB];
+    	beacon_packet[17] = EPS_data[negative_y_positive_x_panel_voltage_LSB];
+    	beacon_packet[18] = EPS_data[negative_y_positive_x_panel_voltage_MSB];
+    	beacon_packet[19] = EPS_data[negative_x_positive_z_panel_voltage_LSB];
+    	beacon_packet[20] = EPS_data[negative_x_positive_z_panel_voltage_MSB];
+    	beacon_packet[21] = EPS_data[negative_z_positive_y_panel_voltage_LSB];
+    	beacon_packet[22] = EPS_data[negative_z_positive_y_panel_voltage_MSB];
+    	beacon_packet[23] = EPS_data[RTD1_B1];
+    	beacon_packet[24] = EPS_data[RTD1_B2];
+    	beacon_packet[25] = EPS_data[RTD1_B3];
+    	beacon_packet[26] = EPS_data[RTD2_B1];
+    	beacon_packet[27] = EPS_data[RTD2_B2];
+    	beacon_packet[28] = EPS_data[RTD2_B3];
+    	beacon_packet[29] = EPS_data[battery_accumulated_current_LSB];
+    	beacon_packet[30] = EPS_data[battery_accumulated_current_MSB];
+    	beacon_packet[31] = crc8(0x03, 0x92, beacon_packet, 31);
+
+    	for(int i = 31; i >= 0; i--){
+    		uart_tx_beacon(beacon_packet[i]);
+    	}
     }
     else{
     	counter_30s++;
