@@ -10,12 +10,58 @@
 
 uint8_t energyLevelAlgorithm(uint16_t chargeLevel){
 
-	if(chargeLevel >= 0.75*maxChargeLevel)
-		return 0x10;
-	else if(chargeLevel >= 0.5*maxChargeLevel)
-		return 0x20;
-	else if(chargeLevel >= 0.25*maxChargeLevel)
-		return 0x30;
-	else
-		return 0x40;
+	volatile static previous_level = level1;
+
+	switch(previous_level){
+	case level1:
+		if(chargeLevel > 0.8*maxChargeLevel)
+			return level1;
+		else{
+			previous_level = level2;
+			return level2;
+		}
+		break;
+
+	case level2:
+		if(chargeLevel > 0.85*maxChargeLevel){
+			previous_level = level1;
+			return level1;
+		}else if(chargeLevel < 0.85*maxChargeLevel && chargeLevel > 0.6*maxChargeLevel){
+			return level2;
+		}else{
+			previous_level = level3;
+			return level3;
+		}
+		break;
+	case level3:
+		if(chargeLevel > 0.65*maxChargeLevel){
+			previous_level = level2;
+			return level2;
+		}else if(chargeLevel < 0.65*maxChargeLevel && chargeLevel > 0.4*maxChargeLevel){
+			return level3;
+		}else{
+			previous_level = level4;
+			return level4;
+		}
+		break;
+	case level4:
+		if(chargeLevel > 0.45*maxChargeLevel){
+			previous_level = level3;
+			return level3;
+		}else if(chargeLevel < 0.45*maxChargeLevel && chargeLevel > 0.2*maxChargeLevel){
+			return level4;
+		}else{
+			previous_level = level5;
+			return level5;
+		}
+		break;
+	case level5:
+		if(chargeLevel > 0.25*maxChargeLevel){
+			previous_level = level4;
+			return level4;
+		}else{
+			return level5;
+		}
+		break;
+	}
 }
