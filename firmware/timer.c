@@ -198,7 +198,9 @@ __interrupt void timer0_a0_isr(void){
     	beacon_packet[30] = EPS_data[battery_accumulated_current_MSB];
     	beacon_packet[31] = crc8(0x03, 0x92, beacon_packet, 31);
 
-    	for(int i = 31; i >= 0; i--){
+    	volatile uint8_t i = 0;
+
+    	for(i = 0; i <= 31; i++){
     		uart_tx_beacon(beacon_packet[i]);
     	}
     }

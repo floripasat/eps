@@ -10,7 +10,7 @@
 
 uint8_t energyLevelAlgorithm(uint16_t chargeLevel){
 
-	volatile static previous_level = level1;
+	volatile static uint8_t previous_level = level1;
 
 	switch(previous_level){
 	case level1:
