@@ -1,1 +1,1 @@
-"./ADS1248.obj" "./eps_i2c.obj" "./eps_onewire.obj" "./eps_spi.obj" "./eps_timer.obj" "./eps_uart.obj" "./main.obj" "./misc.obj" "./pid.obj" "./watchdog.obj" "../lnk_msp430f6659.cmd" -l"libc.a" -l"libmath.a" 
+"./ADC.obj" "./ADS1248.obj" "./I2C.obj" "./SPI.obj" "./clock.obj" "./crc.obj" "./energy_level_algorithm.obj" "./main.obj" "./misc.obj" "./mppt.obj" "./onewire.obj" "./pid.obj" "./timer.obj" "./uart.obj" "./watchdog.obj" "../lnk_msp430f6659.cmd" -llibc.a -llibmath.a 

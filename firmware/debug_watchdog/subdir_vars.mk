@@ -2,6 +2,8 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+SHELL = cmd.exe
+
 # Add inputs and outputs from these tool invocations to the build variables 
 CMD_SRCS += \
 ../lnk_msp430f6659.cmd 
@@ -12,13 +14,33 @@ C_SRCS += \
 ../I2C.c \
 ../SPI.c \
 ../clock.c \
+../crc.c \
+../energy_level_algorithm.c \
 ../main.c \
 ../misc.c \
+../mppt.c \
 ../onewire.c \
 ../pid.c \
 ../timer.c \
 ../uart.c \
 ../watchdog.c 
+
+C_DEPS += \
+./ADC.d \
+./ADS1248.d \
+./I2C.d \
+./SPI.d \
+./clock.d \
+./crc.d \
+./energy_level_algorithm.d \
+./main.d \
+./misc.d \
+./mppt.d \
+./onewire.d \
+./pid.d \
+./timer.d \
+./uart.d \
+./watchdog.d 
 
 OBJS += \
 ./ADC.obj \
@@ -26,41 +48,16 @@ OBJS += \
 ./I2C.obj \
 ./SPI.obj \
 ./clock.obj \
+./crc.obj \
+./energy_level_algorithm.obj \
 ./main.obj \
 ./misc.obj \
+./mppt.obj \
 ./onewire.obj \
 ./pid.obj \
 ./timer.obj \
 ./uart.obj \
 ./watchdog.obj 
-
-C_DEPS += \
-./ADC.pp \
-./ADS1248.pp \
-./I2C.pp \
-./SPI.pp \
-./clock.pp \
-./main.pp \
-./misc.pp \
-./onewire.pp \
-./pid.pp \
-./timer.pp \
-./uart.pp \
-./watchdog.pp 
-
-C_DEPS__QUOTED += \
-"ADC.pp" \
-"ADS1248.pp" \
-"I2C.pp" \
-"SPI.pp" \
-"clock.pp" \
-"main.pp" \
-"misc.pp" \
-"onewire.pp" \
-"pid.pp" \
-"timer.pp" \
-"uart.pp" \
-"watchdog.pp" 
 
 OBJS__QUOTED += \
 "ADC.obj" \
@@ -68,13 +65,33 @@ OBJS__QUOTED += \
 "I2C.obj" \
 "SPI.obj" \
 "clock.obj" \
+"crc.obj" \
+"energy_level_algorithm.obj" \
 "main.obj" \
 "misc.obj" \
+"mppt.obj" \
 "onewire.obj" \
 "pid.obj" \
 "timer.obj" \
 "uart.obj" \
 "watchdog.obj" 
+
+C_DEPS__QUOTED += \
+"ADC.d" \
+"ADS1248.d" \
+"I2C.d" \
+"SPI.d" \
+"clock.d" \
+"crc.d" \
+"energy_level_algorithm.d" \
+"main.d" \
+"misc.d" \
+"mppt.d" \
+"onewire.d" \
+"pid.d" \
+"timer.d" \
+"uart.d" \
+"watchdog.d" 
 
 C_SRCS__QUOTED += \
 "../ADC.c" \
@@ -82,8 +99,11 @@ C_SRCS__QUOTED += \
 "../I2C.c" \
 "../SPI.c" \
 "../clock.c" \
+"../crc.c" \
+"../energy_level_algorithm.c" \
 "../main.c" \
 "../misc.c" \
+"../mppt.c" \
 "../onewire.c" \
 "../pid.c" \
 "../timer.c" \

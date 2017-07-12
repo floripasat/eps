@@ -12,6 +12,7 @@
 #include "onewire.h"
 #include "uart.h"
 #include "mppt.h"
+#include "energy_level_algorithm.h"
 
 volatile float duty_cycle = 0;
 volatile long t = 0;
@@ -161,8 +162,12 @@ __interrupt void timer0_a0_isr(void){
 
     watchdog_reset_counter();
 
+    EPS_data[eps_status] = energyLevelAlgorithm(EPS_data[eps_status]);
+
+    watchdog_reset_counter();
+
     if(counter_30s == 29){
-    	volatile uint8_t beacon_packet[32] = {0};
+    	volatile uint8_t beacon_packet[33] = {0};
     	counter_30s = 0;
 
     	beacon_packet[0] = 0x7E;
@@ -196,7 +201,8 @@ __interrupt void timer0_a0_isr(void){
     	beacon_packet[28] = EPS_data[RTD2_B3];
     	beacon_packet[29] = EPS_data[battery_accumulated_current_LSB];
     	beacon_packet[30] = EPS_data[battery_accumulated_current_MSB];
-    	beacon_packet[31] = crc8(0x03, 0x92, beacon_packet, 31);
+    	beacon_packet[31] = EPS_data[eps_status];
+    	beacon_packet[32] = crc8(0x03, 0x92, beacon_packet, 32);
 
     	volatile uint8_t i = 0;
 
