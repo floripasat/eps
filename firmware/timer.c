@@ -166,7 +166,7 @@ __interrupt void timer0_a0_isr(void){
 
     watchdog_reset_counter();
 
-    if(counter_30s == 29){
+    if(counter_30s == 9){
     	volatile uint8_t beacon_packet[33] = {0};
     	counter_30s = 0;
 
@@ -175,38 +175,38 @@ __interrupt void timer0_a0_isr(void){
     	beacon_packet[2] = EPS_data[battery1_voltage_MSB];
     	beacon_packet[3] = EPS_data[battery2_voltage_LSB];
     	beacon_packet[4] = EPS_data[battery2_voltage_MSB];
-    	beacon_packet[5] = EPS_data[negative_y_panel_current_LSB];
-    	beacon_packet[6] = EPS_data[negative_y_panel_current_MSB];
-    	beacon_packet[7] = EPS_data[positive_x_panel_current_LSB];
-    	beacon_packet[8] = EPS_data[positive_x_panel_current_MSB];
-    	beacon_packet[9] = EPS_data[negative_x_panel_current_LSB];
-    	beacon_packet[10] = EPS_data[negative_x_panel_current_MSB];
-    	beacon_packet[11] = EPS_data[positive_z_panel_current_LSB];
-    	beacon_packet[12] = EPS_data[positive_z_panel_current_MSB];
-    	beacon_packet[13] = EPS_data[negative_z_panel_current_LSB];
-    	beacon_packet[14] = EPS_data[negative_z_panel_current_MSB];
-    	beacon_packet[15] = EPS_data[positive_y_panel_current_LSB];
-    	beacon_packet[16] = EPS_data[positive_y_panel_current_MSB];
-    	beacon_packet[17] = EPS_data[negative_y_positive_x_panel_voltage_LSB];
-    	beacon_packet[18] = EPS_data[negative_y_positive_x_panel_voltage_MSB];
-    	beacon_packet[19] = EPS_data[negative_x_positive_z_panel_voltage_LSB];
-    	beacon_packet[20] = EPS_data[negative_x_positive_z_panel_voltage_MSB];
-    	beacon_packet[21] = EPS_data[negative_z_positive_y_panel_voltage_LSB];
-    	beacon_packet[22] = EPS_data[negative_z_positive_y_panel_voltage_MSB];
-    	beacon_packet[23] = EPS_data[RTD1_B1];
-    	beacon_packet[24] = EPS_data[RTD1_B2];
-    	beacon_packet[25] = EPS_data[RTD1_B3];
-    	beacon_packet[26] = EPS_data[RTD2_B1];
-    	beacon_packet[27] = EPS_data[RTD2_B2];
-    	beacon_packet[28] = EPS_data[RTD2_B3];
-    	beacon_packet[29] = EPS_data[battery_accumulated_current_LSB];
-    	beacon_packet[30] = EPS_data[battery_accumulated_current_MSB];
+        beacon_packet[5] = EPS_data[RTD1_B1];
+        beacon_packet[6] = EPS_data[RTD1_B2];
+        beacon_packet[7] = EPS_data[RTD1_B3];
+        beacon_packet[8] = EPS_data[RTD2_B1];
+        beacon_packet[9] = EPS_data[RTD2_B2];
+        beacon_packet[10] = EPS_data[RTD2_B3];
+        beacon_packet[11] = EPS_data[battery_accumulated_current_LSB];
+        beacon_packet[12] = EPS_data[battery_accumulated_current_MSB];
+    	beacon_packet[13] = EPS_data[negative_y_panel_current_LSB];
+    	beacon_packet[14] = EPS_data[negative_y_panel_current_MSB];
+    	beacon_packet[15] = EPS_data[positive_x_panel_current_LSB];
+    	beacon_packet[16] = EPS_data[positive_x_panel_current_MSB];
+    	beacon_packet[17] = EPS_data[negative_x_panel_current_LSB];
+    	beacon_packet[18] = EPS_data[negative_x_panel_current_MSB];
+    	beacon_packet[19] = EPS_data[positive_z_panel_current_LSB];
+    	beacon_packet[20] = EPS_data[positive_z_panel_current_MSB];
+    	beacon_packet[21] = EPS_data[negative_z_panel_current_LSB];
+    	beacon_packet[22] = EPS_data[negative_z_panel_current_MSB];
+    	beacon_packet[23] = EPS_data[positive_y_panel_current_LSB];
+    	beacon_packet[24] = EPS_data[positive_y_panel_current_MSB];
+    	beacon_packet[25] = EPS_data[negative_y_positive_x_panel_voltage_LSB];
+    	beacon_packet[26] = EPS_data[negative_y_positive_x_panel_voltage_MSB];
+    	beacon_packet[27] = EPS_data[negative_x_positive_z_panel_voltage_LSB];
+    	beacon_packet[28] = EPS_data[negative_x_positive_z_panel_voltage_MSB];
+    	beacon_packet[29] = EPS_data[negative_z_positive_y_panel_voltage_LSB];
+    	beacon_packet[30] = EPS_data[negative_z_positive_y_panel_voltage_MSB];
     	beacon_packet[31] = EPS_data[eps_status];
-    	beacon_packet[32] = crc8(0x03, 0x92, beacon_packet, 32);
+    	beacon_packet[32] = crc8(0x03, 0x92, beacon_packet+1, 31);
 
     	volatile uint8_t i = 0;
 
-    	for(i = 0; i <= 31; i++){
+6    	for(i = 0; i <= 32; i++){
     		uart_tx_beacon(beacon_packet[i]);
     	}
     }
