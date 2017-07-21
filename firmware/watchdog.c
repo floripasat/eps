@@ -9,7 +9,7 @@
 
 
 void watchdog_config(void) {
-	WDTCTL = WDTPW + WDTSSEL_1 + WDTIS_4;
+	WDTCTL = WDTPW + WDTSSEL__VLO + WDTIS__8192;
 }
 
 void watchdog_reset_counter(void){

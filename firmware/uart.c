@@ -9,19 +9,19 @@ void uart_config(){
 
 	P9SEL |= 0x0C;                            // Assign P9.2 to UCA2TXD and P9.3 to UCA2RXD
 	UCA2CTL1 |= UCSWRST;                      // **Put state machine in reset**
-	UCA2CTL1 |= UCSSEL_1;                     // CLK = SMCLK
-	UCA2BR0 = 0x03;                           // baud rate selection 32768/UCA2BRO=9600 => UCA0BRO = 3
-	UCA2BR1 = 0x00;
-	UCA2MCTL = UCBRS_3|UCBRF_0;               // Modulation UCBRSx=3, UCBRFx=0
+	UCA2CTL1 |= UCSSEL__ACLK;                    // CLK = SMCLK
+	UCA2BR0 = 0x82;                           // baud rate selection 32768/UCA2BRO=9600 => UCA0BRO = 3
+	UCA2BR1 = 0x06;
+	UCA2MCTL = UCBRS_6|UCBRF_0;               // Modulation UCBRSx=3, UCBRFx=0
 	UCA2CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
 
 	P2SEL |= BIT4;                            // Assign P2.4 to UCA0TXD
 	P2DIR |= BIT4;							  // set P2.4 as output
 	UCA0CTL1 |= UCSWRST;                      // **Put state machine in reset**
-	UCA0CTL1 |= UCSSEL_1;                     // CLK = SMCLK
-	UCA0BR0 = 0x03;                           // baud rate selection 32768/UCA2BRO=9600 => UCA0BRO = 3
-	UCA0BR1 = 0x00;
-	UCA0MCTL = UCBRS_3|UCBRF_0;               // Modulation UCBRSx=3, UCBRFx=0
+	UCA0CTL1 |= UCSSEL__ACLK;                     // CLK = SMCLK
+	UCA0BR0 = 0x82;                           // baud rate selection 32768/UCA2BRO=9600 => UCA0BRO = 3
+	UCA0BR1 = 0x06;
+	UCA0MCTL = UCBRS_6|UCBRF_0;               // Modulation UCBRSx=3, UCBRFx=0
 	UCA0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
 
 
