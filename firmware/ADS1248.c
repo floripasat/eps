@@ -81,7 +81,7 @@ void config_ADS1248(int positive_channel)
 	if(initialization_data_counter == 21)
 	{
 		#ifdef _DEBUG
-		uint8_t string[4];
+		uint8_t string[10];
 		uint8_t i;
 		uart_tx_debug("ADS1248 data:");
 		for(i = 0; i < 6; i++){

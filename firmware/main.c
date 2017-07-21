@@ -18,23 +18,23 @@ void config_msp430(void);
 
 void main(void){
 
- 	WDTCTL = WDTPW + WDTHOLD;
+    WDTCTL = WDTPW + WDTHOLD;
 
-	config_msp430();
-	config_ADS1248(6);
-	config_DS2775();
+    config_msp430();
+    config_ADS1248(6);
+    config_DS2775();
 
-	#ifdef _DEBUG
-		uart_tx_debug("system boot complete\r\n");
-	#endif
+#ifdef _DEBUG
+    uart_tx_debug("system boot complete\r\n");
+#endif
 
 
 #ifdef _DEBUG_WATCHDOG
     while(1);
 #endif
 
-	__bis_SR_register(GIE);
-	while(1);
+    __bis_SR_register(GIE);
+    while(1);
 }
 
 
@@ -50,41 +50,41 @@ void main(void){
 
 void config_msp430(void){
 
-	clock_config();
+    clock_config();
 
-	watchdog_config();
+    watchdog_config();
 
-	uart_config();
+    uart_config();
 
-	watchdog_reset_counter();
+    watchdog_reset_counter();
 
-	#ifdef _DEBUG
-		uart_tx_debug("system booting\r\n");
-	#endif
+#ifdef _DEBUG
+    uart_tx_debug("system booting\r\n");
+#endif
 
-	adc_config();		// call MSP ADC configuration function
+    adc_config();		// call MSP ADC configuration function
 
-	watchdog_reset_counter();
+    watchdog_reset_counter();
 
-	spi_config();		// call SPI configuration function
+    spi_config();		// call SPI configuration function
 
-	watchdog_reset_counter();
+    watchdog_reset_counter();
 
-	I2C_config();
+    I2C_config();
 
-	watchdog_reset_counter();
+    watchdog_reset_counter();
 
-	timer_config();		// call timer configuration function
+    timer_config();		// call timer configuration function
 
-	watchdog_reset_counter();
+    watchdog_reset_counter();
 
     P1DIR |= BIT6;
     P1OUT &= ~BIT6;		// disable 555
 
-	#ifdef _DEBUG
-	system_on_dir |= system_on_pin;
-	system_on_port |= system_on_pin;
-	#endif
+#ifdef _DEBUG
+    system_on_dir |= system_on_pin;
+    system_on_port |= system_on_pin;
+#endif
 }
 
 
