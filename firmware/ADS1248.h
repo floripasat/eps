@@ -23,7 +23,7 @@
 
 #define chip_select_port P8OUT
 #define chip_select_pin BIT5
-#define negative_channel 0x01
+#define negative_channel 0x07
 #define ADS1248_START_port P8OUT
 #define ADS1248_START_pin BIT6
 
