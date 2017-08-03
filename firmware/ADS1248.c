@@ -107,6 +107,13 @@ int32_t read_ADS1248(uint8_t channel){
 	for (i = 500; i; i--);						// Add time between transmissions to make sure slave can keep up
 	spi_send((channel << 3) | negative_channel);			// write positive input channel value (channel << 3) and negative input channel value (0x01)
 	for (i = 500; i; i--);						// Add time between transmissions to make sure slave can keep up
+	spi_send(WREG_command + 0x0B);				// send write register command + the IDAC1 register address
+	for (i = 500; i; i--);						// Add time between transmissions to make sure slave can keep up
+	spi_send(0x00);
+	for (i = 500; i; i--);						// Add time between transmissions to make sure slave can keep up
+	spi_send(channel);							// set current source output to channel to be read
+	for (i = 500; i; i--);						// Add time between transmissions to make sure slave can keep up
+
 
 	/* start conversion and read outputs */
 
