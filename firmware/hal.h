@@ -94,7 +94,7 @@
 
 #define eps_status 68
 
-#define CRC 69
+#define CRC 70
 
 
 
@@ -135,14 +135,19 @@
 #define system_on_port P5OUT
 #define system_on_pin BIT4
 
-#define HWREG16(x)                                                             \
-    (*((volatile uint16_t *)((uint16_t)x)))
+#define HWREG16(x) (*((volatile uint16_t *)((uint16_t)x)))
 
 /**** MPPT PWM ****/
 
 #define clock 8000000
 #define mppt_pwm_frequency 500000
 #define mppt_pwm_duty_cycle_step (clock/mppt_pwm_frequency)*0.0625
+
+/**** Regulators ****/
+
+#define OBDH_TTC_regulator_enable_dir	P1DIR
+#define OBDH_TTC_regulator_enable_port	P1OUT
+#define OBDH_TTC_regulator_enable_pin	BIT2
 
 
 #endif /* HAL_H_ */
