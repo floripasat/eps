@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include "crc.h"
+#include "hal.h"
 
 void I2C_config(void);
 

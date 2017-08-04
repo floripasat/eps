@@ -211,10 +211,17 @@ __interrupt void timer0_a0_isr(void){
 
 		watchdog_reset_counter();
 
+#ifdef _DEBUG
+		uint8_t string[5];
+		sprintf(string, "%#04x", EPS_data[eps_status]);
+		uart_tx_debug("Energy Level: ");
+		uart_tx_debug(string);
+		uart_tx_debug("\r\n");
+#endif
+
 		if(counter_30s == 9){
 			volatile uint8_t beacon_packet[33] = {0};
 			counter_30s = 0;
-
 
 			beacon_packet[0] = 0x7E;
 			beacon_packet[1] = EPS_data[battery1_voltage_LSB];

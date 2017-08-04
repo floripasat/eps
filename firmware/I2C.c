@@ -3,7 +3,7 @@
 #include "I2C.h"
 #include "misc.h"
 
-volatile uint8_t EPS_data[71] = {0x7E, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 0, 0, 69, 70};
+volatile uint8_t EPS_data[71] = {0x7E, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 0, 0x01, 69, 70};
 volatile uint8_t EPS_data2[71] = {0};
 
 void I2C_tx(uint8_t tx_data){
@@ -35,7 +35,7 @@ __interrupt void USCI_B2_ISR(void)
   case  6:                                  // Vector  6: STTIFG
     UCB2IFG &= ~UCSTTIFG;                   // Clear start condition int flag
     memcpy(EPS_data2, EPS_data, 71);
-    EPS_data2[70] = crc8(0x03, 0x92, EPS_data2+1, 69);
+    EPS_data2[CRC] = crc8(0x03, 0x92, EPS_data2+1, 69);
     break;
   case  8:                                  // Vector  8: STPIFG
     UCB2IFG &= ~UCSTPIFG;                   // Clear stop condition int flag
