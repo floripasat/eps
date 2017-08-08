@@ -188,6 +188,13 @@ __interrupt void timer0_a0_isr(void){
 		EPS_data[RTD6_B2] = (temp_1 >> 8) & 0xff;
 		EPS_data[RTD6_B3] = (temp_1 >> 16) & 0xff;
 
+		volatile float test;
+		test = ((EPS_data[RTD2_B1] + (((uint32_t) EPS_data[RTD2_B2]) << 8 & 0xff00) + (((uint32_t) EPS_data[RTD2_B3]) << 16) & 0xff0000)*0.000196695 - 1000)/3.85;
+		test += (temp_1*0.000196695 - 1000)/3.85;
+		test /= 2;
+
+		TA1CCR1 = (Pid_Control(60, test, parameters))*160;
+
 
 		/*
 

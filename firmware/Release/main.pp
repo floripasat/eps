@@ -8,13 +8,22 @@ main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/intrinsics.h
 main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/intrinsics_legacy_undefs.h
 main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/stdlib.h
 main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/linkage.h
-main.obj: ../eps_onewire.h
-main.obj: ../eps_i2c.h
-main.obj: ../eps_timer.h
-main.obj: ../eps_uart.h
+main.obj: ../ADC.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/stdint.h
 main.obj: ../ADS1248.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/stdio.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/stdarg.h
+main.obj: ../SPI.h
+main.obj: ../uart.h
+main.obj: ../I2C.h
+main.obj: ../crc.h
+main.obj: ../hal.h
+main.obj: ../onewire.h
 main.obj: ../pid.h
 main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/limits.h
+main.obj: ../timer.h
+main.obj: ../clock.h
+main.obj: ../watchdog.h
 
 ../main.c: 
 C:/ti/ccsv6/ccs_base/msp430/include/msp430.h: 
@@ -24,10 +33,19 @@ C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/intrinsics.h:
 C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/intrinsics_legacy_undefs.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/stdlib.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/linkage.h: 
-../eps_onewire.h: 
-../eps_i2c.h: 
-../eps_timer.h: 
-../eps_uart.h: 
+../ADC.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/stdint.h: 
 ../ADS1248.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/stdio.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/stdarg.h: 
+../SPI.h: 
+../uart.h: 
+../I2C.h: 
+../crc.h: 
+../hal.h: 
+../onewire.h: 
 ../pid.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.3/include/limits.h: 
+../timer.h: 
+../clock.h: 
+../watchdog.h: 
