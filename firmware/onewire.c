@@ -236,6 +236,8 @@ void config_DS2775(void){
 	OWWriteByte(current_gain_LSB_register);		// register address
 	OWWriteByte(0x00);					// value to be written
 
+#ifdef _WRITE_ACCUMULATED_CURRENT
+
 	reset= OneWireReset();								// ACCUMULATED CURRENT - MSB REGISTER
 	OWWriteByte(0xCC);									// eeprom address (only one slave on bus, CC is used)
 	OWWriteByte(0x6C);									// write operation
@@ -248,6 +250,8 @@ void config_DS2775(void){
 	OWWriteByte(0x6C);									// write operation
 	OWWriteByte(accumulated_current_LSB_register);		// register address
 	OWWriteByte(0x00);									// value to be written
+
+#endif
 
 	#ifdef _DEBUG
 	uint8_t one_wire_data_sent_back[8] = {0};
