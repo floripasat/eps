@@ -70,7 +70,7 @@ __interrupt void timer0_a0_isr(void){
 		EPS_data[vpanels_voltage_LSB] = (uint8_t) (adc15 & 0xff);		// bitwise and with 0xff to get LSB
 		EPS_data[vpanels_voltage_MSB] = (uint8_t) (adc15 >> 8);			// shift data 8 bits to get MSB
 
-#ifdef _DEBUG
+#ifdef _DEBUG_ADC
 		uart_tx_debug("**** Misc ADC ****");
 		uart_tx_debug("\r\n");
 		uart_tx_debug("Vpanels Voltage: ");
@@ -84,7 +84,7 @@ __interrupt void timer0_a0_isr(void){
 		EPS_data[bus_voltage_LSB] = (uint8_t) (adc7 & 0xff);		// bitwise and with 0xff to get LSB
 		EPS_data[bus_voltage_MSB] = (uint8_t) (adc7 >> 8);		// shift data 8 bits to get MSB
 
-#ifdef _DEBUG
+#ifdef _DEBUG_ADC
 		uart_tx_debug("Vbus Voltage: ");
 		float_send(adc7*0.00244140625);
 		uart_tx_debug("\r\n");
@@ -99,7 +99,7 @@ __interrupt void timer0_a0_isr(void){
 
 		watchdog_reset_counter();
 
-#ifdef _DEBUG
+#ifdef _DEBUG_ADC
 
 		uart_tx_debug("Beacon/EPS Current: ");
 		float_send(adc6*0.0001229927582);
@@ -412,7 +412,7 @@ __interrupt void timer2_a0_isr(void){
 		negative_x_positive_z_panel_voltage_mean /= 10;		// take mean of adc13
 		negative_z_positive_y_panel_voltage_mean /= 10;		// take mean of adc14
 
-#ifdef _DEBUG
+#ifdef _DEBUG_ADC
 		uart_tx_debug("**** Solar Panel Currents ****");
 		uart_tx_debug("\r\n");
 		uart_tx_debug("-Y panel current: ");
