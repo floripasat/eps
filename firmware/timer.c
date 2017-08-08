@@ -255,7 +255,7 @@ __interrupt void timer0_a0_isr(void){
 			beacon_packet[29] = EPS_data[negative_z_positive_y_panel_voltage_LSB];
 			beacon_packet[30] = EPS_data[negative_z_positive_y_panel_voltage_MSB];
 			beacon_packet[31] = EPS_data[eps_status];
-			beacon_packet[32] = crc8(0x00, 0x07, beacon_packet+1, 31);
+			beacon_packet[32] = crc8(0x03, 0x92, beacon_packet+1, 31);
 
 			volatile uint8_t i = 0;
 
