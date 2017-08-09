@@ -214,7 +214,7 @@ __interrupt void timer0_a0_isr(void){
 
 		watchdog_reset_counter();
 
-		EPS_data[eps_status] = energyLevelAlgorithm(EPS_data[eps_status], battery_accumulated_current_LSB | (battery_accumulated_current_MSB << 8));
+		EPS_data[eps_status] = energyLevelAlgorithm(EPS_data[eps_status], EPS_data[battery_accumulated_current_LSB] | (EPS_data[battery_accumulated_current_MSB] << 8));
 
 		watchdog_reset_counter();
 
@@ -292,7 +292,7 @@ __interrupt void timer0_a0_isr(void){
 		float_send(current_unit*((EPS_data[32] << 8) + EPS_data[31]));
 		uart_tx_debug("\r\n");
 		uart_tx_debug("Battery Accumulated Current: ");
-		float_send(accumulated_current_unit*((EPS_data[42] << 8) + EPS_data[41]));
+		float_send((accumulated_current_unit)*((EPS_data[37] << 8) + EPS_data[36]));
 		uart_tx_debug("\r\n");
 		sprintf(protection_register_string, "%#04x", EPS_data[43] & 0x0f);
 		uart_tx_debug("Protection Register: ");
