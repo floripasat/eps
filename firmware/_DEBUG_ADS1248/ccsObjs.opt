@@ -1,0 +1,1 @@
+"./ADC.obj" "./ADS1248.obj" "./I2C.obj" "./SPI.obj" "./clock.obj" "./crc.obj" "./energy_level_algorithm.obj" "./main.obj" "./misc.obj" "./mppt.obj" "./onewire.obj" "./pid.obj" "./timer.obj" "./uart.obj" "./watchdog.obj" "../lnk_msp430f6659.cmd" -l"libc.a" -l"libmath.a" 

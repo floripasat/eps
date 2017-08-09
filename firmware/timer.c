@@ -164,6 +164,8 @@ __interrupt void timer0_a0_isr(void){
 		EPS_data[RTD2_B2] = (temp_1 >> 8) & 0xff;
 		EPS_data[RTD2_B3] = (temp_1 >> 16) & 0xff;
 
+		TA1CCR2 = Pid_Control(60, ((temp_1*0.000196695 - 1000)/3.85), parameters)*160;
+
 		temp_1 = read_ADS1248(3);
 
 		EPS_data[RTD3_B1] = temp_1 & 0xff;
@@ -188,29 +190,17 @@ __interrupt void timer0_a0_isr(void){
 		EPS_data[RTD6_B2] = (temp_1 >> 8) & 0xff;
 		EPS_data[RTD6_B3] = (temp_1 >> 16) & 0xff;
 
-		volatile float test;
-		test = ((EPS_data[RTD2_B1] + (((uint32_t) EPS_data[RTD2_B2]) << 8 & 0xff00) + (((uint32_t) EPS_data[RTD2_B3]) << 16) & 0xff0000)*0.000196695 - 1000)/3.85;
-		test += (temp_1*0.000196695 - 1000)/3.85;
-		test /= 2;
+		TA1CCR1 = Pid_Control(60, ((temp_1*0.000196695 - 1000)/3.85), parameters)*160;
 
-		TA1CCR1 = (Pid_Control(60, test, parameters))*160;
-
-
-		/*
-
-    EPS_data[47] = temp_1 & 0xff;
-    EPS_data[48] = (temp_1 & 0xff00) >> 8;
-    EPS_data[49] = (temp_1 & 0xff0000) >> 16;
-
-
-
-	#ifdef _DEBUG
-    	uart_tx_debug("**** ADS1248 Mesurements ****\r\n");
-    	uart_tx_debug("channel 6: ");
-    	float_send(2*1650*0.000002/(2^24)*temp_1);
-	#endif
-
-		 */
+#ifdef _DEBUG_ADS1248
+		uart_tx_debug("**** ADS1248 Mesurements ****\r\n");
+		uart_tx_debug("channel 2: ");
+		float_send(((EPS_data[RTD2_B1] + (((uint32_t) EPS_data[RTD2_B2]) << 8 & 0xff00) + (((uint32_t) EPS_data[RTD2_B3]) << 16) & 0xff0000)*0.000196695 - 1000)/(3.85));
+		uart_tx_debug("\r\n");
+		uart_tx_debug("channel 6: ");
+		float_send((temp_1*0.000196695 - 1000)/3.85);
+		uart_tx_debug("\r\n");
+#endif
 
 		watchdog_reset_counter();
 
