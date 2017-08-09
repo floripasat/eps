@@ -47,7 +47,8 @@ volatile uint16_t negative_y_positive_x_panel_voltage_mean = 0;		// take mean of
 volatile uint16_t negative_x_positive_z_panel_voltage_mean = 0;		// take mean of adc13
 volatile uint16_t negative_z_positive_y_panel_voltage_mean = 0;		// take mean of adc14
 
-const struct Pid parameters = {0, 0, 1, 250, 20, 0 , INT_MAX, 150};
+struct Pid parameters_heater1 = {0, 0, 1, 150, 20, 0 , INT_MAX, INT_MAX};
+struct Pid parameters_heater2 = {0, 0, 1, 150, 20, 0 , INT_MAX, INT_MAX};
 
 
 /********** INTERRUPTS **********/
@@ -166,7 +167,7 @@ __interrupt void timer0_a0_isr(void){
 		EPS_data[RTD2_B2] = (temp_1 >> 8) & 0xff;
 		EPS_data[RTD2_B3] = (temp_1 >> 16) & 0xff;
 
-		TA1CCR2 = Pid_Control(60, ((temp_2*0.000196695 - 1000)/3.85), parameters)*160;
+		TA1CCR2 = Pid_Control(50, ((temp_2*0.000196695 - 1000)/3.85), &parameters_heater1)*160;
 
 		temp_1 = read_ADS1248(3);
 
@@ -192,7 +193,7 @@ __interrupt void timer0_a0_isr(void){
 		EPS_data[RTD6_B2] = (temp_1 >> 8) & 0xff;
 		EPS_data[RTD6_B3] = (temp_1 >> 16) & 0xff;
 
-		TA1CCR1 = Pid_Control(60, ((temp_6*0.000196695 - 1000)/3.85), parameters)*160;
+		TA1CCR1 = Pid_Control(50, ((temp_6*0.000196695 - 1000)/3.85), &parameters_heater2)*160;
 
 #ifdef _DEBUG_ADS1248
 		uart_tx_debug("**** ADS1248 Mesurements ****\r\n");
