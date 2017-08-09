@@ -34,6 +34,8 @@ volatile uint16_t adc14 = 0;
 volatile uint16_t adc15 = 0;
 volatile uint16_t msp_ts = 0;
 volatile uint32_t temp_1 = 0;
+volatile uint32_t temp_2 = 0;
+volatile uint32_t temp_6 = 0;
 
 volatile uint16_t negative_y_panel_current_mean = 0;				// take mean of adc0
 volatile uint16_t positive_x_panel_current_mean = 0;				// take mean of adc1
@@ -158,13 +160,13 @@ __interrupt void timer0_a0_isr(void){
 		EPS_data[RTD1_B2] = (temp_1 >> 8) & 0xff;
 		EPS_data[RTD1_B3] = (temp_1 >> 16) & 0xff;
 
-		temp_1 = read_ADS1248(2);
+		temp_2 = read_ADS1248(2);
 
 		EPS_data[RTD2_B1] = temp_1 & 0xff;
 		EPS_data[RTD2_B2] = (temp_1 >> 8) & 0xff;
 		EPS_data[RTD2_B3] = (temp_1 >> 16) & 0xff;
 
-		TA1CCR2 = Pid_Control(60, ((temp_1*0.000196695 - 1000)/3.85), parameters)*160;
+		TA1CCR2 = Pid_Control(60, ((temp_2*0.000196695 - 1000)/3.85), parameters)*160;
 
 		temp_1 = read_ADS1248(3);
 
@@ -184,21 +186,21 @@ __interrupt void timer0_a0_isr(void){
 		EPS_data[RTD5_B2] = (temp_1 >> 8) & 0xff;
 		EPS_data[RTD5_B3] = (temp_1 >> 16) & 0xff;
 
-		temp_1 = read_ADS1248(6);
+		temp_6 = read_ADS1248(6);
 
 		EPS_data[RTD6_B1] = temp_1 & 0xff;
 		EPS_data[RTD6_B2] = (temp_1 >> 8) & 0xff;
 		EPS_data[RTD6_B3] = (temp_1 >> 16) & 0xff;
 
-		TA1CCR1 = Pid_Control(60, ((temp_1*0.000196695 - 1000)/3.85), parameters)*160;
+		TA1CCR1 = Pid_Control(60, ((temp_6*0.000196695 - 1000)/3.85), parameters)*160;
 
 #ifdef _DEBUG_ADS1248
 		uart_tx_debug("**** ADS1248 Mesurements ****\r\n");
 		uart_tx_debug("channel 2: ");
-		float_send(((EPS_data[RTD2_B1] + (((uint32_t) EPS_data[RTD2_B2]) << 8 & 0xff00) + (((uint32_t) EPS_data[RTD2_B3]) << 16) & 0xff0000)*0.000196695 - 1000)/(3.85));
+		float_send((temp_2*0.000196695 - 1000)/(3.85));
 		uart_tx_debug("\r\n");
 		uart_tx_debug("channel 6: ");
-		float_send((temp_1*0.000196695 - 1000)/3.85);
+		float_send((temp_6*0.000196695 - 1000)/(3.85));
 		uart_tx_debug("\r\n");
 #endif
 

@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker PC v16.9.4                     
 ******************************************************************************
->> Linked Wed Aug 09 17:10:41 2017
+>> Linked Wed Aug 09 17:47:38 2017
 
 OUTPUT FILE NAME:   <fsat_eps.out>
-ENTRY POINT SYMBOL: "_c_int00_noargs_noexit"  address: 00008b18
+ENTRY POINT SYMBOL: "_c_int00_noargs_noexit"  address: 00008afa
 
 
 MEMORY CONFIGURATION
@@ -19,8 +19,8 @@ MEMORY CONFIGURATION
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
   USBRAM                00001c00   00000800  00000000  00000800  RWIX
-  RAM                   00002400   00004000  0000026c  00003d94  RWIX
-  FLASH                 00008000   00007f80  00000d5a  00007226  RWIX
+  RAM                   00002400   00004000  00000274  00003d8c  RWIX
+  FLASH                 00008000   00007f80  00000d3a  00007246  RWIX
   INT00                 0000ff80   00000002  00000000  00000002  RWIX
   INT01                 0000ff82   00000002  00000000  00000002  RWIX
   INT02                 0000ff84   00000002  00000000  00000002  RWIX
@@ -94,45 +94,45 @@ SECTION ALLOCATION MAP
  output                                  attributes/
 section   page    origin      length       input sections
 --------  ----  ----------  ----------   ----------------
-.data      0    00002400    000000dc     UNINITIALIZED
-                  00002400    00000047     I2C.obj (.data:EPS_data2)
-                  00002447    00000001     I2C.obj (.data)
-                  00002448    00000047     I2C.obj (.data:EPS_data)
-                  0000248f    00000001     --HOLE--
-                  00002490    00000041     timer.obj (.data)
-                  000024d1    00000001     --HOLE--
-                  000024d2    00000007     mppt.obj (.data)
+.data      0    00002400    000000e4     UNINITIALIZED
+                  00002400    00000049     timer.obj (.data)
+                  00002449    00000001     I2C.obj (.data)
+                  0000244a    00000047     I2C.obj (.data:EPS_data2)
+                  00002491    00000001     --HOLE--
+                  00002492    00000047     I2C.obj (.data:EPS_data)
                   000024d9    00000001     --HOLE--
-                  000024da    00000002     rts430x_lc_rd_eabi.lib : errno.obj (.data)
+                  000024da    00000007     mppt.obj (.data)
+                  000024e1    00000001     --HOLE--
+                  000024e2    00000002     rts430x_lc_rd_eabi.lib : errno.obj (.data)
 
 .stack     0    00006270    00000190     UNINITIALIZED
                   00006270    00000004     rts430x_lc_rd_eabi.lib : boot.obj (.stack)
                   00006274    0000018c     --HOLE--
 
 .text:_isr 
-*          0    00008000    00000b3a     
-                  00008000    0000077a     timer.obj (.text:_isr:timer0_a0_isr)
-                  0000877a    00000310     timer.obj (.text:_isr:timer2_a0_isr)
-                  00008a8a    0000008e     I2C.obj (.text:_isr:USCI_B2_ISR)
-                  00008b18    0000001a     rts430x_lc_rd_eabi.lib : boot_special.obj (.text:_isr:_c_int00_noargs_noexit)
-                  00008b32    00000008                            : isr_trap.obj (.text:_isr:__TI_ISR_TRAP)
+*          0    00008000    00000b1c     
+                  00008000    0000075c     timer.obj (.text:_isr:timer0_a0_isr)
+                  0000875c    00000310     timer.obj (.text:_isr:timer2_a0_isr)
+                  00008a6c    0000008e     I2C.obj (.text:_isr:USCI_B2_ISR)
+                  00008afa    0000001a     rts430x_lc_rd_eabi.lib : boot_special.obj (.text:_isr:_c_int00_noargs_noexit)
+                  00008b14    00000008                            : isr_trap.obj (.text:_isr:__TI_ISR_TRAP)
 
-.const     0    00008b3a    000001b0     
-                  00008b3a    00000101     rts430x_lc_rd_eabi.lib : ctype.obj (.const:.string:_ctypes_)
-                  00008c3b    00000001     --HOLE-- [fill = 0]
-                  00008c3c    0000003c     timer.obj (.const:.string)
-                  00008c78    00000026     rts430x_lc_rd_eabi.lib : _printfi.obj (.const:.string)
-                  00008c9e    0000001e     timer.obj (.const:parameters)
-                  00008cbc    00000015     ADS1248.obj (.const:.string:$P$T0$1)
-                  00008cd1    00000001     --HOLE-- [fill = 0]
-                  00008cd2    00000012     mppt.obj (.const:.string)
-                  00008ce4    00000006     uart.obj (.const:.string)
+.const     0    00008b1c    000001b0     
+                  00008b1c    00000101     rts430x_lc_rd_eabi.lib : ctype.obj (.const:.string:_ctypes_)
+                  00008c1d    00000001     --HOLE-- [fill = 0]
+                  00008c1e    0000003c     timer.obj (.const:.string)
+                  00008c5a    00000026     rts430x_lc_rd_eabi.lib : _printfi.obj (.const:.string)
+                  00008c80    0000001e     timer.obj (.const:parameters)
+                  00008c9e    00000015     ADS1248.obj (.const:.string:$P$T0$1)
+                  00008cb3    00000001     --HOLE-- [fill = 0]
+                  00008cb4    00000012     mppt.obj (.const:.string)
+                  00008cc6    00000006     uart.obj (.const:.string)
 
-.cinit     0    00008cea    00000070     
-                  00008cea    0000005f     (.cinit..data.load) [load image, compression = lzss]
-                  00008d49    00000001     --HOLE-- [fill = 0]
-                  00008d4a    00000008     (__TI_handler_table)
-                  00008d52    00000008     (__TI_cinit_table)
+.cinit     0    00008ccc    0000006e     
+                  00008ccc    0000005d     (.cinit..data.load) [load image, compression = lzss]
+                  00008d29    00000001     --HOLE-- [fill = 0]
+                  00008d2a    00000008     (__TI_handler_table)
+                  00008d32    00000008     (__TI_cinit_table)
 
 .init_array 
 *          0    00008000    00000000     UNINITIALIZED
@@ -353,7 +353,7 @@ MODULE SUMMARY
        Module                       code    ro data   rw data
        ------                       ----    -------   -------
     .\
-       timer.obj                    2940    94        65     
+       timer.obj                    2910    94        73     
        ADS1248.obj                  684     21        0      
        onewire.obj                  704     0         0      
        pid.obj                      658     0         0      
@@ -368,7 +368,7 @@ MODULE SUMMARY
        clock.obj                    80      0         0      
        watchdog.obj                 50      0         0      
     +--+----------------------------+-------+---------+---------+
-       Total:                       7306    141       215    
+       Total:                       7276    141       223    
                                                              
     C:\ti\ccsv6\tools\compiler\ti-cgt-msp430_16.9.4.LTS\lib\rts430x_lc_rd_eabi.lib
        _printfi.obj                 6332    38        0      
@@ -465,20 +465,20 @@ MODULE SUMMARY
        Total:                       15754   347       2      
                                                              
        Stack:                       0       0         400    
-       Linker Generated:            0       111       0      
+       Linker Generated:            0       109       0      
     +--+----------------------------+-------+---------+---------+
-       Grand Total:                 23060   599       617    
+       Grand Total:                 23030   597       625    
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00008d52 records: 1, size/record: 8, table size: 8
-	.data: load addr=00008cea, load size=0000005f bytes, run addr=00002400, run size=000000dc bytes, compression=lzss
+__TI_cinit_table @ 00008d32 records: 1, size/record: 8, table size: 8
+	.data: load addr=00008ccc, load size=0000005d bytes, run addr=00002400, run size=000000e4 bytes, compression=lzss
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00008d4a records: 2, size/record: 4, table size: 8
+__TI_handler_table @ 00008d2a records: 2, size/record: 4, table size: 8
 	index: 0, handler: __TI_decompress_lzss
 	index: 1, handler: __TI_decompress_none
 
@@ -708,8 +708,8 @@ address   name
 0000050f  DMAIV_H                                 
 0000050e  DMAIV_L                                 
 00014b56  DS2775_read_register                    
-00002448  EPS_data                                
-00002400  EPS_data2                               
+00002492  EPS_data                                
+0000244a  EPS_data2                               
 00000140  FCTL1                                   
 00000141  FCTL1_H                                 
 00000140  FCTL1_L                                 
@@ -1449,7 +1449,7 @@ address   name
 00000932  USBVECINT                               
 00000933  USBVECINT_H                             
 00000932  USBVECINT_L                             
-00008a8a  USCI_B2_ISR                             
+00008a6c  USCI_B2_ISR                             
 0000015c  WDTCTL                                  
 0000015d  WDTCTL_H                                
 0000015c  WDTCTL_L                                
@@ -1457,13 +1457,13 @@ address   name
 00000190  __STACK_SIZE                            
 UNDEFED   __TI_BINIT_Base                         
 UNDEFED   __TI_BINIT_Limit                        
-00008d52  __TI_CINIT_Base                         
-00008d5a  __TI_CINIT_Limit                        
-00008d4a  __TI_Handler_Table_Base                 
-00008d52  __TI_Handler_Table_Limit                
+00008d32  __TI_CINIT_Base                         
+00008d3a  __TI_CINIT_Limit                        
+00008d2a  __TI_Handler_Table_Base                 
+00008d32  __TI_Handler_Table_Limit                
 UNDEFED   __TI_INITARRAY_Base                     
 UNDEFED   __TI_INITARRAY_Limit                    
-00008b32  __TI_ISR_TRAP                           
+00008b14  __TI_ISR_TRAP                           
 000142c0  __TI_decompress_lzss                    
 00014e22  __TI_decompress_none                    
 000116f6  __TI_frcaddd                            
@@ -1588,27 +1588,27 @@ ffffffff  __c_args__
 00014b24  __mspabi_subd                           
 000130c4  __mspabi_subf                           
 00013fd0  _auto_init_hold_wdt                     
-00008b18  _c_int00_noargs_noexit                  
-00008b3a  _ctypes_                                
+00008afa  _c_int00_noargs_noexit                  
+00008b1c  _ctypes_                                
 0000fffe  _reset_vector                           
 00006270  _stack                                  
 00014ed8  _system_post_cinit                      
 00014ed4  _system_pre_init                        
 00014ece  abort                                   
 00014ea0  abs                                     
-0000249c  adc0                                    
-0000249e  adc1                                    
-000024ac  adc10                                   
-000024ae  adc12                                   
-000024b0  adc13                                   
-000024b2  adc14                                   
-000024b4  adc15                                   
-000024a0  adc2                                    
-000024a2  adc3                                    
-000024a4  adc4                                    
-000024a6  adc5                                    
-000024a8  adc6                                    
-000024aa  adc7                                    
+0000240c  adc0                                    
+0000240e  adc1                                    
+0000241c  adc10                                   
+0000241e  adc12                                   
+00002420  adc13                                   
+00002422  adc14                                   
+00002424  adc15                                   
+00002410  adc2                                    
+00002412  adc3                                    
+00002414  adc4                                    
+00002416  adc5                                    
+00002418  adc6                                    
+0000241a  adc7                                    
 00013ba2  adc_config                              
 00013320  adc_read                                
 000144e4  atoi                                    
@@ -1620,9 +1620,9 @@ ffffffff  __c_args__
 00014be2  copysign                                
 00014be2  copysignl                               
 00014152  crc8                                    
-00002490  duty_cycle                              
+00002400  duty_cycle                              
 000121da  energyLevelAlgorithm                    
-000024da  errno                                   
+000024e2  errno                                   
 000141ce  float_send                              
 00013af0  frexp                                   
 00013af0  frexpl                                  
@@ -1635,19 +1635,19 @@ ffffffff  __c_args__
 00014e0e  memcpy                                  
 00014dce  memset                                  
 00012c98  mppt_algorithm                          
-000024b6  msp_ts                                  
-000024c0  negative_x_panel_current_mean           
-000024ca  negative_x_positive_z_panel_voltage_mean
-000024bc  negative_y_panel_current_mean           
-000024c8  negative_y_positive_x_panel_voltage_mean
-000024c4  negative_z_panel_current_mean           
-000024cc  negative_z_positive_y_panel_voltage_mean
+00002426  msp_ts                                  
+00002438  negative_x_panel_current_mean           
+00002442  negative_x_positive_z_panel_voltage_mean
+00002434  negative_y_panel_current_mean           
+00002440  negative_y_positive_x_panel_voltage_mean
+0000243c  negative_z_panel_current_mean           
+00002444  negative_z_positive_y_panel_voltage_mean
 00014c60  outp                                    
-00008c9e  parameters                              
+00008c80  parameters                              
 00014d86  port_mapping                            
-000024be  positive_x_panel_current_mean           
-000024c6  positive_y_panel_current_mean           
-000024c2  positive_z_panel_current_mean           
+00002436  positive_x_panel_current_mean           
+0000243e  positive_y_panel_current_mean           
+0000243a  positive_z_panel_current_mean           
 000125d6  read_ADS1248                            
 00012970  scalbn                                  
 00012970  scalbnl                                 
@@ -1657,11 +1657,13 @@ ffffffff  __c_args__
 0001480e  sprintf                                 
 00014d6a  strchr                                  
 00014e86  strlen                                  
-00002494  t                                       
-000024b8  temp_1                                  
-00002498  temperature                             
+00002404  t                                       
+00002428  temp_1                                  
+0000242c  temp_2                                  
+00002430  temp_6                                  
+00002408  temperature                             
 00008000  timer0_a0_isr                           
-0000877a  timer2_a0_isr                           
+0000875c  timer2_a0_isr                           
 00013706  timer_config                            
 00014e34  toupper                                 
 00014338  uart_config                             
@@ -2630,49 +2632,51 @@ address   name
 000023fd  USBIEPBBAY_7                            
 000023fe  USBIEPBCTY_7                            
 000023ff  USBIEPSIZXY_7                           
-00002400  EPS_data2                               
-00002448  EPS_data                                
-00002490  duty_cycle                              
-00002494  t                                       
-00002498  temperature                             
-0000249c  adc0                                    
-0000249e  adc1                                    
-000024a0  adc2                                    
-000024a2  adc3                                    
-000024a4  adc4                                    
-000024a6  adc5                                    
-000024a8  adc6                                    
-000024aa  adc7                                    
-000024ac  adc10                                   
-000024ae  adc12                                   
-000024b0  adc13                                   
-000024b2  adc14                                   
-000024b4  adc15                                   
-000024b6  msp_ts                                  
-000024b8  temp_1                                  
-000024bc  negative_y_panel_current_mean           
-000024be  positive_x_panel_current_mean           
-000024c0  negative_x_panel_current_mean           
-000024c2  positive_z_panel_current_mean           
-000024c4  negative_z_panel_current_mean           
-000024c6  positive_y_panel_current_mean           
-000024c8  negative_y_positive_x_panel_voltage_mean
-000024ca  negative_x_positive_z_panel_voltage_mean
-000024cc  negative_z_positive_y_panel_voltage_mean
-000024da  errno                                   
+00002400  duty_cycle                              
+00002404  t                                       
+00002408  temperature                             
+0000240c  adc0                                    
+0000240e  adc1                                    
+00002410  adc2                                    
+00002412  adc3                                    
+00002414  adc4                                    
+00002416  adc5                                    
+00002418  adc6                                    
+0000241a  adc7                                    
+0000241c  adc10                                   
+0000241e  adc12                                   
+00002420  adc13                                   
+00002422  adc14                                   
+00002424  adc15                                   
+00002426  msp_ts                                  
+00002428  temp_1                                  
+0000242c  temp_2                                  
+00002430  temp_6                                  
+00002434  negative_y_panel_current_mean           
+00002436  positive_x_panel_current_mean           
+00002438  negative_x_panel_current_mean           
+0000243a  positive_z_panel_current_mean           
+0000243c  negative_z_panel_current_mean           
+0000243e  positive_y_panel_current_mean           
+00002440  negative_y_positive_x_panel_voltage_mean
+00002442  negative_x_positive_z_panel_voltage_mean
+00002444  negative_z_positive_y_panel_voltage_mean
+0000244a  EPS_data2                               
+00002492  EPS_data                                
+000024e2  errno                                   
 00006270  _stack                                  
 00006400  __STACK_END                             
 00008000  timer0_a0_isr                           
-0000877a  timer2_a0_isr                           
-00008a8a  USCI_B2_ISR                             
-00008b18  _c_int00_noargs_noexit                  
-00008b32  __TI_ISR_TRAP                           
-00008b3a  _ctypes_                                
-00008c9e  parameters                              
-00008d4a  __TI_Handler_Table_Base                 
-00008d52  __TI_CINIT_Base                         
-00008d52  __TI_Handler_Table_Limit                
-00008d5a  __TI_CINIT_Limit                        
+0000875c  timer2_a0_isr                           
+00008a6c  USCI_B2_ISR                             
+00008afa  _c_int00_noargs_noexit                  
+00008b14  __TI_ISR_TRAP                           
+00008b1c  _ctypes_                                
+00008c80  parameters                              
+00008d2a  __TI_Handler_Table_Base                 
+00008d32  __TI_CINIT_Base                         
+00008d32  __TI_Handler_Table_Limit                
+00008d3a  __TI_CINIT_Limit                        
 0000ffc6  __TI_int35                              
 0000ffc8  __TI_int36                              
 0000ffca  __TI_int37                              
@@ -2858,4 +2862,4 @@ UNDEFED   __TI_BINIT_Limit
 UNDEFED   __TI_INITARRAY_Base                     
 UNDEFED   __TI_INITARRAY_Limit                    
 
-[1182 symbols]
+[1184 symbols]
