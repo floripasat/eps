@@ -2,7 +2,7 @@
 <link_info>
    <banner>MSP430 Linker PC v16.9.4.LTS</banner>
    <copyright>Copyright (c) 2003-2017 Texas Instruments Incorporated</copyright>
-   <link_time>0x598b9a78</link_time>
+   <link_time>0x598c4f10</link_time>
    <link_errors>0x0</link_errors>
    <output_file>fsat_eps.out</output_file>
    <entry_point>
@@ -1619,18 +1619,18 @@
          <name>.cinit..data.load</name>
          <load_address>0x8cae</load_address>
          <run_address>0x8cae</run_address>
-         <size>0x70</size>
+         <size>0x6e</size>
       </object_component>
       <object_component id="oc-977">
          <name>__TI_handler_table</name>
-         <load_address>0x8d1e</load_address>
-         <run_address>0x8d1e</run_address>
+         <load_address>0x8d1c</load_address>
+         <run_address>0x8d1c</run_address>
          <size>0x8</size>
       </object_component>
       <object_component id="oc-978">
          <name>__TI_cinit_table</name>
-         <load_address>0x8d26</load_address>
-         <run_address>0x8d26</run_address>
+         <load_address>0x8d24</load_address>
+         <run_address>0x8d24</run_address>
          <size>0x8</size>
       </object_component>
       <object_component id="oc-80f">
@@ -8697,7 +8697,7 @@
          <name>.cinit</name>
          <load_address>0x8cae</load_address>
          <run_address>0x8cae</run_address>
-         <size>0x80</size>
+         <size>0x7e</size>
          <contents>
             <object_component_ref idref="oc-979"/>
             <object_component_ref idref="oc-977"/>
@@ -10327,7 +10327,7 @@
          <name>SEGMENT_2</name>
          <load_address>0x8000</load_address>
          <run_address>0x8000</run_address>
-         <size>0xd2e</size>
+         <size>0xd2c</size>
          <flags>0x5</flags>
          <contents>
             <logical_group_ref idref="lg-8"/>
@@ -10494,8 +10494,8 @@
          <page_id>0x0</page_id>
          <origin>0x8000</origin>
          <length>0x7f80</length>
-         <used_space>0xd2e</used_space>
-         <unused_space>0x7252</unused_space>
+         <used_space>0xd2c</used_space>
+         <unused_space>0x7254</unused_space>
          <attributes>RWIX</attributes>
          <usage_details>
             <allocated_space>
@@ -10510,12 +10510,12 @@
             </allocated_space>
             <allocated_space>
                <start_address>0x8cae</start_address>
-               <size>0x80</size>
+               <size>0x7e</size>
                <logical_group_ref idref="lg-9"/>
             </allocated_space>
             <available_space>
-               <start_address>0x8d2e</start_address>
-               <size>0x7252</size>
+               <start_address>0x8d2c</start_address>
+               <size>0x7254</size>
             </available_space>
          </usage_details>
       </memory_area>
@@ -11406,7 +11406,7 @@
          <cprec>
             <name>.data</name>
             <load_address>0x8cae</load_address>
-            <load_size>0x70</load_size>
+            <load_size>0x6e</load_size>
             <run_address>0x2400</run_address>
             <run_size>0x120</run_size>
             <compression>lzss</compression>
@@ -15243,19 +15243,19 @@
       </symbol>
       <symbol id="sm-3bb">
          <name>__TI_CINIT_Base</name>
-         <value>0x8d26</value>
+         <value>0x8d24</value>
       </symbol>
       <symbol id="sm-3bc">
          <name>__TI_CINIT_Limit</name>
-         <value>0x8d2e</value>
+         <value>0x8d2c</value>
       </symbol>
       <symbol id="sm-3bd">
          <name>__TI_Handler_Table_Base</name>
-         <value>0x8d1e</value>
+         <value>0x8d1c</value>
       </symbol>
       <symbol id="sm-3be">
          <name>__TI_Handler_Table_Limit</name>
-         <value>0x8d26</value>
+         <value>0x8d24</value>
       </symbol>
       <symbol id="sm-3bf">
          <name>__STACK_SIZE</name>
