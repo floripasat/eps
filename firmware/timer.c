@@ -47,8 +47,8 @@ volatile uint16_t negative_y_positive_x_panel_voltage_mean = 0;		// take mean of
 volatile uint16_t negative_x_positive_z_panel_voltage_mean = 0;		// take mean of adc13
 volatile uint16_t negative_z_positive_y_panel_voltage_mean = 0;		// take mean of adc14
 
-struct Pid parameters_heater1 = {0, 0, 1, 150, 20, 0 , INT_MAX, INT_MAX};
-struct Pid parameters_heater2 = {0, 0, 1, 150, 20, 0 , INT_MAX, INT_MAX};
+struct Pid parameters_heater1 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
+struct Pid parameters_heater2 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
 
 
 /********** INTERRUPTS **********/

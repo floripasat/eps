@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v16.9.4                     
 ******************************************************************************
->> Linked Wed Aug 09 20:27:52 2017
+>> Linked Thu Aug 10 09:18:24 2017
 
 OUTPUT FILE NAME:   <fsat_eps.out>
 ENTRY POINT SYMBOL: "_c_int00_noargs_noexit"  address: 00008afa
@@ -20,7 +20,7 @@ MEMORY CONFIGURATION
   INFOA                 00001980   00000080  00000000  00000080  RWIX
   USBRAM                00001c00   00000800  00000000  00000800  RWIX
   RAM                   00002400   00004000  000002b0  00003d50  RWIX
-  FLASH                 00008000   00007f80  00000d2e  00007252  RWIX
+  FLASH                 00008000   00007f80  00000d2c  00007254  RWIX
   INT00                 0000ff80   00000002  00000000  00000002  RWIX
   INT01                 0000ff82   00000002  00000000  00000002  RWIX
   INT02                 0000ff84   00000002  00000000  00000002  RWIX
@@ -129,10 +129,10 @@ section   page    origin      length       input sections
                   00008c96    00000012     mppt.obj (.const:.string)
                   00008ca8    00000006     uart.obj (.const:.string)
 
-.cinit     0    00008cae    00000080     
-                  00008cae    00000070     (.cinit..data.load) [load image, compression = lzss]
-                  00008d1e    00000008     (__TI_handler_table)
-                  00008d26    00000008     (__TI_cinit_table)
+.cinit     0    00008cae    0000007e     
+                  00008cae    0000006e     (.cinit..data.load) [load image, compression = lzss]
+                  00008d1c    00000008     (__TI_handler_table)
+                  00008d24    00000008     (__TI_cinit_table)
 
 .init_array 
 *          0    00008000    00000000     UNINITIALIZED
@@ -465,20 +465,20 @@ MODULE SUMMARY
        Total:                       15754   347       2      
                                                              
        Stack:                       0       0         400    
-       Linker Generated:            0       128       0      
+       Linker Generated:            0       126       0      
     +--+----------------------------+-------+---------+---------+
-       Grand Total:                 23076   586       685    
+       Grand Total:                 23076   584       685    
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00008d26 records: 1, size/record: 8, table size: 8
-	.data: load addr=00008cae, load size=00000070 bytes, run addr=00002400, run size=00000120 bytes, compression=lzss
+__TI_cinit_table @ 00008d24 records: 1, size/record: 8, table size: 8
+	.data: load addr=00008cae, load size=0000006e bytes, run addr=00002400, run size=00000120 bytes, compression=lzss
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00008d1e records: 2, size/record: 4, table size: 8
+__TI_handler_table @ 00008d1c records: 2, size/record: 4, table size: 8
 	index: 0, handler: __TI_decompress_lzss
 	index: 1, handler: __TI_decompress_none
 
@@ -1457,10 +1457,10 @@ address   name
 00000190  __STACK_SIZE                            
 UNDEFED   __TI_BINIT_Base                         
 UNDEFED   __TI_BINIT_Limit                        
-00008d26  __TI_CINIT_Base                         
-00008d2e  __TI_CINIT_Limit                        
-00008d1e  __TI_Handler_Table_Base                 
-00008d26  __TI_Handler_Table_Limit                
+00008d24  __TI_CINIT_Base                         
+00008d2c  __TI_CINIT_Limit                        
+00008d1c  __TI_Handler_Table_Base                 
+00008d24  __TI_Handler_Table_Limit                
 UNDEFED   __TI_INITARRAY_Base                     
 UNDEFED   __TI_INITARRAY_Limit                    
 00008b14  __TI_ISR_TRAP                           
@@ -2675,10 +2675,10 @@ address   name
 00008afa  _c_int00_noargs_noexit                  
 00008b14  __TI_ISR_TRAP                           
 00008b1c  _ctypes_                                
-00008d1e  __TI_Handler_Table_Base                 
-00008d26  __TI_CINIT_Base                         
-00008d26  __TI_Handler_Table_Limit                
-00008d2e  __TI_CINIT_Limit                        
+00008d1c  __TI_Handler_Table_Base                 
+00008d24  __TI_CINIT_Base                         
+00008d24  __TI_Handler_Table_Limit                
+00008d2c  __TI_CINIT_Limit                        
 0000ffc6  __TI_int35                              
 0000ffc8  __TI_int36                              
 0000ffca  __TI_int37                              
