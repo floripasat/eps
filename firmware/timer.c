@@ -14,41 +14,7 @@
 #include "mppt.h"
 #include "energy_level_algorithm.h"
 
-volatile float duty_cycle = 0;
-volatile long t = 0;
-volatile float temperature = 0;
 volatile extern uint8_t EPS_data[70];
-
-volatile uint16_t adc0 = 0;
-volatile uint16_t adc1 = 0;
-volatile uint16_t adc2 = 0;
-volatile uint16_t adc3 = 0;
-volatile uint16_t adc4 = 0;
-volatile uint16_t adc5 = 0;
-volatile uint16_t adc6 = 0;
-volatile uint16_t adc7 = 0;
-volatile uint16_t adc10 = 0;
-volatile uint16_t adc12 = 0;
-volatile uint16_t adc13 = 0;
-volatile uint16_t adc14 = 0;
-volatile uint16_t adc15 = 0;
-volatile uint16_t msp_ts = 0;
-volatile uint32_t temp_1 = 0;
-volatile uint32_t temp_2 = 0;
-volatile uint32_t temp_6 = 0;
-
-volatile uint16_t negative_y_panel_current_mean = 0;				// take mean of adc0
-volatile uint16_t positive_x_panel_current_mean = 0;				// take mean of adc1
-volatile uint16_t negative_x_panel_current_mean = 0;				// take mean of adc2
-volatile uint16_t positive_z_panel_current_mean = 0;				// take mean of adc3
-volatile uint16_t negative_z_panel_current_mean = 0;				// take mean of adc4
-volatile uint16_t positive_y_panel_current_mean = 0;				// take mean of adc5
-volatile uint16_t negative_y_positive_x_panel_voltage_mean = 0;		// take mean of adc12
-volatile uint16_t negative_x_positive_z_panel_voltage_mean = 0;		// take mean of adc13
-volatile uint16_t negative_z_positive_y_panel_voltage_mean = 0;		// take mean of adc14
-
-struct Pid parameters_heater1 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
-struct Pid parameters_heater2 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
 
 
 /********** INTERRUPTS **********/
@@ -60,6 +26,20 @@ __interrupt void timer0_a0_isr(void){
 
 	volatile static uint8_t counter_30s = 0;
 	volatile static uint8_t counter_1s = 0;
+
+	static struct Pid parameters_heater1 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
+	static struct Pid parameters_heater2 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
+
+
+
+	volatile uint16_t adc6 = 0;
+	volatile uint16_t adc7 = 0;
+	volatile uint16_t adc10 = 0;
+	volatile uint16_t adc15 = 0;
+	volatile uint16_t msp_ts = 0;
+	volatile uint32_t temp_1 = 0;
+	volatile uint32_t temp_2 = 0;
+	volatile uint32_t temp_6 = 0;
 
 	if(counter_1s == 9){
 		counter_1s = 0;
@@ -311,7 +291,26 @@ __interrupt void timer2_a0_isr(void){
 	timer_debug_port_100ms ^= timer_debug_pin_100ms;	// Toggle 100ms debug pin
 #endif
 
+	volatile uint16_t adc0 = 0;
+	volatile uint16_t adc1 = 0;
+	volatile uint16_t adc2 = 0;
+	volatile uint16_t adc3 = 0;
+	volatile uint16_t adc4 = 0;
+	volatile uint16_t adc5 = 0;
+	volatile uint16_t adc12 = 0;
+	volatile uint16_t adc13 = 0;
+	volatile uint16_t adc14 = 0;
+
 	static volatile uint8_t mean_counter = 0;
+	static volatile uint16_t negative_y_panel_current_mean = 0;				// take mean of adc0
+	static volatile uint16_t positive_x_panel_current_mean = 0;				// take mean of adc1
+	static volatile uint16_t negative_x_panel_current_mean = 0;				// take mean of adc2
+	static volatile uint16_t positive_z_panel_current_mean = 0;				// take mean of adc3
+	static volatile uint16_t negative_z_panel_current_mean = 0;				// take mean of adc4
+	static volatile uint16_t positive_y_panel_current_mean = 0;				// take mean of adc5
+	static volatile uint16_t negative_y_positive_x_panel_voltage_mean = 0;		// take mean of adc12
+	static volatile uint16_t negative_x_positive_z_panel_voltage_mean = 0;		// take mean of adc13
+	static volatile uint16_t negative_z_positive_y_panel_voltage_mean = 0;		// take mean of adc14
 
 	watchdog_reset_counter();
 
@@ -329,64 +328,64 @@ __interrupt void timer2_a0_isr(void){
 	}
 
 	adc0 = adc_read(negative_y_panel_current);		// -Y panel current measurement
-	EPS_data[3] = (uint8_t) (adc0 & 0xff);			// bitwise and with 0xff to get LSB
-	EPS_data[4] = (uint8_t) (adc0 >> 8);			// shift data 8 bits to get MSB
+	EPS_data[negative_y_panel_current_LSB] = (uint8_t) (adc0 & 0xff);			// bitwise and with 0xff to get LSB
+	EPS_data[negative_y_panel_current_MSB] = (uint8_t) (adc0 >> 8);			// shift data 8 bits to get MSB
 	negative_y_panel_current_mean += adc0;			// add measurement value to mean calculation
 
 	watchdog_reset_counter();
 
 	adc1 = adc_read(positive_x_panel_current);		// +X panel current measurement
-	EPS_data[5] = (uint8_t) (adc1 & 0xff);			// bitwise and with 0xff to get LSB
-	EPS_data[6] = (uint8_t) (adc1 >> 8);			// shift data 8 bits to get MSB
+	EPS_data[positive_x_panel_current_LSB] = (uint8_t) (adc1 & 0xff);			// bitwise and with 0xff to get LSB
+	EPS_data[positive_x_panel_current_MSB] = (uint8_t) (adc1 >> 8);			// shift data 8 bits to get MSB
 	positive_x_panel_current_mean += adc1;			// add measurement value to mean calculation
 
 	watchdog_reset_counter();
 
 	adc2 = adc_read(negative_x_panel_current);		// -X panel current measurement
-	EPS_data[7] = (uint8_t) (adc2 & 0xff);			// bitwise and with 0xff to get LSB
-	EPS_data[8] = (uint8_t) (adc2 >> 8);			// shift data 8 bits to get MSB
+	EPS_data[negative_x_panel_current_LSB] = (uint8_t) (adc2 & 0xff);			// bitwise and with 0xff to get LSB
+	EPS_data[negative_x_panel_current_MSB] = (uint8_t) (adc2 >> 8);			// shift data 8 bits to get MSB
 	negative_x_panel_current_mean += adc2;			// add measurement value to mean calculation
 
 	watchdog_reset_counter();
 
 	adc3 = adc_read(positive_z_panel_current);		// +Z panel current measurement
-	EPS_data[9] = (uint8_t) (adc3 & 0xff);			// bitwise and with 0xff to get LSB
-	EPS_data[10] = (uint8_t) (adc3 >> 8);			// shift data 8 bits to get MSB
+	EPS_data[positive_z_panel_current_LSB] = (uint8_t) (adc3 & 0xff);			// bitwise and with 0xff to get LSB
+	EPS_data[positive_z_panel_current_MSB] = (uint8_t) (adc3 >> 8);			// shift data 8 bits to get MSB
 	positive_z_panel_current_mean += adc3;			// add measurement value to mean calculation
 
 	watchdog_reset_counter();
 
 	adc4 = adc_read(negative_z_panel_current);		// -Z panel current measurement
-	EPS_data[11] = (uint8_t) (adc4 & 0xff);			// bitwise and with 0xff to get LSB
-	EPS_data[12] = (uint8_t) (adc4 >> 8);			// shift data 8 bits to get MSB
+	EPS_data[negative_z_panel_current_LSB] = (uint8_t) (adc4 & 0xff);			// bitwise and with 0xff to get LSB
+	EPS_data[negative_z_panel_current_MSB] = (uint8_t) (adc4 >> 8);			// shift data 8 bits to get MSB
 	negative_z_panel_current_mean += adc4;			// add measurement value to mean calculation
 
 	watchdog_reset_counter();
 
 	adc5 = adc_read(positive_y_panel_current);		// +Y panel current measurement
-	EPS_data[13] = (uint8_t) (adc5 & 0xff);			// bitwise and with 0xff to get LSB
-	EPS_data[14] = (uint8_t) (adc5 >> 8);			// shift data 8 bits to get MSB
+	EPS_data[positive_y_panel_current_LSB] = (uint8_t) (adc5 & 0xff);			// bitwise and with 0xff to get LSB
+	EPS_data[positive_y_panel_current_MSB] = (uint8_t) (adc5 >> 8);			// shift data 8 bits to get MSB
 	positive_y_panel_current_mean += adc5;			// add measurement value to mean calculation
 
 	watchdog_reset_counter();
 
 	adc12 = adc_read(negative_y_positive_x_panel_voltage);		// -Y and +X panels voltage
-	EPS_data[17] = (uint8_t) (adc12 & 0xff);					// bitwise and with 0xff to get LSB
-	EPS_data[18] = (uint8_t) (adc12 >> 8);						// shift data 8 bits to get MSB
+	EPS_data[negative_y_positive_x_panel_voltage_LSB] = (uint8_t) (adc12 & 0xff);					// bitwise and with 0xff to get LSB
+	EPS_data[negative_y_positive_x_panel_voltage_MSB] = (uint8_t) (adc12 >> 8);						// shift data 8 bits to get MSB
 	negative_y_positive_x_panel_voltage_mean += adc12;			// add measurement value to mean calculation
 
 	watchdog_reset_counter();
 
 	adc13 = adc_read(negative_x_positive_z_panel_voltage);		// -X and +Z panels voltage
-	EPS_data[19] = (uint8_t) (adc13 & 0xff);					// bitwise and with 0xff to get LSB
-	EPS_data[20] = (uint8_t) (adc13 >> 8);						// shift data 8 bits to get MSB
+	EPS_data[negative_x_positive_z_panel_voltage_LSB] = (uint8_t) (adc13 & 0xff);					// bitwise and with 0xff to get LSB
+	EPS_data[negative_x_positive_z_panel_voltage_MSB] = (uint8_t) (adc13 >> 8);						// shift data 8 bits to get MSB
 	negative_x_positive_z_panel_voltage_mean += adc13;			// add measurement value to mean calculation
 
 	watchdog_reset_counter();
 
 	adc14 = adc_read(negative_z_positive_y_panel_voltage);		// -Z and +Y panels voltage
-	EPS_data[21] = (uint8_t) (adc14 & 0xff);					// bitwise and with 0xff to get LSB
-	EPS_data[22] = (uint8_t) (adc14 >> 8);						// shift data 8 bits to get MSB
+	EPS_data[negative_z_positive_y_panel_voltage_LSB] = (uint8_t) (adc14 & 0xff);					// bitwise and with 0xff to get LSB
+	EPS_data[negative_z_positive_y_panel_voltage_MSB] = (uint8_t) (adc14 >> 8);						// shift data 8 bits to get MSB
 	negative_z_positive_y_panel_voltage_mean += adc14;			// add measurement value to mean calculation
 
 	watchdog_reset_counter();
