@@ -30,8 +30,6 @@ __interrupt void timer0_a0_isr(void){
 	static struct Pid parameters_heater1 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
 	static struct Pid parameters_heater2 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
 
-
-
 	volatile uint16_t adc6 = 0;
 	volatile uint16_t adc7 = 0;
 	volatile uint16_t adc10 = 0;
@@ -312,6 +310,11 @@ __interrupt void timer2_a0_isr(void){
 	static volatile uint16_t negative_x_positive_z_panel_voltage_mean = 0;		// take mean of adc13
 	static volatile uint16_t negative_z_positive_y_panel_voltage_mean = 0;		// take mean of adc14
 
+	static mppt_parameters_t panel12_parameters = {0,0,1};
+	static mppt_parameters_t panel34_parameters = {0,0,1};
+	static mppt_parameters_t panel56_parameters = {0,0,1};
+
+
 	watchdog_reset_counter();
 
 	if(mean_counter == 0){
@@ -439,8 +442,9 @@ __interrupt void timer2_a0_isr(void){
 		uart_tx_debug("\r\n");
 #endif
 
-		mppt_algorithm((negative_y_panel_current_mean + positive_x_panel_current_mean), negative_y_positive_x_panel_voltage_mean, 0x03D4);
-
+		mppt_algorithm((negative_y_panel_current_mean + positive_x_panel_current_mean), negative_y_positive_x_panel_voltage_mean, 0x03D4, &panel12_parameters);
+		mppt_algorithm((negative_x_panel_current_mean + positive_z_panel_current_mean), negative_x_positive_z_panel_voltage_mean, 0x03D6, &panel34_parameters);
+		mppt_algorithm((negative_z_panel_current_mean + positive_y_panel_current_mean), negative_z_positive_y_panel_voltage_mean, 0x03D8, &panel56_parameters);
 	}
 	else{
 		mean_counter++;
@@ -472,11 +476,11 @@ void timer_config(void){
 
 	TBCCR0 = 70;                      		// PWM Period
 	TBCCTL1 = OUTMOD_7;                       // CCR1 reset/set
-	TBCCR1 = 32;                  				// CCR1 PWM duty cycle
+	TBCCR1 = 10;                  				// CCR1 PWM duty cycle
 	TBCCTL2 = OUTMOD_7;                       // CCR2 reset/set
-	TBCCR2 = 0;                  				// CCR2 PWM duty cycle
+	TBCCR2 = 10;                  				// CCR2 PWM duty cycle
 	TBCCTL3 = OUTMOD_7;						// CCR3 reset/set
-	TBCCR3 = 0;								// CCR3 PWM duty cycle
+	TBCCR3 = 10;								// CCR3 PWM duty cycle
 
 	TA1CTL |= TASSEL_2 + MC_1 + ID__4;	// SMCLK, up mode, divide clock by 4
 	TA1CTL |= TACLR;
