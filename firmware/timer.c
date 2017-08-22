@@ -145,7 +145,7 @@ __interrupt void timer0_a0_isr(void){
 		EPS_data[RTD2_B2] = (temp_1 >> 8) & 0xff;
 		EPS_data[RTD2_B3] = (temp_1 >> 16) & 0xff;
 
-		TA1CCR2 = Pid_Control(50, ((temp_2*0.000196695 - 1000)/3.85), &parameters_heater1)*160;
+		TA1CCR2 = Pid_Control(60, ((temp_2*0.000196695 - 1000)/3.85), &parameters_heater1)*160;
 
 		temp_1 = read_ADS1248(3);
 
@@ -171,7 +171,7 @@ __interrupt void timer0_a0_isr(void){
 		EPS_data[RTD6_B2] = (temp_1 >> 8) & 0xff;
 		EPS_data[RTD6_B3] = (temp_1 >> 16) & 0xff;
 
-		TA1CCR1 = Pid_Control(50, ((temp_6*0.000196695 - 1000)/3.85), &parameters_heater2)*160;
+		TA1CCR1 = Pid_Control(60, ((temp_6*0.000196695 - 1000)/3.85), &parameters_heater2)*160;
 
 #ifdef _DEBUG_ADS1248
 		uart_tx_debug("**** ADS1248 Mesurements ****\r\n");
@@ -490,8 +490,8 @@ void timer_config(void){
 
 	TA1CCR0 = 160;                      // PWM Period = 160/8000000 = 20us => f = 50kHz
 	TA1CCTL1 = OUTMOD_7;                       // CCR2 reset/set
-	TA1CCR1 = 40;                  // CCR2 PWM duty cycle
+	TA1CCR1 = 0;                  // CCR2 PWM duty cycle
 	TA1CCTL2 = OUTMOD_7;                       // CCR3 reset/set
-	TA1CCR2 = 40;                  // CCR3 PWM duty cycle
+	TA1CCR2 = 0;                  // CCR3 PWM duty cycle
 }
 

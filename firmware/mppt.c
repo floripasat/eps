@@ -36,11 +36,17 @@ void mppt_algorithm(uint16_t current, uint16_t voltage, uint16_t address, mppt_p
 		HWREG16(address) += 1;
 		mppt_parameters->previous_step = 1;
 	}
+
 	mppt_parameters->previous_power = power;						// saves current input power for next iteration
 
 #ifdef _DEBUG_MPPT
 
-	uart_tx_debug("Input Power: ");
+	if(address == 0x03D4)
+		uart_tx_debug("Input Power 1: ");
+	else if(address == 0x03D6)
+		uart_tx_debug("Input Power 2: ");
+	else if(address == 0x03D8)
+		uart_tx_debug("Input Power 3: ");
 	float_send(power);
 	uart_tx_debug("\r\n");
 
