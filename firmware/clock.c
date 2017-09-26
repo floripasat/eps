@@ -14,7 +14,7 @@ void clock_config(void){
         BAKCTL &= ~(LOCKBAK);
 
     P7SEL |= BIT2 + BIT3; //XT2
-    UCSCTL6 &= ~(XT1OFF | XT2OFF);            // Enable XT1 & XT2
+    UCSCTL6 &= ~XT2OFF;            // Enable XT1 & XT2
     UCSCTL6 |= XCAP_3;                        // Internal load cap
 
     UCSCTL5 |= DIVM__4 + DIVS__1 + DIVA__2;
