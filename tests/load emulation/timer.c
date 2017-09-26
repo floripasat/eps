@@ -37,10 +37,10 @@ __interrupt void TIMER1_A0_ISR(void){
 
 	__enable_interrupt();
 
-	if(counter30seconds == 29){							// verify if 30 seconds have passed
+	if(counter30seconds == 59){							// verify if 60 seconds have passed
 		counter30seconds = 0;							// reset counter
 		P1OUT |= BIT4;                          // Set transistor base
-		__delay_cycles(2*1045000);			// delay for 0.6 seconds
+		__delay_cycles(2*1045000);			// delay for 2 seconds
 		P1OUT &= ~BIT4;							// turn off transistor base
 	}
 	else{
