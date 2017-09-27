@@ -24,10 +24,11 @@ void config_ADS1248(uint8_t positive_channel){
 
 	chip_select_port &= ~chip_select_pin;					// pull chip select low to start communication
 
-#ifdef _DEBUG
+#ifdef _VERBOSE_DEBUG
 	volatile uint8_t initialization_data_sent_back_counter = 0;
 	volatile uint8_t initialization_data_sent_back[6] = {0};
 #endif
+
 	volatile uint8_t initialization_data_counter = 0;
 	volatile uint16_t i = 0;
 	const uint8_t initialization_data[] = {SDATAC_command,WREG_command,0x03,(positive_channel << 3 | negative_channel),0x00,0x20,0x03,WREG_command + 0x0A,0x01,0x02,0x06,
@@ -40,7 +41,7 @@ void config_ADS1248(uint8_t positive_channel){
 
 		spi_send(initialization_data[initialization_data_counter]);
 		for(i = 500; i > 0; i--);                  // Add time between transmissions to make sure slave can keep up
-#ifdef _DEBUG
+#ifdef _VERBOSE_DEBUG
 		switch(initialization_data_counter){
 		case 13:
 			initialization_data_sent_back[initialization_data_sent_back_counter] = spi_read();
@@ -73,7 +74,7 @@ void config_ADS1248(uint8_t positive_channel){
 	}
 
 	if(initialization_data_counter == 21){
-#ifdef _DEBUG
+#ifdef _VERBOSE_DEBUG
 		uint8_t string[10];
 		uint8_t i;
 		uart_tx_debug("ADS1248 data:");

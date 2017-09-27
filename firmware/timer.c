@@ -43,20 +43,23 @@ __interrupt void timer0_a0_isr(void){
 		counter_1s = 0;
 
 
-#ifdef _DEBUG
-		timer_debug_port_1s ^= timer_debug_pin_1s;		// Toggle 1s debug piun
+#if defined(_DEBUG) || defined(_VERBOSE)
+		timer_debug_port_1s ^= timer_debug_pin_1s;		// Toggle 1s debug pin
 #endif
 
 		adc15 = adc_read(vpanels_voltage);				// Vpanels voltage measurement
 		EPS_data[vpanels_voltage_LSB] = (uint8_t) (adc15 & 0xff);		// bitwise and with 0xff to get LSB
 		EPS_data[vpanels_voltage_MSB] = (uint8_t) (adc15 >> 8);			// shift data 8 bits to get MSB
 
-#ifdef _DEBUG_ADC
+#ifdef _VERBOSE_DEBUG
 		uart_tx_debug("**** Misc ADC ****");
 		uart_tx_debug("\r\n");
 		uart_tx_debug("Vpanels Voltage: ");
 		float_send(adc15*0.00244140625);
 		uart_tx_debug("\r\n");
+#elif defined(_DEBUG)
+		float_send(adc15*0.00244140625);
+		uart_tx_debug(",");
 #endif
 
 		watchdog_reset_counter();
@@ -65,14 +68,16 @@ __interrupt void timer0_a0_isr(void){
 		EPS_data[bus_voltage_LSB] = (uint8_t) (adc7 & 0xff);		// bitwise and with 0xff to get LSB
 		EPS_data[bus_voltage_MSB] = (uint8_t) (adc7 >> 8);		// shift data 8 bits to get MSB
 
-#ifdef _DEBUG_ADC
+#ifdef _VERBOSE_DEBUG
 		uart_tx_debug("Vbus Voltage: ");
 		float_send(adc7*0.00244140625);
 		uart_tx_debug("\r\n");
+#elif defined(_DEBUG)
+		float_send(adc7*0.00244140625);
+		uart_tx_debug(",");
 #endif
 
 		watchdog_reset_counter();
-
 
 		adc6 = adc_read(beacon_eps_current);		// beacon/eps current measurement
 		EPS_data[beacon_eps_current_LSB] = (uint8_t) (adc6 & 0xff);		// bitwise and with 0xff to get LSB
@@ -80,14 +85,14 @@ __interrupt void timer0_a0_isr(void){
 
 		watchdog_reset_counter();
 
-#ifdef _DEBUG_ADC
-
+#ifdef _VERBOSE_DEBUG
 		uart_tx_debug("Beacon/EPS Current: ");
 		float_send(adc6*0.0001229927582);
 		uart_tx_debug("\r\n");
-
+#elif defined(_DEBUG)
+		float_send(adc6*0.0001229927582);
+		uart_tx_debug(",");
 #endif
-
 
 		adc10 = adc_read(msp_temperature);
 		EPS_data[msp_temperature_LSB] = (uint8_t) (adc10 & 0xff);	// bitwise and with 0xff to get LSB
@@ -173,7 +178,7 @@ __interrupt void timer0_a0_isr(void){
 
 		TA1CCR1 = Pid_Control(60, ((temp_6*0.000196695 - 1000)/3.85), &parameters_heater2)*160;
 
-#ifdef _DEBUG_ADS1248
+#ifdef _VERBOSE_DEBUG
 		uart_tx_debug("**** ADS1248 Mesurements ****\r\n");
 		uart_tx_debug("channel 2: ");
 		float_send((temp_2*0.000196695 - 1000)/(3.85));
@@ -181,6 +186,11 @@ __interrupt void timer0_a0_isr(void){
 		uart_tx_debug("channel 6: ");
 		float_send((temp_6*0.000196695 - 1000)/(3.85));
 		uart_tx_debug("\r\n");
+#elif defined(_DEBUG)
+		float_send((temp_2*0.000196695 - 1000)/(3.85));
+		uart_tx_debug(",");
+		float_send((temp_6*0.000196695 - 1000)/(3.85));
+		uart_tx_debug(",");
 #endif
 
 		watchdog_reset_counter();
@@ -189,12 +199,17 @@ __interrupt void timer0_a0_isr(void){
 
 		watchdog_reset_counter();
 
-#ifdef _DEBUG
+#ifdef _VERBOSE_DEBUG
 		uint8_t string[5];
 		sprintf(string, "%#04x", EPS_data[eps_status]);
 		uart_tx_debug("Energy Level: ");
 		uart_tx_debug(string);
 		uart_tx_debug("\r\n");
+#elif defined(_DEBUG)
+		uint8_t string[5];
+		sprintf(string, "%#04x", EPS_data[eps_status]);
+		uart_tx_debug(string);
+		uart_tx_debug(",");
 #endif
 
 		if(counter_30s == 9){
@@ -245,7 +260,7 @@ __interrupt void timer0_a0_isr(void){
 			counter_30s++;
 		}
 
-#ifdef _DEBUG
+#ifdef _VERBOSE_DEBUG
 		uint8_t protection_register_string[30] = {0};
 
 		watchdog_reset_counter();
@@ -269,7 +284,22 @@ __interrupt void timer0_a0_isr(void){
 		uart_tx_debug("Protection Register: ");
 		uart_tx_debug(protection_register_string);
 		uart_tx_debug("\r\n\n");
+#elif defined(_DEBUG)
+		uint8_t protection_register_string[30] = {0};
 
+		float_send(voltage_unit*(((EPS_data[battery1_voltage_MSB] >> 5) << 8) | (EPS_data[battery1_voltage_LSB] >> 5) | ((EPS_data[battery1_voltage_MSB] << 3) & 0xf8)));
+		uart_tx_debug(",");
+		float_send(voltage_unit*(((EPS_data[battery2_voltage_MSB] >> 5) << 8) | (EPS_data[battery2_voltage_LSB] >> 5) | ((EPS_data[battery2_voltage_MSB] << 3) & 0xf8)));
+		uart_tx_debug(",");
+		float_send(current_unit*((EPS_data[battery_current_MSB] << 8) + EPS_data[battery_current_LSB]));
+		uart_tx_debug(",");
+		float_send(current_unit*((EPS_data[battery_average_current_MSB] << 8) + EPS_data[battery_average_current_LSB]));
+		uart_tx_debug(",");
+		float_send((accumulated_current_unit)*((EPS_data[battery_accumulated_current_MSB] << 8) + EPS_data[battery_accumulated_current_LSB]));
+		uart_tx_debug(",");
+		sprintf(protection_register_string, "%#04x", EPS_data[protection_register_LSB] & 0x0f);
+		uart_tx_debug(protection_register_string);
+		uart_tx_debug("\r\n");
 #endif
 	}
 	else{
@@ -407,7 +437,7 @@ __interrupt void timer2_a0_isr(void){
 		negative_x_positive_z_panel_voltage_mean /= 10;		// take mean of adc13
 		negative_z_positive_y_panel_voltage_mean /= 10;		// take mean of adc14
 
-#ifdef _DEBUG_ADC
+#ifdef _VERBOSE_DEBUG
 		uart_tx_debug("**** Solar Panel Currents ****");
 		uart_tx_debug("\r\n");
 		uart_tx_debug("-Y panel current: ");
@@ -440,6 +470,25 @@ __interrupt void timer2_a0_isr(void){
 		uart_tx_debug("-Z/+Y panel voltage: ");
 		float_send(negative_z_positive_y_panel_voltage_mean*0.001178588867);
 		uart_tx_debug("\r\n");
+#elif defined(_DEBUG)
+		float_send(negative_y_panel_current_mean*.0001479640152);
+		uart_tx_debug(",");
+		float_send(positive_x_panel_current_mean*.0001479640152);
+		uart_tx_debug(",");
+		float_send(negative_x_panel_current_mean*.0001479640152);
+		uart_tx_debug(",");
+		float_send(positive_z_panel_current_mean*.0001479640152);
+		uart_tx_debug(",");
+		float_send(negative_z_panel_current_mean*.0001479640152);
+		uart_tx_debug(",");
+		float_send(positive_y_panel_current_mean*.0001479640152);
+		uart_tx_debug(",");
+		float_send(negative_y_positive_x_panel_voltage_mean*0.001178588867);
+		uart_tx_debug(",");
+		float_send(negative_x_positive_z_panel_voltage_mean*0.001178588867);
+		uart_tx_debug(",");
+		float_send(negative_z_positive_y_panel_voltage_mean*0.001178588867);
+		uart_tx_debug(",");
 #endif
 
 		mppt_algorithm((negative_y_panel_current_mean + positive_x_panel_current_mean), negative_y_positive_x_panel_voltage_mean, 0x03D4, &panel12_parameters);

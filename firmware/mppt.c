@@ -39,8 +39,7 @@ void mppt_algorithm(uint16_t current, uint16_t voltage, uint16_t address, mppt_p
 
 	mppt_parameters->previous_power = power;						// saves current input power for next iteration
 
-#ifdef _DEBUG_MPPT
-
+#ifdef _VERBOSE_DEBUG
 	if(address == 0x03D4)
 		uart_tx_debug("Input Power 1: ");
 	else if(address == 0x03D6)
@@ -49,7 +48,9 @@ void mppt_algorithm(uint16_t current, uint16_t voltage, uint16_t address, mppt_p
 		uart_tx_debug("Input Power 3: ");
 	float_send(power);
 	uart_tx_debug("\r\n");
-
+#elif defined(_DEBUG)
+	float_send(power);
+	uart_tx_debug(",");
 #endif
 	mppt_parameters->previous_voltage = voltage;					// saves current voltage for next iteration
 

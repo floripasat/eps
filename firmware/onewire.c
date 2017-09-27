@@ -263,7 +263,7 @@ void config_DS2775(void){
 
 #endif
 
-	#ifdef _DEBUG
+#ifdef _VERBOSE_DEBUG
 	uint8_t one_wire_data_sent_back[8] = {0};
 	one_wire_data_sent_back[0] = DS2775_read_register(protection_register);
 	one_wire_data_sent_back[1] = DS2775_read_register(protector_threshold_register);
@@ -287,7 +287,7 @@ void config_DS2775(void){
 			uart_tx_debug("\r\n");
 		}
 	}
-	#endif
+#endif
 }
 
 
