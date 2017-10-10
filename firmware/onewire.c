@@ -242,7 +242,7 @@ void config_DS2775(void){
 	OWWriteByte(0xCC);									// eeprom address (only one slave on bus, CC is used)
 	OWWriteByte(0x6C);									// write operation
 	OWWriteByte(accumulated_current_MSB_register);		// register address
-	OWWriteByte(0x00);									// value to be written
+	OWWriteByte(0x12);									// value to be written
 
 	reset = OneWireReset();
 	OWWriteByte(0xCC);									// eeprom address (only one slave on bus, CC is used)
@@ -253,7 +253,7 @@ void config_DS2775(void){
 	OWWriteByte(0xCC);									// eeprom address (only one slave on bus, CC is used)
 	OWWriteByte(0x6C);									// write operation
 	OWWriteByte(accumulated_current_LSB_register);		// register address
-	OWWriteByte(0x00);									// value to be written
+	OWWriteByte(0xC0);									// value to be written
 
 	reset = OneWireReset();
 	OWWriteByte(0xCC);									// eeprom address (only one slave on bus, CC is used)
