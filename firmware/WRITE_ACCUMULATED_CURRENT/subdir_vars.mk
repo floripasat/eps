@@ -23,6 +23,23 @@ C_SRCS += \
 ../uart.c \
 ../watchdog.c 
 
+C_DEPS += \
+./ADC.d \
+./ADS1248.d \
+./I2C.d \
+./SPI.d \
+./clock.d \
+./crc.d \
+./energy_level_algorithm.d \
+./main.d \
+./misc.d \
+./mppt.d \
+./onewire.d \
+./pid.d \
+./timer.d \
+./uart.d \
+./watchdog.d 
+
 OBJS += \
 ./ADC.obj \
 ./ADS1248.obj \
@@ -40,40 +57,6 @@ OBJS += \
 ./uart.obj \
 ./watchdog.obj 
 
-C_DEPS += \
-./ADC.pp \
-./ADS1248.pp \
-./I2C.pp \
-./SPI.pp \
-./clock.pp \
-./crc.pp \
-./energy_level_algorithm.pp \
-./main.pp \
-./misc.pp \
-./mppt.pp \
-./onewire.pp \
-./pid.pp \
-./timer.pp \
-./uart.pp \
-./watchdog.pp 
-
-C_DEPS__QUOTED += \
-"ADC.pp" \
-"ADS1248.pp" \
-"I2C.pp" \
-"SPI.pp" \
-"clock.pp" \
-"crc.pp" \
-"energy_level_algorithm.pp" \
-"main.pp" \
-"misc.pp" \
-"mppt.pp" \
-"onewire.pp" \
-"pid.pp" \
-"timer.pp" \
-"uart.pp" \
-"watchdog.pp" 
-
 OBJS__QUOTED += \
 "ADC.obj" \
 "ADS1248.obj" \
@@ -90,6 +73,23 @@ OBJS__QUOTED += \
 "timer.obj" \
 "uart.obj" \
 "watchdog.obj" 
+
+C_DEPS__QUOTED += \
+"ADC.d" \
+"ADS1248.d" \
+"I2C.d" \
+"SPI.d" \
+"clock.d" \
+"crc.d" \
+"energy_level_algorithm.d" \
+"main.d" \
+"misc.d" \
+"mppt.d" \
+"onewire.d" \
+"pid.d" \
+"timer.d" \
+"uart.d" \
+"watchdog.d" 
 
 C_SRCS__QUOTED += \
 "../ADC.c" \
