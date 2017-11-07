@@ -236,20 +236,34 @@ void config_DS2775(void){
 	OWWriteByte(current_gain_LSB_register);		// register address
 	OWWriteByte(0x00);					// value to be written
 
+#ifdef _WRITE_ACCUMULATED_CURRENT
+
 	reset= OneWireReset();								// ACCUMULATED CURRENT - MSB REGISTER
 	OWWriteByte(0xCC);									// eeprom address (only one slave on bus, CC is used)
 	OWWriteByte(0x6C);									// write operation
 	OWWriteByte(accumulated_current_MSB_register);		// register address
-	OWWriteByte(0x13);									// value to be written
+	OWWriteByte(0x12);									// value to be written
 
+	reset = OneWireReset();
+	OWWriteByte(0xCC);									// eeprom address (only one slave on bus, CC is used)
+	OWWriteByte(0x48);									// copy data command
+	OWWriteByte(accumulated_current_MSB_register);		// register address
 
 	reset= OneWireReset();								// ACCUMULATED CURRENT - LSB REGISTER
 	OWWriteByte(0xCC);									// eeprom address (only one slave on bus, CC is used)
 	OWWriteByte(0x6C);									// write operation
 	OWWriteByte(accumulated_current_LSB_register);		// register address
-	OWWriteByte(0x00);									// value to be written
+	OWWriteByte(0xC0);									// value to be written
 
-	#ifdef _DEBUG
+	reset = OneWireReset();
+	OWWriteByte(0xCC);									// eeprom address (only one slave on bus, CC is used)
+	OWWriteByte(0x48);									// copy data command
+	OWWriteByte(accumulated_current_LSB_register);		// register address
+
+
+#endif
+
+#ifdef _VERBOSE_DEBUG
 	uint8_t one_wire_data_sent_back[8] = {0};
 	one_wire_data_sent_back[0] = DS2775_read_register(protection_register);
 	one_wire_data_sent_back[1] = DS2775_read_register(protector_threshold_register);
@@ -273,7 +287,7 @@ void config_DS2775(void){
 			uart_tx_debug("\r\n");
 		}
 	}
-	#endif
+#endif
 }
 
 

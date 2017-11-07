@@ -24,7 +24,7 @@ void main(void){
     config_ADS1248(6);
     config_DS2775();
 
-#ifdef _DEBUG
+#ifdef _VERBOSE_DEBUG
     uart_tx_debug("system boot complete\r\n");
 #endif
 
@@ -58,7 +58,7 @@ void config_msp430(void){
 
     watchdog_reset_counter();
 
-#ifdef _DEBUG
+#ifdef _VERBOSE_DEBUG
     uart_tx_debug("system booting\r\n");
 #endif
 
@@ -81,7 +81,10 @@ void config_msp430(void){
     P1DIR |= BIT6;
     P1OUT &= ~BIT6;		// disable 555
 
-#ifdef _DEBUG
+    OBDH_TTC_regulator_enable_dir |= OBDH_TTC_regulator_enable_pin;
+    payload_regulator_enable_dir |= payload_regulator_enable_pin;
+
+#if defined(_DEBUG) || defined(_VERBOSE_DEBUG)
     system_on_dir |= system_on_pin;
     system_on_port |= system_on_pin;
 #endif

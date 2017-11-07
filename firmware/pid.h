@@ -26,6 +26,6 @@ struct Pid {
 
 void Pid_Init(struct Pid pid, float PFactor, float IFactor, float DFactor,
 		int ScalingFactor);
-float Pid_Control(int SetPoint, float ProcessValue, struct Pid pid);
+float Pid_Control(int SetPoint, float ProcessValue, struct Pid *pid);
 
 #endif
