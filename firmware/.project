@@ -24,4 +24,26 @@
 		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>crc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/fsp/fsp/crc.h</locationURI>
+		</link>
+		<link>
+			<name>crc16.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/fsp/fsp/crc16.c</locationURI>
+		</link>
+		<link>
+			<name>fsp.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/fsp/fsp/fsp.c</locationURI>
+		</link>
+		<link>
+			<name>fsp.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/fsp/fsp/fsp.h</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
