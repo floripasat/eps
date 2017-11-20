@@ -11,6 +11,7 @@
 #include "clock.h"
 #include "hal.h"
 #include "watchdog.h"
+#include "fsp.h"
 
 
 void config_msp430(void);
@@ -21,6 +22,7 @@ void main(void){
     WDTCTL = WDTPW + WDTHOLD;
 
     config_msp430();
+
     config_ADS1248(6);
     config_DS2775();
 
@@ -83,6 +85,8 @@ void config_msp430(void){
 
     OBDH_TTC_regulator_enable_dir |= OBDH_TTC_regulator_enable_pin;
     payload_regulator_enable_dir |= payload_regulator_enable_pin;
+
+    fsp_init(FSP_ADR_EPS);
 
 #if defined(_DEBUG) || defined(_VERBOSE_DEBUG)
     system_on_dir |= system_on_pin;
