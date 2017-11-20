@@ -135,47 +135,47 @@ __interrupt void timer0_a0_isr(void){
 
 		temp_1 = read_ADS1248(0);
 
-		EPS_data[RTD0_B1] = temp_1 & 0xff;
+		EPS_data[RTD0_B3] = temp_1 & 0xff;
 		EPS_data[RTD0_B2] = (temp_1 >> 8) & 0xff;
-		EPS_data[RTD0_B3] = (temp_1 >> 16) & 0xff;
+		EPS_data[RTD0_B1] = (temp_1 >> 16) & 0xff;
 
 		temp_1 = read_ADS1248(1);
 
-		EPS_data[RTD1_B1] = temp_1 & 0xff;
+		EPS_data[RTD1_B3] = temp_1 & 0xff;
 		EPS_data[RTD1_B2] = (temp_1 >> 8) & 0xff;
-		EPS_data[RTD1_B3] = (temp_1 >> 16) & 0xff;
+		EPS_data[RTD1_B1] = (temp_1 >> 16) & 0xff;
 
 		temp_2 = read_ADS1248(2);
 
-		EPS_data[RTD2_B1] = temp_1 & 0xff;
+		EPS_data[RTD2_B3] = temp_1 & 0xff;
 		EPS_data[RTD2_B2] = (temp_1 >> 8) & 0xff;
-		EPS_data[RTD2_B3] = (temp_1 >> 16) & 0xff;
+		EPS_data[RTD2_B1] = (temp_1 >> 16) & 0xff;
 
 		TA1CCR2 = Pid_Control(60, ((temp_2*0.000196695 - 1000)/3.85), &parameters_heater1)*160;
 
 		temp_1 = read_ADS1248(3);
 
-		EPS_data[RTD3_B1] = temp_1 & 0xff;
+		EPS_data[RTD3_B3] = temp_1 & 0xff;
 		EPS_data[RTD3_B2] = (temp_1 >> 8) & 0xff;
-		EPS_data[RTD3_B3] = (temp_1 >> 16) & 0xff;
+		EPS_data[RTD3_B1] = (temp_1 >> 16) & 0xff;
 
 		temp_1 = read_ADS1248(4);
 
-		EPS_data[RTD4_B1] = temp_1 & 0xff;
+		EPS_data[RTD4_B3] = temp_1 & 0xff;
 		EPS_data[RTD4_B2] = (temp_1 >> 8) & 0xff;
-		EPS_data[RTD4_B3] = (temp_1 >> 16) & 0xff;
+		EPS_data[RTD4_B1] = (temp_1 >> 16) & 0xff;
 
 		temp_1 = read_ADS1248(5);
 
-		EPS_data[RTD5_B1] = temp_1 & 0xff;
+		EPS_data[RTD5_B3] = temp_1 & 0xff;
 		EPS_data[RTD5_B2] = (temp_1 >> 8) & 0xff;
-		EPS_data[RTD5_B3] = (temp_1 >> 16) & 0xff;
+		EPS_data[RTD5_B1] = (temp_1 >> 16) & 0xff;
 
 		temp_6 = read_ADS1248(6);
 
-		EPS_data[RTD6_B1] = temp_1 & 0xff;
+		EPS_data[RTD6_B3] = temp_1 & 0xff;
 		EPS_data[RTD6_B2] = (temp_1 >> 8) & 0xff;
-		EPS_data[RTD6_B3] = (temp_1 >> 16) & 0xff;
+		EPS_data[RTD6_B1] = (temp_1 >> 16) & 0xff;
 
 		TA1CCR1 = Pid_Control(60, ((temp_6*0.000196695 - 1000)/3.85), &parameters_heater2)*160;
 
@@ -223,12 +223,12 @@ __interrupt void timer0_a0_isr(void){
 			beacon_packet[1] = EPS_data[battery1_voltage_LSB];
 			beacon_packet[2] = EPS_data[battery2_voltage_MSB];
 			beacon_packet[3] = EPS_data[battery2_voltage_LSB];
-			beacon_packet[4] = EPS_data[RTD1_B3];
+			beacon_packet[4] = EPS_data[RTD1_B1];
 			beacon_packet[5] = EPS_data[RTD1_B2];
-			beacon_packet[6] = EPS_data[RTD1_B1];
-			beacon_packet[7] = EPS_data[RTD2_B3];
+			beacon_packet[6] = EPS_data[RTD1_B3];
+			beacon_packet[7] = EPS_data[RTD2_B1];
 			beacon_packet[8] = EPS_data[RTD2_B2];
-			beacon_packet[9] = EPS_data[RTD2_B1];
+			beacon_packet[9] = EPS_data[RTD2_B3];
 			beacon_packet[10] = EPS_data[battery_accumulated_current_MSB];
 			beacon_packet[11] = EPS_data[battery_accumulated_current_LSB];
 			beacon_packet[12] = EPS_data[negative_y_panel_current_MSB];
@@ -250,7 +250,6 @@ __interrupt void timer0_a0_isr(void){
 			beacon_packet[28] = EPS_data[negative_z_positive_y_panel_voltage_MSB];
 			beacon_packet[29] = EPS_data[negative_z_positive_y_panel_voltage_LSB];
 			beacon_packet[30] = EPS_data[eps_status];
-	        fsp_init(FSP_ADR_EPS);
 	        fsp_gen_data_pkt(beacon_packet, sizeof(beacon_packet), FSP_ADR_TTC, FSP_PKT_WITHOUT_ACK, &beacon_packet_fsp_struct);
 
 	        uint8_t packet_length;
