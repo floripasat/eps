@@ -196,7 +196,7 @@ __interrupt void timer0_a0_isr(void){
 
 		watchdog_reset_counter();
 
-		EPS_data[eps_status] = energyLevelAlgorithm(EPS_data[eps_status], EPS_data[battery_accumulated_current_LSB] | (EPS_data[battery_accumulated_current_MSB] << 8));
+		//EPS_data[eps_status] = energyLevelAlgorithm(EPS_data[eps_status], EPS_data[battery_accumulated_current_LSB] | (EPS_data[battery_accumulated_current_MSB] << 8));
 
 		watchdog_reset_counter();
 
@@ -499,6 +499,14 @@ __interrupt void timer2_a0_isr(void){
 		mppt_algorithm((negative_y_panel_current_mean + positive_x_panel_current_mean), negative_y_positive_x_panel_voltage_mean, 0x03D4, &panel12_parameters);
 		mppt_algorithm((negative_x_panel_current_mean + positive_z_panel_current_mean), negative_x_positive_z_panel_voltage_mean, 0x03D6, &panel34_parameters);
 		mppt_algorithm((negative_z_panel_current_mean + positive_y_panel_current_mean), negative_z_positive_y_panel_voltage_mean, 0x03D8, &panel56_parameters);
+
+		if((negative_y_panel_current_mean + positive_x_panel_current_mean
+		        + negative_x_panel_current_mean + positive_z_panel_current_mean
+		        + negative_z_panel_current_mean + positive_y_panel_current_mean) < 0.03){
+		    OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
+		}else{
+		    OBDH_TTC_regulator_enable_port &= ~OBDH_TTC_regulator_enable_pin;
+		}
 	}
 	else{
 		mean_counter++;
