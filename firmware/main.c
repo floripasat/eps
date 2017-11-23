@@ -86,6 +86,9 @@ void config_msp430(void){
     OBDH_TTC_regulator_enable_dir |= OBDH_TTC_regulator_enable_pin;
     payload_regulator_enable_dir |= payload_regulator_enable_pin;
 
+    OBDH_TTC_regulator_enable_port &= ~OBDH_TTC_regulator_enable_pin;
+    payload_regulator_enable_port |= payload_regulator_enable_pin;
+
     fsp_init(FSP_ADR_EPS);
 
 #if defined(_DEBUG) || defined(_VERBOSE_DEBUG)
