@@ -502,7 +502,7 @@ __interrupt void timer2_a0_isr(void){
 
 		if((negative_y_panel_current_mean + positive_x_panel_current_mean
 		        + negative_x_panel_current_mean + positive_z_panel_current_mean
-		        + negative_z_panel_current_mean + positive_y_panel_current_mean) < 0.03){
+		        + negative_z_panel_current_mean + positive_y_panel_current_mean)*.0001479640152 < 0.03){
 		    OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
 		}else{
 		    OBDH_TTC_regulator_enable_port &= ~OBDH_TTC_regulator_enable_pin;
