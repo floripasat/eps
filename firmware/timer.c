@@ -16,6 +16,7 @@
 #include "fsp.h"
 
 volatile extern uint8_t EPS_data[70];
+unsigned volatile int i = 0,count = 0;
 
 
 /********** INTERRUPTS **********/
@@ -42,6 +43,23 @@ __interrupt void timer0_a0_isr(void){
 
 	if(counter_1s == 9){
 		counter_1s = 0;
+
+	if(count == 43299)        // 43300 seconds --> 12h
+    {
+	     count = 0;
+	     i++;
+
+	     if(i == 10)
+         {
+            WDTCTL = 0xDEAD;      // reset
+            i = 0;
+	     }
+
+	}
+    else
+    {
+      count++;
+    }
 
 
 #if defined(_DEBUG) || defined(_VERBOSE)
