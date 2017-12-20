@@ -8,6 +8,12 @@
 #ifndef ADS1248_H_
 #define ADS1248_H_
 
+#include <msp430.h>
+#include <stdint.h>
+#include <stdio.h>
+#include "SPI.h"
+#include "uart.h"
+
 /**** COMMANDS ****/
 
 #define RESET_command 0x06				// reset command
@@ -21,11 +27,13 @@
 
 /**** PINS and Channels ****/
 
-#define chip_select_port P5OUT
-#define chip_select_pin BIT4
-#define negative_channel 0x01
+#define chip_select_port P8OUT
+#define chip_select_pin BIT5
+#define negative_channel 0x07
+#define ADS1248_START_port P8OUT
+#define ADS1248_START_pin BIT6
 
-void config_ADS1248(int channel);
-long read_ADS1248(int channel);
+void config_ADS1248(uint8_t channel);
+int32_t read_ADS1248(uint8_t channel);
 
 #endif /* ADS1248_H_ */

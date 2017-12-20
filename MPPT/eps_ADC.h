@@ -5,11 +5,11 @@
  *      Author: Bruno Eiterer
  */
 
-#ifndef EPS_ADC_H_
-#define EPS_ADC_H_
+#ifndef FSAT_EPS_MPPT_TEST_EPS_ADC_H_
+#define FSAT_EPS_MPPT_TEST_EPS_ADC_H_
 
 
 void measurement_ADC(void);
 
 
-#endif /* EPS_ADC_H_ */
+#endif /* FSAT_EPS_MPPT_TEST_EPS_ADC_H_ */
