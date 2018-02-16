@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['b0',['B0',['../d8/d4b/hal_8h.html#a8a03ef52aa4926d1d75cb647ac768622',1,'hal.h']]],
+  ['b1',['B1',['../d8/d4b/hal_8h.html#a7b21d6a6a4573b4997b1f04b01cd4efb',1,'hal.h']]],
+  ['b2',['B2',['../d8/d4b/hal_8h.html#a6945d50f798e1fde624d70c74457090e',1,'hal.h']]],
+  ['battery1_5fvoltage_5flsb',['battery1_voltage_LSB',['../d8/d4b/hal_8h.html#a5a4ddde9192c1faecc8ebd8896c97cb0',1,'hal.h']]],
+  ['battery1_5fvoltage_5fmsb',['battery1_voltage_MSB',['../d8/d4b/hal_8h.html#af6ce589e7bbf4a35411f4f3bcca4f3fb',1,'hal.h']]],
+  ['battery2_5fvoltage_5flsb',['battery2_voltage_LSB',['../d8/d4b/hal_8h.html#a475c9a8d8bb83da64c2500b27ba1d4de',1,'hal.h']]],
+  ['battery2_5fvoltage_5fmsb',['battery2_voltage_MSB',['../d8/d4b/hal_8h.html#a4e29792b9781381bf32796ea8745fff7',1,'hal.h']]],
+  ['battery_5faccumulated_5fcurrent_5flsb',['battery_accumulated_current_LSB',['../d8/d4b/hal_8h.html#acada9831305ddb61ad35ba32ab672c44',1,'hal.h']]],
+  ['battery_5faccumulated_5fcurrent_5fmsb',['battery_accumulated_current_MSB',['../d8/d4b/hal_8h.html#a9cbb51b3520ae13457dbb07833aec01b',1,'hal.h']]],
+  ['battery_5faverage_5fcurrent_5flsb',['battery_average_current_LSB',['../d8/d4b/hal_8h.html#ac95815d6cc8ef515033a15eeeaf02cd7',1,'hal.h']]],
+  ['battery_5faverage_5fcurrent_5fmsb',['battery_average_current_MSB',['../d8/d4b/hal_8h.html#ac313d1f9c461ca0e649da66b929967f8',1,'hal.h']]],
+  ['battery_5fcurrent_5flsb',['battery_current_LSB',['../d8/d4b/hal_8h.html#a3393d02bde79291644b323054579244e',1,'hal.h']]],
+  ['battery_5fcurrent_5fmsb',['battery_current_MSB',['../d8/d4b/hal_8h.html#a887b3f897b06632059a76cc5a648159d',1,'hal.h']]],
+  ['battery_5fmonitor_5ftemeperature_5flsb',['battery_monitor_temeperature_LSB',['../d8/d4b/hal_8h.html#ad96fa971bbb60cbe4e01b8b733dae4a0',1,'hal.h']]],
+  ['battery_5fmonitor_5ftemeperature_5fmsb',['battery_monitor_temeperature_MSB',['../d8/d4b/hal_8h.html#a75197886133b8091a033ee077a26b106',1,'hal.h']]],
+  ['beacon_5feps_5fcurrent',['beacon_eps_current',['../d8/d4b/hal_8h.html#a9c7b6ce7ecf227a958bb64adba31f99a',1,'hal.h']]],
+  ['beacon_5feps_5fcurrent_5flsb',['beacon_eps_current_LSB',['../d8/d4b/hal_8h.html#a056641e5476df1c1f966f161cdd9b7e2',1,'hal.h']]],
+  ['beacon_5feps_5fcurrent_5fmsb',['beacon_eps_current_MSB',['../d8/d4b/hal_8h.html#a9fc980d74fb82f42e212022c3228ddf1',1,'hal.h']]],
+  ['bitwire',['BitWire',['../df/d13/onewire_8c.html#ac4054bec7fc39636ff422a25099598c4',1,'onewire.c']]],
+  ['bus_5fvoltage',['bus_voltage',['../d8/d4b/hal_8h.html#ae9c19a9878247d640e5fb343fa98002f',1,'hal.h']]],
+  ['bus_5fvoltage_5flsb',['bus_voltage_LSB',['../d8/d4b/hal_8h.html#a25d423807edbb1f1687755cbb4a441af',1,'hal.h']]],
+  ['bus_5fvoltage_5fmsb',['bus_voltage_MSB',['../d8/d4b/hal_8h.html#a31ff5291be4a046c2f09fe3ee4e6dd3e',1,'hal.h']]]
+];
