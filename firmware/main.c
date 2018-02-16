@@ -1,4 +1,12 @@
-#include <msp430.h> 
+/**
+ * \file
+ *
+ * \brief Main MCU and peripherals configuration
+ *
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
+*/
+
+#include <msp430.h>
 #include <stdlib.h>
 #include "ADC.h"
 #include "ADS1248.h"
@@ -16,6 +24,11 @@
 
 void config_msp430(void);
 
+/**
+ * \brief Main Function
+ *
+ * Configures the MCU, the ADS1248 external ADC and the DS2775 batteries monitor.
+*/
 
 void main(void){
 
@@ -40,13 +53,16 @@ void main(void){
 }
 
 
-/**********************************
- * Function name: config_msp430
+/**
+ * \brief Configures the MCU peripherals
  *
- * Arguments: void
+ * This function configures the MCU clock, watchdog, UART, ADC, SPI, I2C, timers,
+ * the regulators and 555 enable pins, starts the fsp protocol in software and prints
+ * messages and turn leds on in debug mode.
  *
- * Returns: void
+ * \param -
  *
+ * \return -
  */
 
 
@@ -93,5 +109,3 @@ void config_msp430(void){
     system_on_port |= system_on_pin;
 #endif
 }
-
-
