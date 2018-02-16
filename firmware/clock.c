@@ -1,12 +1,35 @@
-/*
- * clock.c
+/**
+ * \file
  *
- *  Created on: 06/04/2017
- *      Author: Bruno Eiterer
+ * \brief Clock configuration source
+ *
+ * \author Bruno Vale Barbosa Eiterer
  */
 
 #include <msp430.h>
 #include "clock.h"
+
+/**
+ * \brief Configures the MCU clocks
+ *
+ * Configures all of the MCU clocks frequency and source, based on the following
+ * table:
+ *
+ * | Clock | Source | Divider |Frequency |
+ * | ----- | ------ | ------- |--------- |
+ * | MCLK  | XT2    | 4       |8 MHz     |
+ * | SMCLK | XT2    | 1       |32 MHz    |
+ * | ACLK  | XT2    | 2       |16 MHz    |
+ *
+ * To do so, it configures P7.2 and P7.3 as XT2, enables XT2 in UCSCTL6, enables
+ * the internal load capacitor in UCSCTL6, chooses the respective dividers in UCSCTL5 and
+ * finay chooses XT2 as the source in UCSCTL4. Then it loops until all the fault
+ * flags are cleared, indicating that the external crystal is working properly.
+ *
+ * \param -
+ * \return -
+ *
+*/
 
 void clock_config(void){
 

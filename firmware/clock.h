@@ -1,12 +1,17 @@
-/*
- * clock.h
+/**
+ * \file
  *
- *  Created on: 06/04/2017
- *      Author: Bruno Eiterer
+ * \brief Clock configuration header
+ *
+ * \author Bruno Vale Barbosa Eiterer
  */
 
 #ifndef CLOCK_H_
 #define CLOCK_H_
+
+/**
+ * \brief Configures the MCU clocks
+*/
 
 void clock_config(void);
 
