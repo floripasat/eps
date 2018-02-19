@@ -39,3 +39,5 @@
 firmware/GenericRecorderLibSrc/
 
 *.log
+
+Doxygen/doc/
