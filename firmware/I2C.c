@@ -9,10 +9,32 @@ volatile uint8_t EPS_data2[69] = {0};
 volatile FSPPacket obdh_packet_fsp_struct;
 volatile uint8_t obdh_packet_fsp_array[77] = {0};
 
+/**
+ * \brief Sends data via I<sup>2</sup>C protocol
+ *
+ * Writes the data to be sent in the UCB2TXBUF register.
+ *
+ * \param tx_data is the data to be sent
+ *
+ * \returns -
+ */
+
 void I2C_tx(uint8_t tx_data){
     UCB2TXBUF = tx_data;
 }
 
+
+/**
+ * \brief I<sup>2</sup>C peripheral configuration
+ *
+ * Configures port 9 bit 5 as I<sup>2</sup>C SDA and port 9 bit 6 as I<sup>2</sup>C SCL. Then set the UCSWRST bit in the UCB2CTL1 register to enable configuration of the peripheral.
+ * Then configures the peripheral as I<sup>2</sup>C slave and sets the UCSYNC to signal a synchronous protocol in the UCB2CTL0 register. Then selects own address as 0x48 in the
+ * UCB2I2COA register. Then it clears the UCSWRST bit in the UCB2CTL1 register. Finally it enables the TX, RX, STP and STT interrupts in the UCB2IE register.
+ *
+ * \param -
+ *
+ * \returns -
+ */
 void I2C_config(void){
     P9SEL |= BIT5 + BIT6;                            // Assign P2.0 to UCB0SDA and...
     P9DIR |= BIT5 + BIT6;                            // P2.1 to UCB0SCL
@@ -23,6 +45,29 @@ void I2C_config(void){
     UCB2CTL1 &= ~UCSWRST;                     // Clear SW reset, resume operation
     UCB2IE |= UCTXIE | UCRXIE | UCSTPIE | UCSTTIE;     // Enable STT, STP, TX, RX interrupt
 }
+
+/**
+ * \brief I<sup>2</sup>C peripheral interrupt handler
+ *
+ * Uses a switch structure to the determine the interrupt source, then proceeds as follows: <br>
+ * <br>
+ * <b> Start Condition Interrupt </b> <br>
+ * Clears the interrupt flag, resets the fsp protocol, clears the data reception counter, generates the fsp packet with the data to be sent to OBDH and encodes it in an array. <br>
+ * <br>
+ * <b> Stop Condtion Interrupt</b> <br>
+ * Clears the interrupt flag. <br>
+ * <br>
+ * <b> RX Interrupt </b> <br>
+ * Stores the data from the UCB2RXBUF register in an array and increments the reception counter. If the counter reaches 8, decodes the fsp packet received. If the packet payload
+ * is 0x02, indicating a data request command, resets the TX counter. <br>
+ * <br>
+ * <b> TX Interrupt </b> <br>
+ * Puts data from the encoded array position indicated by the tx counter in the UCB2TXBUF and increments the tx counter.
+ *
+ * \param -
+ *
+ * \returns -
+ */
 
 
 #pragma vector = USCI_B2_VECTOR
