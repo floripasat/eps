@@ -535,6 +535,10 @@ void timer_config(void){
     TA0EX0 = TAIDEX_7;                              // divide clock by 8
     TA0CTL |= TACLR;                                 // clear TAR
 
+    TA2CTL = TASSEL_1 + MC_1 + ID__8;        // ACLK, up to CCR0, divide clock by 8
+    TA2EX0 = TAIDEX_7;                              // divide clock by 8
+    TA2CTL |= TACLR;                                 // clear TAR
+
 
     TBCTL |= TBSSEL_2 + MC_1;
     TBCTL |= TBCLR;
