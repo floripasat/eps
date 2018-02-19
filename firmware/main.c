@@ -56,7 +56,7 @@ void main(void){
 /**
  * \brief Configures the MCU peripherals
  *
- * This function configures the MCU clock, watchdog, UART, ADC, SPI, I2C, timers,
+ * Configures the MCU clock, watchdog, UART, ADC, SPI, I2C, timers,
  * the regulators and 555 enable pins, starts the fsp protocol in software and prints
  * messages and turn leds on in debug mode.
  *
