@@ -1,3 +1,11 @@
+/**
+ * \file
+ *
+ * \brief Timer driver source
+ *
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com> and Daniel Igiski Baron <->
+ */
+
 #include <msp430.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -523,6 +531,36 @@ __interrupt void timer0_a1_isr(void){
     TA0CCTL0 = CCIE;
 }
 
+/**
+ * \brief Configures the timer peripheral
+ *
+ * <b> Time Bases Configuration </b> <br>
+ * Timers A0.1 and A0.2 are used to generate the time bases. <br>
+ * Sets the debug pins as output, then configures the TA0CCR0 and TA0CCR1 registers as 50000, generating interrupts every 100 ms. Then enables the interrupts in the TA0CCTL0 and
+ * TA0CCTL1 registers. Then it configures the TA0CTL register to select SMCLK (32 MHz) as the clock source, counting in up mode and with a clock divider of 8. Then it configures
+ * the TA0EX0 register to again divide the clock by 8. Then it clears the counter by setting the TACLR bit in the TA0CTL register. <br>
+ * <br>
+ *
+ * <b> Timeout Timer Configuration </b> <br>
+ * Timer A2 is used to generate timeouts. <br>
+ * Configures the TA2CTL register to use ACLK (16 MHz) as clock source, counting in up mode and sets the clock divider to 8. Then configures the TA2EX0 register to again divide
+ * the clock by 8. Then clears the counter by setting the TACLR bit in the TA2CTL register. <br>
+ * <br>
+ *
+ * <b> PWM Configuration </b> <br>
+ * Timers A1 and B0 are used to generate PWM signals. <br>
+ * Configures TBCTL to use SMCLK as clock source (32 MHz) and count in up mode. Then clears the counter by setting the TBCLR bit in the TBCTL register. The it configures port 4
+ * pins 1, 2 and 3 as PWM function. It configures the TBCCR0 register as 70, resulting in a PWM frequency of ~457 kHz. Then it configures the TBCCTL1, TBCCTL2 and TBCCTL3 registers
+ * in reset/set output mode. The TBCCR1, TBCCR2 and TBCCR3 are initially configured in an arbitrary value. <br>
+ * The second PWM frequency is configured by configuring TA1CTL to use SMCLK as the clock source, counting in up mode and dividing the clock by 4. Then the counter is cleared
+ * by setting the TACLR in the TA1CTL register. Port 3 pins 2 and 3 functions are selected as PWM. Then TA1CCR0 is configured as 160, resulting in a PWM frequency of 50 kHz. Then
+ * TA1CCTL1 and TA1CCTL2 are configured in reset/set output mode. Finally TA1CCR1 and TA1CCR2 are initially configured in arbitrary values.
+ *
+ * \param -
+ *
+ * \returns -
+ */
+
 void timer_config(void){
 
     timer_debug_port_dir |= timer_debug_pin_1s;     // P1.0 output
@@ -531,13 +569,13 @@ void timer_config(void){
     TA0CCR1 = 50000;
     TA0CCTL0 = CCIE;                                // timer A0 CCR0 interrupt enabled
     TA0CCTL1 = CCIE;
-    TA0CTL = TASSEL_2 + MC_1 + ID__8;           // SMCLK, upmode, timer A interrupt enable, divide clock by 8
+    TA0CTL = TASSEL_2 + MC_1 + ID__8;           	// SMCLK, upmode, timer A interrupt enable, divide clock by 8
     TA0EX0 = TAIDEX_7;                              // divide clock by 8
-    TA0CTL |= TACLR;                                 // clear TAR
+    TA0CTL |= TACLR;                                // clear TAR
 
-    TA2CTL = TASSEL_1 + MC_1 + ID__8;        // ACLK, up to CCR0, divide clock by 8
+    TA2CTL = TASSEL_1 + MC_1 + ID__8;        		// ACLK, up to CCR0, divide clock by 8
     TA2EX0 = TAIDEX_7;                              // divide clock by 8
-    TA2CTL |= TACLR;                                 // clear TAR
+    TA2CTL |= TACLR;                                // clear TAR
 
 
     TBCTL |= TBSSEL_2 + MC_1;
@@ -547,12 +585,12 @@ void timer_config(void){
     P4DIR |= BIT1 | BIT2 | BIT3;   // P4.1, P4.2 and P4.3 outputs
 
     TBCCR0 = 70;                            // PWM Period
-    TBCCTL1 = OUTMOD_7;                       // CCR1 reset/set
-    TBCCR1 = 10;                                // CCR1 PWM duty cycle
-    TBCCTL2 = OUTMOD_7;                       // CCR2 reset/set
-    TBCCR2 = 10;                                // CCR2 PWM duty cycle
+    TBCCTL1 = OUTMOD_7;                     // CCR1 reset/set
+    TBCCR1 = 10;                            // CCR1 PWM duty cycle
+    TBCCTL2 = OUTMOD_7;                     // CCR2 reset/set
+    TBCCR2 = 10;                            // CCR2 PWM duty cycle
     TBCCTL3 = OUTMOD_7;                     // CCR3 reset/set
-    TBCCR3 = 10;                                // CCR3 PWM duty cycle
+    TBCCR3 = 10;                            // CCR3 PWM duty cycle
 
     TA1CTL |= TASSEL_2 + MC_1 + ID__4;  // SMCLK, up mode, divide clock by 4
     TA1CTL |= TACLR;
@@ -561,9 +599,9 @@ void timer_config(void){
     P3DIR |= BIT2 | BIT3;   // P3.2 and P3.3 outputs
 
     TA1CCR0 = 160;                      // PWM Period = 160/8000000 = 20us => f = 50kHz
-    TA1CCTL1 = OUTMOD_7;                       // CCR2 reset/set
-    TA1CCR1 = 0;                  // CCR2 PWM duty cycle
-    TA1CCTL2 = OUTMOD_7;                       // CCR3 reset/set
-    TA1CCR2 = 0;                  // CCR3 PWM duty cycle
+    TA1CCTL1 = OUTMOD_7;                // CCR2 reset/set
+    TA1CCR1 = 0;                  		// CCR2 PWM duty cycle
+    TA1CCTL2 = OUTMOD_7					// CCR3 reset/set
+    TA1CCR2 = 0;                  		// CCR3 PWM duty cycle
 }
 
