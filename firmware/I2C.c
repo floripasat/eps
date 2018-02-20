@@ -3,6 +3,7 @@
 #include "I2C.h"
 #include "misc.h"
 #include "fsp.h"
+#include "avoid_infinit_loops.h"
 
 volatile uint8_t EPS_data[69] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 0, 0x01, 0x01};
 volatile uint8_t EPS_data2[69] = {0};
@@ -99,9 +100,10 @@ __interrupt void USCI_B2_ISR(void)
         obdh_rx_buffer[i++] = UCB2RXBUF;
         if(i >= 8){
             i = 0;
+            config_avoid_infinit_loops(62500);  // Maximum time on the loop: (TA2CCR0/clock): 62500/250000: 250ms
             do {
                 fsp_status = fsp_decode(obdh_rx_buffer[i++], &obdh_rx_packet);
-            } while(fsp_status == FSP_PKT_NOT_READY);
+            } while((fsp_status == FSP_PKT_NOT_READY) & !avoid_infinit_loops());
 
             if(fsp_status == FSP_PKT_READY) {
                 if(obdh_rx_packet.payload[0] == 0x02)

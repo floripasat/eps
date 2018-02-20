@@ -8,6 +8,7 @@
 
 #include <msp430.h>
 #include "ADC.h"
+#include "avoid_infinit_loops.h"
 
 /**
  * \brief Configures the ADC peripheral
@@ -67,7 +68,8 @@ int16_t adc_read(uint8_t channel){
 	ADC12CTL0 &= ~ADC12SC;
 	ADC12CTL0 |= ADC12SC;
 
-	while(!(ADC12IFG & (1 << channel)));
+	config_avoid_infinit_loops(62500);  // Maximum time on the loop: (TA2CCR0/clock): 62500/250000: 250ms
+	while(!(ADC12IFG & (1 << channel)) & !avoid_infinit_loops());
 
 	switch(channel){
 	case 0:

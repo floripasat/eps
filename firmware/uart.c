@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <intrinsics.h>
 #include "uart.h"
+#include "avoid_infinit_loops.h"
 
 /**
  * \brief Configures the UART peripheral
@@ -76,9 +77,11 @@ void uart_config(){
 void uart_tx_debug(uint8_t *tx_data){
 
 	uint8_t i = 0;				  	      // used to determine when array is finished
-	while(tx_data[i])                     // Increment through array, look for null pointer (0) at end of string
+	config_avoid_infinit_loops(62500);  // Maximum time on the loop: (TA2CCR0/clock): 62500/250000: 250ms
+	while(tx_data[i] & !avoid_infinit_loops())  // Increment through array, look for null pointer (0) at end of string
 	{
-		while ((UCA2STAT & UCBUSY));      // Wait if line TX/RX module is busy with data
+	    config_avoid_infinit_loops(62500);
+		while ((UCA2STAT & UCBUSY) & !avoid_infinit_loops());      // Wait if line TX/RX module is busy with data
 		UCA2TXBUF = tx_data[i];           // Send out element i of tx_data array on UART bus
 		i++;                              // Increment variable for array address
 	}
@@ -100,7 +103,8 @@ void uart_tx_debug(uint8_t *tx_data){
 
 void uart_tx_beacon(uint8_t tx_data){
 
-	while ((UCA0STAT & UCBUSY));      // Wait if line TX/RX module is busy with data
+    config_avoid_infinit_loops(62500);
+	while ((UCA0STAT & UCBUSY) & !avoid_infinit_loops());      // Wait if line TX/RX module is busy with data
 	UCA0TXBUF = tx_data;           // Send out element i of tx_data array on UART bus
 
 }

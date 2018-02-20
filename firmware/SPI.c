@@ -7,6 +7,7 @@
 
 #include <msp430.h>
 #include "SPI.h"
+#include "avoid_infinit_loops.h"
 
 /**
  * \brief Configures the SPI peripheral
@@ -45,9 +46,12 @@ void spi_config(void){
  */
 
 void spi_send(int data){
-	while(!(UCA1IFG & UCTXIFG));
+
+    config_avoid_infinit_loops(62500);  // Maximum time on the loop: (TA2CCR0/clock): 62500/250000: 250ms
+	while(!(UCA1IFG & UCTXIFG) & !avoid_infinit_loops());
 	UCA1TXBUF = data;	// send data to spi buffer
-	while(!(UCA1IFG & UCRXIFG));
+	config_avoid_infinit_loops(62500);
+	while(!(UCA1IFG & UCRXIFG) & !avoid_infinit_loops());
 }
 
 /**
@@ -61,7 +65,9 @@ void spi_send(int data){
  */
 
 int spi_read(void){
-	while(!(UCA1IFG & UCRXIFG));
+
+    config_avoid_infinit_loops(62500);
+	while(!(UCA1IFG & UCRXIFG) & !avoid_infinit_loops());
 	return UCA1RXBUF;
 }
 

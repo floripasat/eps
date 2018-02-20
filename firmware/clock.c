@@ -8,6 +8,7 @@
 
 #include <msp430.h>
 #include "clock.h"
+#include "avoid_infinit_loops.h"
 
 /**
  * \brief Configures the MCU clocks
@@ -33,7 +34,8 @@
 
 void clock_config(void){
 
-    while(BAKCTL & LOCKBAK)                   // Unlock XT1 pins for operation
+    config_avoid_infinit_loops(62500);         // Maximum time on the loop: (TA2CCR0/clock): 62500/250000: 250ms
+    while((BAKCTL & LOCKBAK) & !avoid_infinit_loops())                   // Unlock XT1 pins for operation
         BAKCTL &= ~(LOCKBAK);
 
     P7SEL |= BIT2 + BIT3; //XT2
@@ -43,8 +45,9 @@ void clock_config(void){
     UCSCTL5 |= DIVM__4 + DIVS__1 + DIVA__2;
     UCSCTL4 |= SELA__XT2CLK + SELS__XT2CLK + SELM__XT2CLK;  // SMCLK = MCLK = ACLK = XT2
 
+    config_avoid_infinit_loops(62500);
     do {
         UCSCTL7 &= ~(XT2OFFG | XT1LFOFFG | XT1HFOFFG | DCOFFG);  // Clear XT2,XT1,DCO fault flags
         SFRIFG1 &= ~OFIFG;                      // Clear fault flags
-    } while (SFRIFG1 & OFIFG);
+    } while ((SFRIFG1 & OFIFG) & !avoid_infinit_loops());
 }
