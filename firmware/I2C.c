@@ -1,4 +1,5 @@
 #include <msp430.h>
+#include <stdint.h>
 #include <string.h>
 #include "I2C.h"
 #include "misc.h"

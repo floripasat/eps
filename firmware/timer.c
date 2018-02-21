@@ -601,7 +601,7 @@ void timer_config(void){
     TA1CCR0 = 160;                      // PWM Period = 160/8000000 = 20us => f = 50kHz
     TA1CCTL1 = OUTMOD_7;                // CCR2 reset/set
     TA1CCR1 = 0;                  		// CCR2 PWM duty cycle
-    TA1CCTL2 = OUTMOD_7					// CCR3 reset/set
+    TA1CCTL2 = OUTMOD_7;				// CCR3 reset/set
     TA1CCR2 = 0;                  		// CCR3 PWM duty cycle
 }
 

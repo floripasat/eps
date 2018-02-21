@@ -7,6 +7,7 @@
  */
 
 #include <msp430.h>
+#include <stdint.h>
 #include "clock.h"
 #include "avoid_infinit_loops.h"
 

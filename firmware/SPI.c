@@ -2,10 +2,11 @@
  * \file
  *
  * \brief SPI driver source
- *
+ *s
  */
 
 #include <msp430.h>
+#include <stdint.h>
 #include "SPI.h"
 #include "avoid_infinit_loops.h"
 
