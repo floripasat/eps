@@ -69,7 +69,7 @@ int16_t adc_read(uint8_t channel){
 	ADC12CTL0 &= ~ADC12SC;
 	ADC12CTL0 |= ADC12SC;
 
-	config_avoid_infinit_loops(62500);  // Maximum time on the loop: (TA2CCR0/clock): 62500/250000: 250ms
+	config_avoid_infinit_loops(1000);  // Maximum time on the loop: (TA2CCR0/clock): 1000/250000: 4ms
 	while(!(ADC12IFG & (1 << channel)) & !avoid_infinit_loops());
 
 	switch(channel){

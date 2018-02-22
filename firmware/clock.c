@@ -46,7 +46,7 @@ void clock_config(void){
     UCSCTL5 |= DIVM__4 + DIVS__1 + DIVA__2;
     UCSCTL4 |= SELA__XT2CLK + SELS__XT2CLK + SELM__XT2CLK;  // SMCLK = MCLK = ACLK = XT2
 
-    config_avoid_infinit_loops(62500);
+    config_avoid_infinit_loops(250);      // Maximum time on the loop: (TA2CCR0/clock): 250/250000: 1ms
     do {
         UCSCTL7 &= ~(XT2OFFG | XT1LFOFFG | XT1HFOFFG | DCOFFG);  // Clear XT2,XT1,DCO fault flags
         SFRIFG1 &= ~OFIFG;                      // Clear fault flags

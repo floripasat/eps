@@ -101,7 +101,7 @@ __interrupt void USCI_B2_ISR(void)
         obdh_rx_buffer[i++] = UCB2RXBUF;
         if(i >= 8){
             i = 0;
-            config_avoid_infinit_loops(62500);  // Maximum time on the loop: (TA2CCR0/clock): 62500/250000: 250ms
+            config_avoid_infinit_loops(1000);  // Maximum time on the loop: (TA2CCR0/clock): 1000/250000: 4ms
             do {
                 fsp_status = fsp_decode(obdh_rx_buffer[i++], &obdh_rx_packet);
             } while((fsp_status == FSP_PKT_NOT_READY) & !avoid_infinit_loops());
