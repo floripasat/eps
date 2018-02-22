@@ -48,10 +48,10 @@ void spi_config(void){
 
 void spi_send(int data){
 
-    config_avoid_infinit_loops(62500);  // Maximum time on the loop: (TA2CCR0/clock): 62500/250000: 250ms
+    config_avoid_infinit_loops(1000);  // Maximum time on the loop: (TA2CCR0/clock): 1000/250000: 4ms
 	while(!(UCA1IFG & UCTXIFG) & !avoid_infinit_loops());
 	UCA1TXBUF = data;	// send data to spi buffer
-	config_avoid_infinit_loops(62500);
+	config_avoid_infinit_loops(1000);
 	while(!(UCA1IFG & UCRXIFG) & !avoid_infinit_loops());
 }
 
@@ -67,7 +67,7 @@ void spi_send(int data){
 
 int spi_read(void){
 
-    config_avoid_infinit_loops(62500);
+    config_avoid_infinit_loops(1000);
 	while(!(UCA1IFG & UCRXIFG) & !avoid_infinit_loops());
 	return UCA1RXBUF;
 }
