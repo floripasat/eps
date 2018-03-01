@@ -8,22 +8,6 @@
 
 #include "ADS1248.h"
 
-/*
- * ADS1248 initialization procedure: - send RESET command
- * 									 - wait 0.6ms
- * 									 - send stop read data continous mode (SDATC) command
- * 									 - send write register (WREG) command + 0 offset (will start writing to register MUX0 at address 0x00)
- * 									 - send number of bytes to write - 1 (MUX0 register at address 0x00, Vbias register at address 0x01, MUX1 register at address 0x02h and SYS0 register at 0x03)
- * 									 - send value to be written on register MUX0: turn off burn-out current source and configure channel to be read
- * 									 - send value to be written on register Vbias: disable Vbias
- * 									 - send value to be written on MUX1 register: turn internal reference generator always on, select input reference and normal operation mode
- * 									 - send value to be written on SYS0 register: select PGA gain and data output rate
- * 									 - send write register (WREG) command + 0x0A offset (will start writing to register IDAC0 at address 0x0A)
- * 									 - send number of bytes to write - 1 (IDAC0 register at address 0x0A, IDAC1 register at address 0x0B)
- * 									 - send value to be written on IDAC0 register: set DRDY mode and magnitude of excitation current
- * 									 - send value to be written on IDAC1 register: select output pin of excitation currents
- */
-
 /**
  * \brief Configures the ADS1248 external ADC
  *
