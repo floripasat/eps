@@ -3,7 +3,7 @@
  *
  * \brief Timer driver header
  *
- * \author Bruno Valo Barbosa Eiterer <brunoeiterer@gmail.com> and Daniel Igiski Baron <->
+ * \author Bruno Valo Barbosa Eiterer <brunoeiterer@gmail.com> and Daniel Igiski Baron <danieligiskibaron@hotmail.com>
  */
 
 #ifndef TIMER_H_

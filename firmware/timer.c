@@ -3,7 +3,7 @@
  *
  * \brief Timer driver source
  *
- * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com> and Daniel Igiski Baron <->
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com> and Daniel Igiski Baron <danieligiskibaron@hotmail.com>
  */
 
 #include <msp430.h>

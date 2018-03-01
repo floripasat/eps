@@ -3,6 +3,8 @@
  *
  * \brief SPI driver header
  *
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
+ *
  */
 
 #ifndef SPI_H_

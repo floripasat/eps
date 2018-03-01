@@ -1,3 +1,11 @@
+/**
+ * \file
+ *
+ * \brief I<sup>2</sup>C protocol driver source
+ *
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
+ */
+
 #include <msp430.h>
 #include <stdint.h>
 #include <string.h>

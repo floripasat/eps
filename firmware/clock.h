@@ -3,7 +3,7 @@
  *
  * \brief Clock configuration header
  *
- * \author Bruno Vale Barbosa Eiterer
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
  */
 
 #ifndef CLOCK_H_

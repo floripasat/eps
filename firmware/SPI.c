@@ -2,7 +2,9 @@
  * \file
  *
  * \brief SPI driver source
- *s
+ *
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
+ *
  */
 
 #include <msp430.h>

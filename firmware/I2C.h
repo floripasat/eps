@@ -3,7 +3,7 @@
  *
  * \brief I<sup>2</sup>C driver header
  *
- * \author Bruno Vale Barbosa Eiterer
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
  */
 
 #ifndef I2C_H_

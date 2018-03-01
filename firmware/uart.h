@@ -3,7 +3,7 @@
  *
  * \brief UART driver header
  *
- * \author Bruno Vale Barbosa Eiterer
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
  *
  */
 
