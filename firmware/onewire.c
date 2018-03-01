@@ -1,3 +1,11 @@
+/**
+ * \file
+ *
+ * \brief DS2775 batteries monitor drivers source
+ *
+ * \author Sara Vega Martinez <vegamartinezsara@gmail.com> and Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
+ */
+
 #include <msp430.h>
 #include <stdio.h>
 #include "onewire.h"
@@ -31,12 +39,16 @@ unsigned char protection_register_lsb = 0x00;
 
 volatile unsigned int count = 0;
 
-/************************************************************************/
-/*  - name: outp
- *  - Description: This function sends bit to 1-wire slave.
- *  - input data: int bit
- *  - output data: --
- ***********************************************************************/
+/**
+ * \brief Puts a bit on the one-wire line.
+ *
+ * Sets the one-wire pin as output and drives it low if the bit is 0
+ * or sets it as input to release the bus if the bit is 1.
+ *
+ * \param bit to be sent.
+ *
+ * \returns -
+ */
 
 void outp(int bit){
 
@@ -51,12 +63,16 @@ void outp(int bit){
 	DIR_P_Wire &= ~BitWire;
 	}
 }
-/************************************************************************/
-/*  - name: inp
- *  - Description: This function reads a bit from the 1-wire slave.
- *  - input data: --
- *  - output data: int result
- ***********************************************************************/
+
+/**
+ * \brief Reads bit from the one-wire line.
+ *
+ * Sets the one-wire pin as input and reads it.
+ *
+ * \param -
+ *
+ * \returns the bit read.
+ */
 
 int inp(void){
 volatile unsigned int result=0;
@@ -68,13 +84,17 @@ volatile unsigned int result=0;
 
 	}
 
-/************************************************************************/
-/*  - name: OneWireReset
- *  - Description: This function genererates 1-wire reset. Returns 0
- *    if no presence detect was found, return 1 otherwise.
- *  - input data: --
- *  - output data: int result
- ***********************************************************************/
+/**
+ * \brief Generates reset on one-wire line.
+ *
+ * Drives the line high, delays for 0 seconds, drives the line low,
+ * delays for 480 us, drives the line high, delays for 70 us, reads
+ * the response from the slave and delays for 410 us.
+ *
+ * \param -
+ *
+ * \returns 0 if device is present, 1 if not present.
+ */
 
 int OneWireReset(void){
 
@@ -96,12 +116,17 @@ int OneWireReset(void){
 
 }
 
-/************************************************************************/
-/*  - name: OneWireWrite
- *  - Description: this function sends a 1-wire write bit to 1-wire slave.
- *  - input data: int bit
- *  - output data:--
- ***********************************************************************/
+/**
+ * \brief Sends one-wire bit to one-wire slave.
+ *
+ * If the bit is 1, drives the pin low and delays for 6 us, then sets
+ * the pin high and delays for 64 us. If the bit is 0, drives the pin
+ * low and delays for 60 us then drives the pin high and delays for 80 us.
+ *
+ * \param bit to be sent.
+ *
+ * \returns -
+ */
 
 void OneWireWrite(int bit){
 
@@ -125,13 +150,16 @@ void OneWireWrite(int bit){
 
 }
 
-/************************************************************************/
-/*  - name: OneWireReadBit
- *  - Description: This function reads a 1-wire data bit  to 1-wire slave and returns int.
- *  - input data: --
- *  - output data: int result
- ***********************************************************************/
-
+/**
+ * \brief Reads one-wire bit from one-wire slave.
+ *
+ * Drives the one-wire pin low and delays for 6 us, then drives the pin
+ * high and delays for 9 us, reads the result and delays for 55 us.
+ *
+ * \param -
+ *
+ * \returns the bit read.
+ */
 int OneWireReadBit(void){
 
 	int result;
@@ -148,12 +176,16 @@ int OneWireReadBit(void){
 
 }
 
-/************************************************************************/
-/*  - name: OWWriteByte
- *  - Description: This function writes a 1-wire data byte.
- *  - input data: int data
- *  - output data: --
- ***********************************************************************/
+/**
+ * \brief Writes a byte to one-wire slave.
+ *
+ * Loops 8 times calling OneWireWrite passing each bit of the byte to
+ * be sent.
+ *
+ * \param data byte to be sent.
+ *
+ * \returns -
+ */
 
 void OWWriteByte(int data)
 {
@@ -168,12 +200,15 @@ void OWWriteByte(int data)
 	}
 }
 
-/************************************************************************/
-/*  - name: OWReadByte
- *  - Description: This function read a 1-wire data byte and return it
- *  - input data:
- *  - output data: int data
- ***********************************************************************/
+/**
+ * \brief Reads a byte from the one-wire slave.
+ *
+ * Loops 8 times calling OneWireReadBit and adding the result.
+ *
+ * \param -
+ *
+ * \returns the byte read.
+ */
 
 uint8_t OWReadByte(void)
 {
@@ -189,8 +224,47 @@ uint8_t OWReadByte(void)
 		return result;
 }
 
-
-
+/**
+ * \brief Configures the DS2775 batteries monitor.
+ *
+ * Configures the DS2775 registers by the following procedure:
+ * - Generates a reset on the one-wire line
+ * - Sends the 0xCC general address to the line (only one slave is present)
+ * - Sends the write command (0x6C)
+ * - Sends the register address
+ * - Sends the value to be written
+ *
+ * The registers are configured as follows:
+ *
+ * <b>Protection Register</b>
+ * Enable charge and discharge.
+ *
+ * <b>Protector Threshold Register</b>
+ * 0x61 bias used to the current accumulation.
+ *
+ * <b>Status Register</b>
+ * Clear all flags.
+ *
+ * <b>Control Register</b>
+ * Set the undervoltage threshold to 2.6 V.
+ *
+ * <b>Overcurrent Threshold Register</b>
+ * Set the short-circuit current to 15 A, the discharge overcurrent
+ * to 7.5 A and the charge overcurrent to 5A.
+ *
+ * <b>Current Gain Register</b>
+ * Removes gain from the measurements.
+ *
+ * If the Write Accumulated Current build is being used, the Accumulated
+ * Current Register is written with 3 Ah.
+ *
+ * In Debug mode, the data sent is read back to verify if it was
+ * configured properly.
+ *
+ * \param -
+ *
+ * \returns -
+ */
 
 void config_DS2775(void){
 	// CONFIGURATION DS2775
@@ -290,15 +364,10 @@ void config_DS2775(void){
 #endif
 }
 
+/**
+ * \brief Acquires data from the DS2775 batteries monitor [Deprecated]
+ */
 
-
-
-/************************************************************************/
-/*  - name: measurement_data_DS2775
- *  - Description:
- *  - input data: --
- *  - output data: --
- ***********************************************************************/
 void measurement_data_DS2775(void){
 
     volatile unsigned int aux;
@@ -452,6 +521,18 @@ void measurement_data_DS2775(void){
     OWWriteByte(control_register);		// register address
     OWWriteByte(0x0C);					// value to be written
 }
+
+/**
+ * \brief Reads a register from the DS2775 batteries monitor.
+ *
+ * Generates a reset on the one-wire line, sends the CC general address,
+ * sends the read register command (0x69), sends the address of the
+ * register to be read.
+ *
+ * \param register_address is the address of the register to be read.
+ *
+ * \returns the value read.
+ */
 
 uint8_t DS2775_read_register(uint8_t register_address){
 	uint8_t reset = 0;						// declare variable to hold reset value

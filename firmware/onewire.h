@@ -1,8 +1,9 @@
-/*
- * eps_onewire_test.h
+/**
+ * \file
  *
- *  Created on: 12/04/2016
- *      Author: Bruno Eiterer
+ * \brief DS2775 batteries monitor drivers header
+ *
+ * \author Sara Vega Martinez <vegamartinezsara@gmail.com> and Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
  */
 
 #ifndef ONEWIRE_H_
@@ -38,17 +39,64 @@
 #define current_unit	0.0000015625/rsense
 #define accumulated_current_unit	6.25*0.000001/rsense
 
+/**
+ * \brief Configures the DS2775 batteries monitor.
+ */
+
 void config_DS2775(void);
+
+/**
+ * \brief Acquires data from the DS2775 batteries monitor [Deprecated]
+ */
 
 void measurement_data_DS2775(void);
 
+/**
+ * \brief Puts a bit on the one-wire line.
+ */
+
 void outp(int bit);
+
+/**
+ * \brief Reads bit from the one-wire line.
+ */
+
 int inp(void);
+
+/**
+ * \brief Generates reset on one-wire line.
+ */
+
 int OneWireReset(void);
+
+/**
+ * \brief Sends one-wire bit to one-wire slave.
+ */
+
 void OneWireWrite(int bit);
+
+/**
+ * \brief Reads one-wire bit from one-wire slave.
+ */
+
 int OneWireReadBit(void);
+
+/**
+ * \brief Writes a byte to one-wire slave.
+ */
+
 void OWWriteByte(int data);
+
+/**
+ * \brief Reads a byte from the one-wire slave.
+ */
+
 uint8_t OWReadByte(void);
+
+/**
+ * \brief Reads a register from the DS2775 batteries monitor.
+ */
+
 uint8_t DS2775_read_register(uint8_t register_address);
 
 #endif /* EPS_ONEWIRE_TEST_H_ */
