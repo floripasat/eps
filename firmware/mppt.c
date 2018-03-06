@@ -1,7 +1,27 @@
+/**
+ * \file
+ *
+ * \brief MPPT algorithm source
+ *
+ * \author Bruno Vale Barbosa Eiterer
+ */
+
 #include <stdint.h>
 #include "mppt.h"
 #include "hal.h"
 
+/**
+ * \brief Executes a P&O algorithm and changes the PWM outputs accordingly.
+ *
+ * Compares the input power with the one from the previous interaction and the previous action (increase the duty cycle or decrease the duty cycle) and takes the appropriate action.
+ *
+ * \param current is the solar panel current
+ * \param voltage is the solar panel voltage
+ * \param address is the address of the PWM register
+ * \param mppt_parameters is a structure containing the voltage, power and action from the previous interaction
+ *
+ * \returns -
+ */
 
 void mppt_algorithm(uint16_t current, uint16_t voltage, uint16_t address, mppt_parameters_t* mppt_parameters){
 

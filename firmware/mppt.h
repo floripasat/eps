@@ -1,8 +1,9 @@
-/*
- * mppt.h
+/**
+ * \file
  *
- *  Created on: 25/05/2017
- *      Author: Bruno Eiterer
+ * \brief MPPT algorithm header
+ *
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
  */
 
 #ifndef MPPT_H_
@@ -21,6 +22,10 @@ typedef struct {
 
 #define solar_panel_current_unit 0.0001479640152
 #define solar_panel_voltage_unit 0.001178588867
+
+/**
+ * \brief Executes a P&O algorithm and changes the PWM outputs accordingly.
+ */
 
 void mppt_algorithm(uint16_t current, uint16_t voltage, uint16_t address, mppt_parameters_t* mppt_paremeters);
 
