@@ -349,6 +349,16 @@ __interrupt void timer0_a0_isr(void){
 
 }
 
+/**
+ * \brief Timer A1.1 interrupt handler.
+ *
+ * 100 milliseconds timebase. Reads the solar panels voltages and currents 10 times and takes the mean. Then uses this data to execute the MPPT algorithm.
+ *
+ * \param -
+ *
+ * \returns -
+ */
+
 #pragma vector=TIMER0_A1_VECTOR
 __interrupt void timer0_a1_isr(void){
 
