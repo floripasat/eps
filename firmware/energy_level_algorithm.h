@@ -1,8 +1,9 @@
-/*
- * energy_level_algorithm.c
+/**
+ * \file
  *
- *  Created on: 26/06/2017
- *      Author: Bruno Eiterer
+ * \brief Energy level algorithm header
+ *
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
  */
 
 #ifndef ENERGY_LEVEL_ALGORITHM_C_
@@ -18,6 +19,10 @@
 #define level3 0x03
 #define level4 0x04
 #define level5 0x05
+
+/**
+ * \brief Determines the operation level of the satellite based on the remaining charge of the batteries.
+ */
 
 uint8_t energyLevelAlgorithm(uint8_t previous_level, uint16_t chargeLevel);
 
