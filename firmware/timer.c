@@ -26,8 +26,20 @@
 volatile extern uint8_t EPS_data[70];
 
 
-
-/********** INTERRUPTS **********/
+/**
+ * \brief Timer A0.0 interrupt handler
+ *
+ * 1 second timebase. Reads the solar panels boost converters output voltage, the main bus voltage, the EPS-Beacon current, the MCU internal temperature, the batteries monitor data,
+ * the RTDs temperatures, executes the batteries temperature control algorithm.
+ *
+ * Every 10 seconds it sends data to Beacon.
+ *
+ * Every 12 hours it resets the MCU.
+ *
+ * \param -
+ *
+ * \returns -
+ */
 
 #pragma vector=TIMER0_A0_VECTOR
 __interrupt void timer0_a0_isr(void){
