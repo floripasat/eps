@@ -78,10 +78,10 @@ void uart_tx_debug(uint8_t *tx_data){
 
 	uint8_t i = 0;				  	      // used to determine when array is finished
 	config_avoid_infinit_loops(1000);  // Maximum time on the loop: (TA2CCR0/clock): 1000/250000: 4ms
-	while(tx_data[i] & !avoid_infinit_loops())  // Increment through array, look for null pointer (0) at end of string
+	while(tx_data[i] && !avoid_infinit_loops())  // Increment through array, look for null pointer (0) at end of string
 	{
 	    config_avoid_infinit_loops(1000);
-		while ((UCA2STAT & UCBUSY) & !avoid_infinit_loops());      // Wait if line TX/RX module is busy with data
+		while ((UCA2STAT & UCBUSY) && !avoid_infinit_loops());      // Wait if line TX/RX module is busy with data
 		UCA2TXBUF = tx_data[i];           // Send out element i of tx_data array on UART bus
 		i++;                              // Increment variable for array address
 	}
@@ -104,7 +104,7 @@ void uart_tx_debug(uint8_t *tx_data){
 void uart_tx_beacon(uint8_t tx_data){
 
     config_avoid_infinit_loops(1000);
-	while ((UCA0STAT & UCBUSY) & !avoid_infinit_loops());      // Wait if line TX/RX module is busy with data
+	while ((UCA0STAT & UCBUSY) && !avoid_infinit_loops());      // Wait if line TX/RX module is busy with data
 	UCA0TXBUF = tx_data;           // Send out element i of tx_data array on UART bus
 
 }
