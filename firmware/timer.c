@@ -23,6 +23,10 @@
 #include "energy_level_algorithm.h"
 #include "fsp.h"
 
+#define COUNTER_VALUE_12_HOURS      432000
+#define COUNTER_VALUE_1_SECOND      10
+#define COUNTER_VALUE_10_SECONDS    100
+
 volatile extern uint8_t EPS_data[70];
 
 
@@ -46,9 +50,7 @@ __interrupt void timer0_a0_isr(void){
 
     __enable_interrupt();
 
-    volatile static uint16_t count12h = 0;
-    volatile static uint8_t i = 0, counter_30s = 0;
-    volatile static uint8_t counter_1s = 0;
+    volatile static uint32_t counter = 1;       // multiple purpose counter - increments every 100ms
 
     static struct Pid parameters_heater1 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
     static struct Pid parameters_heater2 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
@@ -62,22 +64,14 @@ __interrupt void timer0_a0_isr(void){
     volatile uint32_t temp_2 = 0;
     volatile uint32_t temp_6 = 0;
 
-    if(count12h == 43199)        // 43300 seconds --> 12h
-    {
-         count12h = 0;
-         i++;
 
-         if(i == 10)
-         {
-            WDTCTL = 0xDEAD;      // reset
-            i = 0;
-         }
-
+    if( (counter % COUNTER_VALUE_12_HOURS) == 0){    // enters every 12 hours to reset the MCU
+        counter = 1;                                 // reset the counter
+        WDTCTL = 0xDEAD;                             // reset the MCU
     }
-    else  count12h++;
 
-    if(counter_1s == 9) {
-        counter_1s = 0;
+
+    if( (counter % COUNTER_VALUE_1_SECOND) == 0) {  // enters every 1 second to normal operation
 
 
 #if defined(_DEBUG) || defined(_VERBOSE)
@@ -249,11 +243,10 @@ __interrupt void timer0_a0_isr(void){
         uart_tx_debug(",");
 #endif
 
-        if(counter_30s == 9){
+        if( (counter % COUNTER_VALUE_10_SECONDS) == 0){     // enters every 10 seconds to send data to beacon
             static FSPPacket beacon_packet_fsp_struct;
             volatile uint8_t beacon_packet_fsp_array[38] = {0};
             volatile uint8_t beacon_packet[31] = {0};
-            counter_30s = 0;
 
             beacon_packet[0] = EPS_data[battery1_voltage_MSB];
             beacon_packet[1] = EPS_data[battery1_voltage_LSB];
@@ -297,9 +290,7 @@ __interrupt void timer0_a0_isr(void){
                 uart_tx_beacon(beacon_packet_fsp_array[i]);
             }
         }
-        else{
-            counter_30s++;
-        }
+
 
 #ifdef _VERBOSE_DEBUG
         uint8_t protection_register_string[30] = {0};
@@ -342,10 +333,10 @@ __interrupt void timer0_a0_isr(void){
         uart_tx_debug(protection_register_string);
         uart_tx_debug("\r\n");
 #endif
+
     }
-    else{
-        counter_1s++;
-    }
+
+    counter++;      //increments counter every 100ms
 
 }
 
