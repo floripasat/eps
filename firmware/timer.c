@@ -74,6 +74,7 @@ __interrupt void timer0_a0_isr(void){
         }
 
         if(flash_counter >= FLASH_COUNTER_VALUE_1_DAY){             // enter if 1 day is passed
+            write_accumulated_current_max_value();
             reset_battery_charge_counter = 1;
 
             flash_erase(RESET_BATTERY_CHARGE_ADDR_FLASH);           // turn off the reset battery charge mode flag
