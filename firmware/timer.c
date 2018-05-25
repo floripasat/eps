@@ -22,10 +22,7 @@
 #include "mppt.h"
 #include "energy_level_algorithm.h"
 #include "fsp.h"
-
-#define COUNTER_VALUE_12_HOURS      432000
-#define COUNTER_VALUE_1_SECOND      10
-#define COUNTER_VALUE_10_SECONDS    100
+#include "flash.h"
 
 volatile extern uint8_t EPS_data[70];
 
@@ -50,7 +47,9 @@ __interrupt void timer0_a0_isr(void){
 
     __enable_interrupt();
 
-    volatile static uint32_t counter = 1;       // multiple purpose counter - increments every 100ms
+    volatile static uint32_t counter = 1;                           // multiple purpose counter - increments every 100ms
+    volatile static uint16_t reset_battery_charge_counter = 1;      // specific counter for the reset battery charge function - increments every 100ms
+    volatile static uint32_t flash_counter = 0;                     // stores the current value of flash memory COUNTER_10_MINUTE_ADDR_FLASH adress - increments every 10 minutes
 
     static struct Pid parameters_heater1 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
     static struct Pid parameters_heater2 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
@@ -63,6 +62,30 @@ __interrupt void timer0_a0_isr(void){
     volatile uint32_t temp_1 = 0;
     volatile uint32_t temp_2 = 0;
     volatile uint32_t temp_6 = 0;
+
+
+    if(flash_read_single(RESET_BATTERY_CHARGE_ADDR_FLASH) == 1){                // enters if the reset battery charge mode flag is active
+
+        if( (reset_battery_charge_counter % COUNTER_VALUE_10_MINUTES) == 0){    // enters every 10 minutes
+            flash_counter = flash_read_long(FLASH_COUNTER_ADDR_FLASH);          //increments 10 minute counter stored on the flash memory
+            flash_counter++;
+            flash_erase(FLASH_COUNTER_ADDR_FLASH);
+            flash_write_long(flash_counter, FLASH_COUNTER_ADDR_FLASH);
+        }
+
+        if(flash_counter >= FLASH_COUNTER_VALUE_1_DAY){             // enter if 1 day is passed
+            reset_battery_charge_counter = 1;
+
+            flash_erase(RESET_BATTERY_CHARGE_ADDR_FLASH);           // turn off the reset battery charge mode flag
+            flash_write_single(0,RESET_BATTERY_CHARGE_ADDR_FLASH);
+
+            flash_erase(FLASH_COUNTER_ADDR_FLASH);                  // reset the 10 minute counter on the flash memory
+            flash_write_long(0, FLASH_COUNTER_ADDR_FLASH);
+        }
+        else{
+            reset_battery_charge_counter++;         // increments every 100ms
+        }
+    }
 
 
     if( (counter % COUNTER_VALUE_12_HOURS) == 0){    // enters every 12 hours to reset the MCU
@@ -156,8 +179,15 @@ __interrupt void timer0_a0_isr(void){
 
         watchdog_reset_counter();
 
-        EPS_data[battery_accumulated_current_LSB] = DS2775_read_register(accumulated_current_LSB_register);     // read battery current LSB
-        EPS_data[battery_accumulated_current_MSB] = DS2775_read_register(accumulated_current_MSB_register);     // read battery current MSB
+        if(flash_read_single(RESET_BATTERY_CHARGE_ADDR_FLASH) == 1){        // enter if the reset battery charge mode flag is active
+            EPS_data[battery_accumulated_current_LSB] = 0x00;               // set battery accumulated current LSB to zero
+            EPS_data[battery_accumulated_current_MSB] = 0x00;               // set battery accumulated current MSB to zero
+
+        }
+        else{
+            EPS_data[battery_accumulated_current_LSB] = DS2775_read_register(accumulated_current_LSB_register);     // read battery current LSB
+            EPS_data[battery_accumulated_current_MSB] = DS2775_read_register(accumulated_current_MSB_register);     // read battery current MSB
+        }
 
         watchdog_reset_counter();
 
