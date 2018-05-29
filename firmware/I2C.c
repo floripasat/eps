@@ -120,7 +120,7 @@ __interrupt void USCI_B2_ISR(void)
                 if(obdh_rx_packet.payload[0] == 0x02){
                     tx_data_counter = 0;
                 }
-                else if(obdh_rx_packet.payload[0] == 0x1C){             // enter if a reset battery charge command is received from OBDH
+                else if(obdh_rx_packet.payload[0] == 0xC1){             // enter if a reset battery charge command is received from OBDH
                     flash_erase(RESET_BATTERY_CHARGE_ADDR_FLASH);
                     flash_write_single(1, RESET_BATTERY_CHARGE_ADDR_FLASH);
                 }
