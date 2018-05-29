@@ -12,8 +12,6 @@
 #include <stdint.h>
 #include "hal.h"
 
-#define RESET_BATTERY_CHARGE_ADDR_FLASH     (uint8_t *) SEGC_ADDR       // flash memory adress to store the battery charge reset mode flag
-
 /**
  * \brief I<sup>2</sup>C peripheral configuration
  */

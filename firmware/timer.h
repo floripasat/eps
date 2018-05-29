@@ -20,9 +20,6 @@
 #define COUNTER_VALUE_10_MINUTES    6000
 #define FLASH_COUNTER_VALUE_1_DAY   144
 
-#define FLASH_COUNTER_ADDR_FLASH            (uint32_t *) SEGD_ADDR       // flash memory adress to store a 10 minute counter for the reset battery charge function
-#define RESET_BATTERY_CHARGE_ADDR_FLASH     (uint8_t *) SEGC_ADDR       // flash memory adress to store the battery charge reset mode flag
-
 /**
  * \brief Configures the timer peripheral
  */
