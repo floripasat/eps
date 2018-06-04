@@ -2,6 +2,8 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+SHELL = cmd.exe
+
 # Add inputs and outputs from these tool invocations to the build variables 
 CMD_SRCS += \
 ../lnk_msp430f6659.cmd 
@@ -11,11 +13,12 @@ C_SRCS += \
 ../ADS1248.c \
 ../I2C.c \
 ../SPI.c \
+../avoid_infinit_loops.c \
 ../clock.c \
-/home/bruno/Git/fsp/fsp/crc16.c \
+C:/Users/danie/Desktop/Engenharia\ Eletronica/Git/fsp/fsp/crc16.c \
 ../crc8.c \
 ../energy_level_algorithm.c \
-/home/bruno/Git/fsp/fsp/fsp.c \
+C:/Users/danie/Desktop/Engenharia\ Eletronica/Git/fsp/fsp/fsp.c \
 ../main.c \
 ../misc.c \
 ../mppt.c \
@@ -30,6 +33,7 @@ C_DEPS += \
 ./ADS1248.d \
 ./I2C.d \
 ./SPI.d \
+./avoid_infinit_loops.d \
 ./clock.d \
 ./crc16.d \
 ./crc8.d \
@@ -49,6 +53,7 @@ OBJS += \
 ./ADS1248.obj \
 ./I2C.obj \
 ./SPI.obj \
+./avoid_infinit_loops.obj \
 ./clock.obj \
 ./crc16.obj \
 ./crc8.obj \
@@ -68,6 +73,7 @@ OBJS__QUOTED += \
 "ADS1248.obj" \
 "I2C.obj" \
 "SPI.obj" \
+"avoid_infinit_loops.obj" \
 "clock.obj" \
 "crc16.obj" \
 "crc8.obj" \
@@ -87,6 +93,7 @@ C_DEPS__QUOTED += \
 "ADS1248.d" \
 "I2C.d" \
 "SPI.d" \
+"avoid_infinit_loops.d" \
 "clock.d" \
 "crc16.d" \
 "crc8.d" \
@@ -106,11 +113,12 @@ C_SRCS__QUOTED += \
 "../ADS1248.c" \
 "../I2C.c" \
 "../SPI.c" \
+"../avoid_infinit_loops.c" \
 "../clock.c" \
-"/home/bruno/Git/fsp/fsp/crc16.c" \
+"C:/Users/danie/Desktop/Engenharia Eletronica/Git/fsp/fsp/crc16.c" \
 "../crc8.c" \
 "../energy_level_algorithm.c" \
-"/home/bruno/Git/fsp/fsp/fsp.c" \
+"C:/Users/danie/Desktop/Engenharia Eletronica/Git/fsp/fsp/fsp.c" \
 "../main.c" \
 "../misc.c" \
 "../mppt.c" \

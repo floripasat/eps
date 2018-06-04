@@ -2,7 +2,9 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
-CG_TOOL_ROOT := /home/bruno/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.6.LTS
+SHELL = cmd.exe
+
+CG_TOOL_ROOT := D:/CCS/ccsv7/tools/compiler/ti-cgt-msp430_16.9.4.LTS
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
@@ -12,6 +14,7 @@ ORDERED_OBJS += \
 "./ADS1248.obj" \
 "./I2C.obj" \
 "./SPI.obj" \
+"./avoid_infinit_loops.obj" \
 "./clock.obj" \
 "./crc16.obj" \
 "./crc8.obj" \
@@ -32,8 +35,8 @@ $(GEN_CMDS__FLAG) \
 
 -include ../makefile.init
 
-RM := rm -rf
-RMDIR := rm -rf
+RM := DEL /F
+RMDIR := RMDIR /S/Q
 
 # All of the sources participating in the build are defined here
 -include sources.mk
@@ -152,24 +155,23 @@ all: fsat_eps.out
 
 # Tool invocations
 fsat_eps.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
-	@echo 'Building target: "$@"'
+	@echo 'Building target: $@'
 	@echo 'Invoking: MSP430 Linker'
-	"/home/bruno/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.6.LTS/bin/cl430" -vmspx --abi=eabi --data_model=restricted -O2 --use_hw_mpy=F5 --advice:power=all --define=__MSP430F6659__ --define=_WRITE_ACCUMULATED_CURRENT --display_error_number --diag_warning=225 --diag_wrap=off --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=full -z -m"fsat_eps.map" --stack_size=160 --heap_size=160 --cinit_hold_wdt=on -i"/home/bruno/ti/ccsv7/ccs_base/msp430/include" -i"/home/bruno/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.6.LTS/lib" -i"/home/bruno/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.6.LTS/include" -i"/home/bruno/ti/ccsv7/ccs_base/msp430/lib/5xx_6xx_FRxx" --reread_libs --warn_sections --diag_wrap=off --display_error_number --xml_link_info="fsat_eps_linkInfo.xml" --use_hw_mpy=F5 --rom_model -o "fsat_eps.out" $(ORDERED_OBJS)
-	@echo 'Finished building target: "$@"'
+	"D:/CCS/ccsv7/tools/compiler/ti-cgt-msp430_16.9.4.LTS/bin/cl430" -vmspx --abi=eabi --data_model=restricted -O2 --use_hw_mpy=F5 --advice:power=all --define=__MSP430F6659__ --define=_WRITE_ACCUMULATED_CURRENT --display_error_number --diag_warning=225 --diag_wrap=off --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=full -z -m"fsat_eps.map" --stack_size=160 --heap_size=160 --cinit_hold_wdt=on -i"D:/CCS/ccsv7/ccs_base/msp430/include" -i"D:/CCS/ccsv7/tools/compiler/ti-cgt-msp430_16.9.4.LTS/lib" -i"D:/CCS/ccsv7/tools/compiler/ti-cgt-msp430_16.9.4.LTS/include" -i"D:/CCS/ccsv7/ccs_base/msp430/lib/5xx_6xx_FRxx" --reread_libs --warn_sections --diag_wrap=off --display_error_number --xml_link_info="fsat_eps_linkInfo.xml" --use_hw_mpy=F5 --rom_model -o "fsat_eps.out" $(ORDERED_OBJS)
+	@echo 'Finished building target: $@'
 	@echo ' '
 
 fsat_eps.hex: $(EXE_OUTPUTS)
-	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo 'Invoking: MSP430 Hex Utility'
-	"/home/bruno/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.6.LTS/bin/hex430" --memwidth=8 --romwidth=8 -o "fsat_eps.hex" $(EXE_OUTPUTS__QUOTED)
-	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
+	"D:/CCS/ccsv7/tools/compiler/ti-cgt-msp430_16.9.4.LTS/bin/hex430" --memwidth=8 --romwidth=8 -o "fsat_eps.hex" $(EXE_OUTPUTS__QUOTED)
+	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "ADC.obj" "ADS1248.obj" "I2C.obj" "SPI.obj" "clock.obj" "crc16.obj" "crc8.obj" "energy_level_algorithm.obj" "fsp.obj" "main.obj" "misc.obj" "mppt.obj" "onewire.obj" "pid.obj" "timer.obj" "uart.obj" "watchdog.obj" 
-	-$(RM) "ADC.d" "ADS1248.d" "I2C.d" "SPI.d" "clock.d" "crc16.d" "crc8.d" "energy_level_algorithm.d" "fsp.d" "main.d" "misc.d" "mppt.d" "onewire.d" "pid.d" "timer.d" "uart.d" "watchdog.d" 
+	-$(RM) "ADC.obj" "ADS1248.obj" "I2C.obj" "SPI.obj" "avoid_infinit_loops.obj" "clock.obj" "crc16.obj" "crc8.obj" "energy_level_algorithm.obj" "fsp.obj" "main.obj" "misc.obj" "mppt.obj" "onewire.obj" "pid.obj" "timer.obj" "uart.obj" "watchdog.obj" 
+	-$(RM) "ADC.d" "ADS1248.d" "I2C.d" "SPI.d" "avoid_infinit_loops.d" "clock.d" "crc16.d" "crc8.d" "energy_level_algorithm.d" "fsp.d" "main.d" "misc.d" "mppt.d" "onewire.d" "pid.d" "timer.d" "uart.d" "watchdog.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

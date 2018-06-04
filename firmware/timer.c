@@ -364,7 +364,8 @@ __interrupt void timer0_a1_isr(void){
 
     TA0CCTL1 &= ~CCIFG;
     __enable_interrupt();
-     TA0CCTL0 &= ~CCIE;
+    TA0CCTL0 &= ~CCIE;
+    interruption_occurring = 1;
 
 
 #ifdef _DEBUG
@@ -591,11 +592,11 @@ void timer_config(void){
     TA0CCR1 = 50000;
     TA0CCTL0 = CCIE;                                // timer A0 CCR0 interrupt enabled
     TA0CCTL1 = CCIE;
-    TA0CTL = TASSEL_2 + MC_1 + ID__8;           	// SMCLK, upmode, timer A interrupt enable, divide clock by 8
+    TA0CTL = TASSEL_2 + MC_1 + ID__8;               // SMCLK, upmode, timer A interrupt enable, divide clock by 8
     TA0EX0 = TAIDEX_7;                              // divide clock by 8
     TA0CTL |= TACLR;                                // clear TAR
 
-    TA2CTL = TASSEL_1 + MC_1 + ID__8;        		// ACLK, up to CCR0, divide clock by 8
+    TA2CTL = TASSEL_1 + MC_1 + ID__8;               // ACLK, up to CCR0, divide clock by 8
     TA2EX0 = TAIDEX_7;                              // divide clock by 8
     TA2CTL |= TACLR;                                // clear TAR
 
@@ -622,8 +623,7 @@ void timer_config(void){
 
     TA1CCR0 = 160;                      // PWM Period = 160/8000000 = 20us => f = 50kHz
     TA1CCTL1 = OUTMOD_7;                // CCR2 reset/set
-    TA1CCR1 = 0;                  		// CCR2 PWM duty cycle
-    TA1CCTL2 = OUTMOD_7;				// CCR3 reset/set
-    TA1CCR2 = 0;                  		// CCR3 PWM duty cycle
+    TA1CCR1 = 0;                        // CCR2 PWM duty cycle
+    TA1CCTL2 = OUTMOD_7;                // CCR3 reset/set
+    TA1CCR2 = 0;                        // CCR3 PWM duty cycle
 }
-
