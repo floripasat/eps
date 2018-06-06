@@ -2,6 +2,10 @@
  * \file
  *
  * \brief I<sup>2</sup>C protocol driver source
+ /**
+ * \file
+ *
+ * \brief I<sup>2</sup>C protocol driver source
  *
  * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
  */
@@ -92,6 +96,8 @@ __interrupt void USCI_B2_ISR(void)
     static uint8_t obdh_rx_buffer[8];
     uint8_t fsp_status;
 
+    interruption_occurring = 1;     // Variavel para debug (APAGAR DEPOIS DE DEBUGAR)
+
     switch(__even_in_range(UCB2IV,12))
     {
     case  0: break;                           // Vector  0: No interrupts
@@ -107,7 +113,7 @@ __interrupt void USCI_B2_ISR(void)
     case  8:                                  // Vector  8: STPIFG
         UCB2IFG &= ~UCSTPIFG;                   // Clear stop condition int flag
         break;
-    case 10: 									// Vector 10: RXIFG
+    case 10:                                    // Vector 10: RXIFG
         obdh_rx_buffer[i++] = UCB2RXBUF;
         if(i >= 8){
             i = 0;

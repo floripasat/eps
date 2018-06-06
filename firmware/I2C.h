@@ -12,6 +12,8 @@
 #include <stdint.h>
 #include "hal.h"
 
+     volatile int interruption_occurring;         // Variavel Teste para Debug (APAGAR DEPOIS DE DEBUGAR)
+
 /**
  * \brief I<sup>2</sup>C peripheral configuration
  */
