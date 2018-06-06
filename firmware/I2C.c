@@ -70,7 +70,7 @@ void I2C_config(void){
  * <br>
  * <b> RX Interrupt </b> <br>
  * Stores the data from the UCB2RXBUF register in an array and increments the reception counter. If the counter reaches 8, decodes the fsp packet received. If the packet payload
- * is 0x02, indicating a data request command, resets the TX counter. Else if the packet payload is 0x1C, indicating a reset battery charge command, sets the reset battery
+ * is 0x02, indicating a data request command, resets the TX counter. Else if the packet payload is 0xC1, indicating a reset battery charge command, sets the reset battery
  * charge flag on the flash memory. <br>
  * <br>
  * <b> TX Interrupt </b> <br>

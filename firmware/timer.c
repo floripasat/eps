@@ -64,7 +64,7 @@ __interrupt void timer0_a0_isr(void){
     volatile uint32_t temp_6 = 0;
 
 
-    if(flash_read_single(RESET_BATTERY_CHARGE_ADDR_FLASH) == 1){                // enters if the reset battery charge mode flag is active
+    if(flash_read_single(RESET_BATTERY_CHARGE_ADDR_FLASH) == 0xC1){                // enters if the reset battery charge mode flag is active
 
         if( (reset_battery_charge_counter % COUNTER_VALUE_10_MINUTES) == 0){    // enters every 10 minutes
             flash_counter = flash_read_long(FLASH_COUNTER_ADDR_FLASH);          //increments 10 minute counter stored on the flash memory
@@ -180,7 +180,7 @@ __interrupt void timer0_a0_isr(void){
 
         watchdog_reset_counter();
 
-        if(flash_read_single(RESET_BATTERY_CHARGE_ADDR_FLASH) == 1){        // enter if the reset battery charge mode flag is active
+        if(flash_read_single(RESET_BATTERY_CHARGE_ADDR_FLASH) == 0xC1){        // enter if the reset battery charge mode flag is active
             EPS_data[battery_accumulated_current_LSB] = 0x00;               // set battery accumulated current LSB to zero
             EPS_data[battery_accumulated_current_MSB] = 0x00;               // set battery accumulated current MSB to zero
 
