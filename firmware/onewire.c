@@ -695,3 +695,37 @@ uint8_t DS2775_read_register(uint8_t register_address){
     return result;  // return value read from register
 
 }
+
+/**
+ * \brief Writes accumulated current maximum value (3 Ah) to batteries monitor appropriated register.
+ *
+ * \param
+ *
+ * \returns
+ */
+
+void write_accumulated_current_max_value(void){         // write 3Ah to battery accumulated current
+    volatile unsigned int reset=0x1;
+
+    reset = OneWireReset();                              // ACCUMULATED CURRENT - MSB REGISTER
+    OWWriteByte(0xCC);                                  // eeprom address (only one slave on bus, CC is used)
+    OWWriteByte(0x6C);                                  // write operation
+    OWWriteByte(accumulated_current_MSB_register);      // register address
+    OWWriteByte(0x12);                                  // value to be written
+
+    reset = OneWireReset();
+    OWWriteByte(0xCC);                                  // eeprom address (only one slave on bus, CC is used)
+    OWWriteByte(0x48);                                  // copy data command
+    OWWriteByte(accumulated_current_MSB_register);      // register address
+
+    reset = OneWireReset();                              // ACCUMULATED CURRENT - LSB REGISTER
+    OWWriteByte(0xCC);                                  // eeprom address (only one slave on bus, CC is used)
+    OWWriteByte(0x6C);                                  // write operation
+    OWWriteByte(accumulated_current_LSB_register);      // register address
+    OWWriteByte(0xC0);                                  // value to be written
+
+    reset = OneWireReset();
+    OWWriteByte(0xCC);                                  // eeprom address (only one slave on bus, CC is used)
+    OWWriteByte(0x48);                                  // copy data command
+    OWWriteByte(accumulated_current_LSB_register);      // register address
+}
