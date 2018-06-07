@@ -31,7 +31,7 @@ void adc_config(void){
 
 	REFCTL0 &= ~REFMSTR;								// allows reference control in the ADC12 registers
 
-	ADC12CTL0 = ADC12ON + ADC12MSC + ADC12SHT0_15 + ADC12REFON; 		// turn on ADC12, enable multiple sample and conversion, extend sampling time to avoid overflow of results and turns on the internal reference
+	ADC12CTL0 = ADC12ON | ADC12MSC | ADC12SHT0_15 | ADC12SHT1_15 | ADC12REFON;      // turn on ADC12, enable multiple sample and conversion, extend sampling time to avoid overflow of results and turns on the internal reference
 	ADC12CTL1 = ADC12SHP + ADC12CONSEQ_1;       						// use sampling timer, sequence of channels
 	ADC12MCTL0 = ADC12INCH_0 + ADC12SREF_2;             				// ref+=VeRef, channel = A0
 	ADC12MCTL1 = ADC12INCH_1 + ADC12SREF_2;              				// ref+=VeRef, channel = A1
