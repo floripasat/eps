@@ -555,12 +555,6 @@ uint8_t DS2775_read_register(uint8_t register_address){
     OWWriteByte(register_address);          //
     result = OWReadByte();
 
-    reset = OneWireReset();                              // ACCUMULATED CURRENT - MSB REGISTER
-    OWWriteByte(0xCC);                                  // eeprom address (only one slave on bus, CC is used)
-    OWWriteByte(0x6C);                                  // write operation
-    OWWriteByte(accumulated_current_MSB_register);      // register address
-    OWWriteByte(0x12);                                  // value to be written
-
     if(interruption_occurring == 1){        // Prevents the interrupt from corrupting the data:
                                             // When a interrupt occurs during the communication returns the previous value
         interruption_occurring = 0;
@@ -695,6 +689,7 @@ uint8_t DS2775_read_register(uint8_t register_address){
     return result;  // return value read from register
 
 }
+
 
 /**
  * \brief Writes accumulated current maximum value (3 Ah) to batteries monitor appropriated register.
