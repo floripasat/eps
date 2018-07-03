@@ -22,6 +22,7 @@
 #include "mppt.h"
 #include "energy_level_algorithm.h"
 #include "fsp.h"
+#include "flash.h"
 
 volatile extern uint8_t EPS_data[70];
 
@@ -46,9 +47,11 @@ __interrupt void timer0_a0_isr(void){
 
     __enable_interrupt();
 
-    volatile static uint16_t count12h = 0;
-    volatile static uint8_t i = 0, counter_30s = 0;
-    volatile static uint8_t counter_1s = 0;
+    volatile static uint8_t counter_1s = 0;         // increments every 100 milliseconds; resets every 1 second
+    volatile static uint8_t counter_10s = 0;        // increments every second; resets every 10 seconds
+    volatile static uint16_t counter_10min = 0;     // increments every 100 milliseconds when in battery charge reset mode; resets every 10 minutes
+    volatile static uint32_t counter_12h = 0;       // increments every 100 milliseconds; resets every 12 hours
+    volatile static uint8_t flash_counter = 0;
 
     static struct Pid parameters_heater1 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
     static struct Pid parameters_heater2 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
@@ -62,23 +65,60 @@ __interrupt void timer0_a0_isr(void){
     volatile uint32_t temp_2 = 0;
     volatile uint32_t temp_6 = 0;
 
-    if(count12h == 43199)        // 43300 seconds --> 12h
-    {
-         count12h = 0;
-         i++;
 
-         if(i == 10)
-         {
-            WDTCTL = 0xDEAD;      // reset
-            i = 0;
-         }
+    if(flash_read_single(FIRST_CHARGE_RESET_ADDR_FLASH) == FIRST_CHARGE_RESET_ACTIVE){
+        if(counter_10min++ >= COUNTER_EQUIVALENT_TO_10MIN){
+            counter_10min = 0;
 
+            flash_counter = flash_read_long(FLASH_COUNTER_ADDR_FLASH);                          // increment counter stored on the flash memory
+            flash_counter++;
+            flash_erase(FLASH_COUNTER_ADDR_FLASH);
+            flash_write_long(flash_counter, FLASH_COUNTER_ADDR_FLASH);
+
+            if(flash_read_long(FLASH_COUNTER_ADDR_FLASH) >= COUNTER_EQUIVALENT_TO_1H){
+                flash_erase(RESET_BATTERY_CHARGE_ADDR_FLASH);
+                flash_write_single(RESET_BATTERY_CHARGE_COMMAND, RESET_BATTERY_CHARGE_ADDR_FLASH);
+
+                flash_erase(FLASH_COUNTER_ADDR_FLASH);
+                flash_write_long(0x00, FLASH_COUNTER_ADDR_FLASH);
+
+                flash_erase(FIRST_CHARGE_RESET_ADDR_FLASH);
+                flash_write_long(FIRST_CHARGE_RESET_DONE, FIRST_CHARGE_RESET_ADDR_FLASH);
+            }
+        }
     }
-    else  count12h++;
 
-    if(counter_1s == 9) {
+
+    if(flash_read_single(RESET_BATTERY_CHARGE_ADDR_FLASH) == RESET_BATTERY_CHARGE_COMMAND){         // enter if the reset battery charge mode flag is active
+
+        if(counter_10min++ >= COUNTER_EQUIVALENT_TO_10MIN){                                         // enter every 10 minutes
+            counter_10min = 0;                                                                      // reset the counter
+
+            flash_counter = flash_read_long(FLASH_COUNTER_ADDR_FLASH);                          // increment counter stored on the flash memory
+            flash_counter++;
+            flash_erase(FLASH_COUNTER_ADDR_FLASH);
+            flash_write_long(flash_counter, FLASH_COUNTER_ADDR_FLASH);
+
+            if(flash_read_long(FLASH_COUNTER_ADDR_FLASH) >= COUNTER_EQUIVALENT_TO_1D){              // enter if 1 day is passed
+                write_accumulated_current_max_value();                                              // record the battery charge maximum value in batteries monitor
+
+                flash_erase(RESET_BATTERY_CHARGE_ADDR_FLASH);                                       // turn off the reset battery charge mode flag
+
+                flash_erase(FLASH_COUNTER_ADDR_FLASH);                                              // reset the 10-minute counter stored on the flash memory
+                flash_write_long(0x00, FLASH_COUNTER_ADDR_FLASH);
+            }
+        }
+    }
+
+
+    if(counter_12h++ >= COUNTER_EQUIVALENT_TO_12H){         // enter every 12 hours to reset the MCU
+        counter_12h = 0;                                    // reset the counter
+        WDTCTL = 0xDEAD;                                    // reset the MCU
+    }
+
+
+    if(counter_1s++ >= COUNTER_EQUIVALENT_TO_1S){               // enter every 1 second to normal operation
         counter_1s = 0;
-
 
 #if defined(_DEBUG) || defined(_VERBOSE)
         timer_debug_port_1s ^= timer_debug_pin_1s;      // Toggle 1s debug pin
@@ -162,8 +202,15 @@ __interrupt void timer0_a0_isr(void){
 
         watchdog_reset_counter();
 
-        EPS_data[battery_accumulated_current_LSB] = DS2775_read_register(accumulated_current_LSB_register);     // read battery current LSB
-        EPS_data[battery_accumulated_current_MSB] = DS2775_read_register(accumulated_current_MSB_register);     // read battery current MSB
+        if(flash_read_single(RESET_BATTERY_CHARGE_ADDR_FLASH) == RESET_BATTERY_CHARGE_COMMAND){        // enter if the reset battery charge mode flag is active
+            EPS_data[battery_accumulated_current_LSB] = 0x00;               // set battery accumulated current LSB to zero
+            EPS_data[battery_accumulated_current_MSB] = 0x00;               // set battery accumulated current MSB to zero
+
+        }
+        else{
+            EPS_data[battery_accumulated_current_LSB] = DS2775_read_register(accumulated_current_LSB_register);     // read battery current LSB
+            EPS_data[battery_accumulated_current_MSB] = DS2775_read_register(accumulated_current_MSB_register);     // read battery current MSB
+        }
 
         watchdog_reset_counter();
 
@@ -249,11 +296,12 @@ __interrupt void timer0_a0_isr(void){
         uart_tx_debug(",");
 #endif
 
-        if(counter_30s == 9){
+        if(counter_10s++ >= COUNTER_EQUIVALENT_TO_10S){     // enter every 10 seconds to send data to beacon
+            counter_10s = 0;
+
             static FSPPacket beacon_packet_fsp_struct;
             volatile uint8_t beacon_packet_fsp_array[38] = {0};
             volatile uint8_t beacon_packet[31] = {0};
-            counter_30s = 0;
 
             beacon_packet[0] = EPS_data[battery1_voltage_MSB];
             beacon_packet[1] = EPS_data[battery1_voltage_LSB];
@@ -297,9 +345,7 @@ __interrupt void timer0_a0_isr(void){
                 uart_tx_beacon(beacon_packet_fsp_array[i]);
             }
         }
-        else{
-            counter_30s++;
-        }
+
 
 #ifdef _VERBOSE_DEBUG
         uint8_t protection_register_string[30] = {0};
@@ -342,11 +388,8 @@ __interrupt void timer0_a0_isr(void){
         uart_tx_debug(protection_register_string);
         uart_tx_debug("\r\n");
 #endif
-    }
-    else{
-        counter_1s++;
-    }
 
+    }
 }
 
 /**
@@ -364,7 +407,8 @@ __interrupt void timer0_a1_isr(void){
 
     TA0CCTL1 &= ~CCIFG;
     __enable_interrupt();
-     TA0CCTL0 &= ~CCIE;
+    TA0CCTL0 &= ~CCIE;
+    interruption_occurring = 1;
 
 
 #ifdef _DEBUG
@@ -591,11 +635,11 @@ void timer_config(void){
     TA0CCR1 = 50000;
     TA0CCTL0 = CCIE;                                // timer A0 CCR0 interrupt enabled
     TA0CCTL1 = CCIE;
-    TA0CTL = TASSEL_2 + MC_1 + ID__8;           	// SMCLK, upmode, timer A interrupt enable, divide clock by 8
+    TA0CTL = TASSEL_2 + MC_1 + ID__8;               // SMCLK, upmode, timer A interrupt enable, divide clock by 8
     TA0EX0 = TAIDEX_7;                              // divide clock by 8
     TA0CTL |= TACLR;                                // clear TAR
 
-    TA2CTL = TASSEL_1 + MC_1 + ID__8;        		// ACLK, up to CCR0, divide clock by 8
+    TA2CTL = TASSEL_1 + MC_1 + ID__8;               // ACLK, up to CCR0, divide clock by 8
     TA2EX0 = TAIDEX_7;                              // divide clock by 8
     TA2CTL |= TACLR;                                // clear TAR
 
@@ -622,8 +666,7 @@ void timer_config(void){
 
     TA1CCR0 = 160;                      // PWM Period = 160/8000000 = 20us => f = 50kHz
     TA1CCTL1 = OUTMOD_7;                // CCR2 reset/set
-    TA1CCR1 = 0;                  		// CCR2 PWM duty cycle
-    TA1CCTL2 = OUTMOD_7;				// CCR3 reset/set
-    TA1CCR2 = 0;                  		// CCR3 PWM duty cycle
+    TA1CCR1 = 0;                        // CCR2 PWM duty cycle
+    TA1CCTL2 = OUTMOD_7;                // CCR3 reset/set
+    TA1CCR2 = 0;                        // CCR3 PWM duty cycle
 }
-

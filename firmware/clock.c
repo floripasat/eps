@@ -36,7 +36,7 @@
 void clock_config(void){
 
     config_avoid_infinit_loops(1000);         // Maximum time on the loop: (TA2CCR0/clock): 1000/250000: 4ms
-    while((BAKCTL & LOCKBAK) & !avoid_infinit_loops())                   // Unlock XT1 pins for operation
+    while((BAKCTL & LOCKBAK) && !avoid_infinit_loops())                   // Unlock XT1 pins for operation
         BAKCTL &= ~(LOCKBAK);
 
     P7SEL |= BIT2 + BIT3; //XT2
@@ -50,5 +50,5 @@ void clock_config(void){
     do {
         UCSCTL7 &= ~(XT2OFFG | XT1LFOFFG | XT1HFOFFG | DCOFFG);  // Clear XT2,XT1,DCO fault flags
         SFRIFG1 &= ~OFIFG;                      // Clear fault flags
-    } while ((SFRIFG1 & OFIFG) & !avoid_infinit_loops());
+    } while ((SFRIFG1 & OFIFG) && !avoid_infinit_loops());
 }

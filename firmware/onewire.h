@@ -99,6 +99,12 @@ uint8_t OWReadByte(void);
 
 uint8_t DS2775_read_register(uint8_t register_address);
 
+/**
+ * \brief Writes accumulated current maximum value (3 Ah) to batteries monitor appropriated register.
+ */
+
+void write_accumulated_current_max_value(void);
+
 #endif /* EPS_ONEWIRE_TEST_H_ */
 
 

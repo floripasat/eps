@@ -14,6 +14,17 @@
 #define PWM_DUTY_CYCLE	0.5		// absolute pwm duty cycle
 #define PWM_PERIOD	10000			// pwm period in us
 
+#define COUNTER_EQUIVALENT_TO_12H       431999
+#define COUNTER_EQUIVALENT_TO_1S        9
+#define COUNTER_EQUIVALENT_TO_10S       9
+#define COUNTER_EQUIVALENT_TO_10MIN     5999
+#define COUNTER_EQUIVALENT_TO_1H        6
+#define COUNTER_EQUIVALENT_TO_1D        144
+
+#define FIRST_CHARGE_RESET_ACTIVE       0xC5
+#define FIRST_CHARGE_RESET_DONE     0x4F
+
+
 /**
  * \brief Configures the timer peripheral
  */

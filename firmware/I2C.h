@@ -12,6 +12,11 @@
 #include <stdint.h>
 #include "hal.h"
 
+volatile int interruption_occurring;         // Variavel Teste para Debug (APAGAR DEPOIS DE DEBUGAR)
+
+#define DATA_REQUEST_COMMAND 0x02
+#define RESET_BATTERY_CHARGE_COMMAND 0x05
+
 /**
  * \brief I<sup>2</sup>C peripheral configuration
  */
