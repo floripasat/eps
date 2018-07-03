@@ -69,7 +69,7 @@ void I2C_config(void){
  * <b> Start Condition Interrupt </b> <br>
  * Clears the interrupt flag, resets the fsp protocol, clears the data reception counter, generates the fsp packet with the data to be sent to OBDH and encodes it in an array. <br>
  * <br>
- * <b> Stop Condtion Interrupt</b> <br>
+ * <b> Stop Condition Interrupt</b> <br>
  * Clears the interrupt flag. <br>
  * <br>
  * <b> RX Interrupt </b> <br>
@@ -122,19 +122,20 @@ __interrupt void USCI_B2_ISR(void)
                 fsp_status = fsp_decode(obdh_rx_buffer[i++], &obdh_rx_packet);
             } while((fsp_status == FSP_PKT_NOT_READY) && !avoid_infinit_loops());
 
-            if(fsp_status == FSP_PKT_READY) {
-                if(obdh_rx_packet.payload[0] == 0x02){
+            if(fsp_status == FSP_PKT_READY){
+                if(obdh_rx_packet.payload[0] == DATA_REQUEST_COMMAND){
                     tx_data_counter = 0;
                 }
-                else if(obdh_rx_packet.payload[0] == 0xC1){             // enter if a reset battery charge command is received from OBDH
+                else if(obdh_rx_packet.payload[0] == RESET_BATTERY_CHARGE_COMMAND){             // enter if a reset battery charge command is received from OBDH
                     flash_erase(RESET_BATTERY_CHARGE_ADDR_FLASH);
-                    flash_write_single(1, RESET_BATTERY_CHARGE_ADDR_FLASH);
+                    flash_write_single(RESET_BATTERY_CHARGE_COMMAND, RESET_BATTERY_CHARGE_ADDR_FLASH);
+                    tx_data_counter = 0;
                 }
             }
         }
         break;
     case 12:                                  // Vector 12: TXIFG
-        UCB2TXBUF = obdh_packet_fsp_array[tx_data_counter];                // Transmit data at address PTxData
+        UCB2TXBUF = obdh_packet_fsp_array[tx_data_counter];             // Transmit data at address PTxData
         tx_data_counter++;
         break;
     default: break;
