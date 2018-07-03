@@ -47,9 +47,11 @@ __interrupt void timer0_a0_isr(void){
 
     __enable_interrupt();
 
-    volatile static uint32_t counter = 1;                           // multiple purpose counter - increments every 100ms
-    volatile static uint16_t reset_battery_charge_counter = 1;      // specific counter for the reset battery charge function - increments every 100ms
-    volatile static uint32_t flash_counter = 0;                     // stores the current value of flash memory COUNTER_10_MINUTE_ADDR_FLASH adress - increments every 10 minutes
+    volatile static uint8_t counter_1s = 0;         // increments every 100 milliseconds; resets every 1 second
+    volatile static uint8_t counter_10s = 0;        // increments every second; resets every 10 seconds
+    volatile static uint16_t counter_10min = 0;     // increments every 100 milliseconds when in battery charge reset mode; resets every 10 minutes
+    volatile static uint32_t counter_12h = 0;       // increments every 100 milliseconds; resets every 12 hours
+    volatile static uint8_t flash_counter = 0;
 
     static struct Pid parameters_heater1 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
     static struct Pid parameters_heater2 = {0, 0, 1, 150, 20, 0 , INT_MAX, 10};
@@ -64,39 +66,59 @@ __interrupt void timer0_a0_isr(void){
     volatile uint32_t temp_6 = 0;
 
 
-    if(flash_read_single(RESET_BATTERY_CHARGE_ADDR_FLASH) == 0xC1){                // enters if the reset battery charge mode flag is active
+    if(flash_read_single(FIRST_CHARGE_RESET_ADDR_FLASH) == FIRST_CHARGE_RESET_ACTIVE){
+        if(counter_10min++ >= COUNTER_EQUIVALENT_TO_10MIN){
+            counter_10min = 0;
 
-        if( (reset_battery_charge_counter % COUNTER_VALUE_10_MINUTES) == 0){    // enters every 10 minutes
-            flash_counter = flash_read_long(FLASH_COUNTER_ADDR_FLASH);          //increments 10 minute counter stored on the flash memory
+            flash_counter = flash_read_long(FLASH_COUNTER_ADDR_FLASH);                          // increment counter stored on the flash memory
             flash_counter++;
             flash_erase(FLASH_COUNTER_ADDR_FLASH);
             flash_write_long(flash_counter, FLASH_COUNTER_ADDR_FLASH);
-        }
 
-        if(flash_counter >= FLASH_COUNTER_VALUE_1_DAY){             // enter if 1 day is passed
-            write_accumulated_current_max_value();
-            reset_battery_charge_counter = 1;
+            if(flash_read_long(FLASH_COUNTER_ADDR_FLASH) >= COUNTER_EQUIVALENT_TO_1H){
+                flash_erase(RESET_BATTERY_CHARGE_ADDR_FLASH);
+                flash_write_single(RESET_BATTERY_CHARGE_COMMAND, RESET_BATTERY_CHARGE_ADDR_FLASH);
 
-            flash_erase(RESET_BATTERY_CHARGE_ADDR_FLASH);           // turn off the reset battery charge mode flag
-            flash_write_single(0,RESET_BATTERY_CHARGE_ADDR_FLASH);
+                flash_erase(FLASH_COUNTER_ADDR_FLASH);
+                flash_write_long(0x00, FLASH_COUNTER_ADDR_FLASH);
 
-            flash_erase(FLASH_COUNTER_ADDR_FLASH);                  // reset the 10 minute counter on the flash memory
-            flash_write_long(0, FLASH_COUNTER_ADDR_FLASH);
-        }
-        else{
-            reset_battery_charge_counter++;         // increments every 100ms
+                flash_erase(FIRST_CHARGE_RESET_ADDR_FLASH);
+                flash_write_long(FIRST_CHARGE_RESET_DONE, FIRST_CHARGE_RESET_ADDR_FLASH);
+            }
         }
     }
 
 
-    if( (counter % COUNTER_VALUE_12_HOURS) == 0){    // enters every 12 hours to reset the MCU
-        counter = 1;                                 // reset the counter
-        WDTCTL = 0xDEAD;                             // reset the MCU
+    if(flash_read_single(RESET_BATTERY_CHARGE_ADDR_FLASH) == RESET_BATTERY_CHARGE_COMMAND){         // enter if the reset battery charge mode flag is active
+
+        if(counter_10min++ >= COUNTER_EQUIVALENT_TO_10MIN){                                         // enter every 10 minutes
+            counter_10min = 0;                                                                      // reset the counter
+
+            flash_counter = flash_read_long(FLASH_COUNTER_ADDR_FLASH);                          // increment counter stored on the flash memory
+            flash_counter++;
+            flash_erase(FLASH_COUNTER_ADDR_FLASH);
+            flash_write_long(flash_counter, FLASH_COUNTER_ADDR_FLASH);
+
+            if(flash_read_long(FLASH_COUNTER_ADDR_FLASH) >= COUNTER_EQUIVALENT_TO_1D){              // enter if 1 day is passed
+                write_accumulated_current_max_value();                                              // record the battery charge maximum value in batteries monitor
+
+                flash_erase(RESET_BATTERY_CHARGE_ADDR_FLASH);                                       // turn off the reset battery charge mode flag
+
+                flash_erase(FLASH_COUNTER_ADDR_FLASH);                                              // reset the 10-minute counter stored on the flash memory
+                flash_write_long(0x00, FLASH_COUNTER_ADDR_FLASH);
+            }
+        }
     }
 
 
-    if( (counter % COUNTER_VALUE_1_SECOND) == 0) {  // enters every 1 second to normal operation
+    if(counter_12h++ >= COUNTER_EQUIVALENT_TO_12H){         // enter every 12 hours to reset the MCU
+        counter_12h = 0;                                    // reset the counter
+        WDTCTL = 0xDEAD;                                    // reset the MCU
+    }
 
+
+    if(counter_1s++ >= COUNTER_EQUIVALENT_TO_1S){               // enter every 1 second to normal operation
+        counter_1s = 0;
 
 #if defined(_DEBUG) || defined(_VERBOSE)
         timer_debug_port_1s ^= timer_debug_pin_1s;      // Toggle 1s debug pin
@@ -180,7 +202,7 @@ __interrupt void timer0_a0_isr(void){
 
         watchdog_reset_counter();
 
-        if(flash_read_single(RESET_BATTERY_CHARGE_ADDR_FLASH) == 0xC1){        // enter if the reset battery charge mode flag is active
+        if(flash_read_single(RESET_BATTERY_CHARGE_ADDR_FLASH) == RESET_BATTERY_CHARGE_COMMAND){        // enter if the reset battery charge mode flag is active
             EPS_data[battery_accumulated_current_LSB] = 0x00;               // set battery accumulated current LSB to zero
             EPS_data[battery_accumulated_current_MSB] = 0x00;               // set battery accumulated current MSB to zero
 
@@ -274,7 +296,9 @@ __interrupt void timer0_a0_isr(void){
         uart_tx_debug(",");
 #endif
 
-        if( (counter % COUNTER_VALUE_10_SECONDS) == 0){     // enters every 10 seconds to send data to beacon
+        if(counter_10s++ >= COUNTER_EQUIVALENT_TO_10S){     // enter every 10 seconds to send data to beacon
+            counter_10s = 0;
+
             static FSPPacket beacon_packet_fsp_struct;
             volatile uint8_t beacon_packet_fsp_array[38] = {0};
             volatile uint8_t beacon_packet[31] = {0};
@@ -366,9 +390,6 @@ __interrupt void timer0_a0_isr(void){
 #endif
 
     }
-
-    counter++;      //increments counter every 100ms
-
 }
 
 /**

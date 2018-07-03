@@ -67,8 +67,9 @@
 #define BSL3_ADDR       0x001000
 #define MASS_ERASE      0XFFFFFF
 
-#define FLASH_COUNTER_ADDR_FLASH            (uint32_t *) SEGD_ADDR       // flash memory adress to store a 10 minute counter for the reset battery charge function
-#define RESET_BATTERY_CHARGE_ADDR_FLASH     (uint8_t *) SEGC_ADDR       // flash memory adress to store the battery charge reset mode flag
+#define FLASH_COUNTER_ADDR_FLASH            (uint32_t *) SEGD_ADDR      // flash memory address to store a counter used in battery charge reset procedures
+#define RESET_BATTERY_CHARGE_ADDR_FLASH     (uint8_t *) SEGC_ADDR       // flash memory address to store the battery charge reset mode flag
+#define FIRST_CHARGE_RESET_ADDR_FLASH       (uint8_t *) SEGB_ADDR       // flash memory address to store the flag for the first charge reset (in deployment)
 
 char *flash_ptr;                         	// Initialize Flash pointer
 long *current_flash_ptr;					//place holder to save flash pointer to boot
