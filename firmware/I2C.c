@@ -129,6 +129,10 @@ __interrupt void USCI_B2_ISR(void)
                 else if(obdh_rx_packet.payload[0] == RESET_BATTERY_CHARGE_COMMAND){             // enter if a reset battery charge command is received from OBDH
                     flash_erase(RESET_BATTERY_CHARGE_ADDR_FLASH);
                     flash_write_single(RESET_BATTERY_CHARGE_COMMAND, RESET_BATTERY_CHARGE_ADDR_FLASH);
+
+                    flash_erase(FLASH_COUNTER_ADDR_FLASH);                                     // reset the counter stored on the flash memory
+                    flash_write_long(0x00, FLASH_COUNTER_ADDR_FLASH);
+
                     tx_data_counter = 0;
                 }
             }
