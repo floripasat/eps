@@ -1,6 +1,5 @@
 #include "misc.h"
 
-
 void frame_to_string(unsigned char frame[],unsigned char frame_string[], int size){
 	int i;
 	int j = 0;
@@ -57,4 +56,37 @@ void int_to_char(int data, char string[], int size){
 		string[i]=' ';
 	}
 	/////////(end) >> string /////////
+}
+
+void update_vector(uint32_t *vector, uint8_t size, uint32_t new_value){
+    int i = 0;
+    for(i=0; i<(size-1) ; i++){
+        vector[i] = vector[i+1];
+    }
+    vector[size-1] = new_value;
+}
+
+uint32_t average(uint32_t value1, uint32_t value2){
+    return (value1 + value2)/2;
+}
+
+uint32_t median_value(uint32_t *vector, uint8_t size){
+    int i, j;
+    uint32_t temp;
+
+    for(i=0; i<(size-1); i++) {
+        for(j=i+1; j<size; j++) {
+            if(vector[j] < vector[i]) {
+                temp = vector[i];
+                vector[i] = vector[j];
+                vector[j] = temp;
+            }
+        }
+    }
+    if(size%2 == 0){
+        return average(vector[size/2], vector[size/2 - 1]);
+    }
+    else{
+        return vector[(size-1)/2];
+    }
 }
