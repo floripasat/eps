@@ -23,9 +23,9 @@
 #include "energy_level_algorithm.h"
 #include "fsp.h"
 #include "flash.h"
+#include "misc.h"
 
 volatile extern uint8_t EPS_data[70];
-
 
 /**
  * \brief Timer A0.0 interrupt handler
@@ -61,9 +61,11 @@ __interrupt void timer0_a0_isr(void){
     volatile uint16_t adc10 = 0;
     volatile uint16_t adc15 = 0;
     volatile uint16_t msp_ts = 0;
-    volatile uint32_t temp_1 = 0;
-    volatile uint32_t temp_2 = 0;
-    volatile uint32_t temp_6 = 0;
+    volatile uint32_t rtd0_measure = 0, rtd1_measure = 0, rtd2_measure = 0, rtd3_measure = 0;
+    volatile uint32_t rtd4_measure = 0, rtd5_measure = 0, rtd6_measure = 0;
+    volatile uint32_t rtd2_values[RTD_FILTER_SIZE], rtd3_values[RTD_FILTER_SIZE];
+    volatile uint32_t rtd5_values[RTD_FILTER_SIZE], rtd6_values[RTD_FILTER_SIZE];
+    volatile uint32_t heater1_input = 0, heater2_input = 0;
 
 
     if(flash_read_single(FIRST_CHARGE_RESET_ADDR_FLASH) == FIRST_CHARGE_RESET_ACTIVE){
@@ -216,51 +218,63 @@ __interrupt void timer0_a0_isr(void){
 
         EPS_data[protection_register_LSB] = DS2775_read_register(protection_register);      // read protection register
 
-        temp_1 = read_ADS1248(0);
+        rtd0_measure = read_ADS1248(0);
 
-        EPS_data[RTD0_B3] = temp_1 & 0xff;
-        EPS_data[RTD0_B2] = (temp_1 >> 8) & 0xff;
-        EPS_data[RTD0_B1] = (temp_1 >> 16) & 0xff;
+        EPS_data[RTD0_B3] = rtd0_measure & 0xff;
+        EPS_data[RTD0_B2] = (rtd0_measure >> 8) & 0xff;
+        EPS_data[RTD0_B1] = (rtd0_measure >> 16) & 0xff;
 
-        temp_1 = read_ADS1248(1);
+        rtd1_measure = read_ADS1248(1);
 
-        EPS_data[RTD1_B3] = temp_1 & 0xff;
-        EPS_data[RTD1_B2] = (temp_1 >> 8) & 0xff;
-        EPS_data[RTD1_B1] = (temp_1 >> 16) & 0xff;
+        EPS_data[RTD1_B3] = rtd1_measure & 0xff;
+        EPS_data[RTD1_B2] = (rtd1_measure >> 8) & 0xff;
+        EPS_data[RTD1_B1] = (rtd1_measure >> 16) & 0xff;
 
-        temp_2 = read_ADS1248(2);
+        rtd2_measure = read_ADS1248(2);
+        update_vector(rtd2_values, RTD_FILTER_SIZE, rtd2_measure);
 
-        EPS_data[RTD2_B3] = temp_1 & 0xff;
-        EPS_data[RTD2_B2] = (temp_1 >> 8) & 0xff;
-        EPS_data[RTD2_B1] = (temp_1 >> 16) & 0xff;
+        EPS_data[RTD2_B3] = rtd2_measure & 0xff;
+        EPS_data[RTD2_B2] = (rtd2_measure >> 8) & 0xff;
+        EPS_data[RTD2_B1] = (rtd2_measure >> 16) & 0xff;
 
-        TA1CCR2 = Pid_Control(60, ((temp_2*0.000196695 - 1000)/3.85), &parameters_heater1)*160;
+        rtd3_measure = read_ADS1248(3);
+        update_vector(rtd3_values, RTD_FILTER_SIZE, rtd3_measure);
 
-        temp_1 = read_ADS1248(3);
+        EPS_data[RTD3_B3] = rtd3_measure & 0xff;
+        EPS_data[RTD3_B2] = (rtd3_measure >> 8) & 0xff;
+        EPS_data[RTD3_B1] = (rtd3_measure >> 16) & 0xff;
 
-        EPS_data[RTD3_B3] = temp_1 & 0xff;
-        EPS_data[RTD3_B2] = (temp_1 >> 8) & 0xff;
-        EPS_data[RTD3_B1] = (temp_1 >> 16) & 0xff;
+        rtd4_measure = read_ADS1248(4);
 
-        temp_1 = read_ADS1248(4);
+        EPS_data[RTD4_B3] = rtd4_measure & 0xff;
+        EPS_data[RTD4_B2] = (rtd4_measure >> 8) & 0xff;
+        EPS_data[RTD4_B1] = (rtd4_measure >> 16) & 0xff;
 
-        EPS_data[RTD4_B3] = temp_1 & 0xff;
-        EPS_data[RTD4_B2] = (temp_1 >> 8) & 0xff;
-        EPS_data[RTD4_B1] = (temp_1 >> 16) & 0xff;
+        rtd5_measure = read_ADS1248(5);
+        update_vector(rtd5_values, RTD_FILTER_SIZE, rtd5_measure);
 
-        temp_1 = read_ADS1248(5);
+        EPS_data[RTD5_B3] = rtd5_measure & 0xff;
+        EPS_data[RTD5_B2] = (rtd5_measure >> 8) & 0xff;
+        EPS_data[RTD5_B1] = (rtd5_measure >> 16) & 0xff;
 
-        EPS_data[RTD5_B3] = temp_1 & 0xff;
-        EPS_data[RTD5_B2] = (temp_1 >> 8) & 0xff;
-        EPS_data[RTD5_B1] = (temp_1 >> 16) & 0xff;
+        rtd6_measure = read_ADS1248(6);
+        update_vector(rtd6_values, RTD_FILTER_SIZE, rtd6_measure);
 
-        temp_6 = read_ADS1248(6);
+        EPS_data[RTD6_B3] = rtd6_measure & 0xff;
+        EPS_data[RTD6_B2] = (rtd6_measure >> 8) & 0xff;
+        EPS_data[RTD6_B1] = (rtd6_measure >> 16) & 0xff;
 
-        EPS_data[RTD6_B3] = temp_1 & 0xff;
-        EPS_data[RTD6_B2] = (temp_1 >> 8) & 0xff;
-        EPS_data[RTD6_B1] = (temp_1 >> 16) & 0xff;
+        if(counter_12h >= FIRST_10_MEASURES){
+            heater1_input = average(median_value(rtd5_values, RTD_FILTER_SIZE), median_value(rtd6_values, RTD_FILTER_SIZE));
+            heater2_input = average(median_value(rtd2_values, RTD_FILTER_SIZE), median_value(rtd3_values, RTD_FILTER_SIZE));
+        }
+        else{
+            heater1_input = average(rtd5_measure, rtd6_measure);
+            heater2_input = average(rtd2_measure, rtd3_measure);
+        }
 
-        TA1CCR1 = Pid_Control(60, ((temp_6*0.000196695 - 1000)/3.85), &parameters_heater2)*160;
+        TA1CCR2 = Pid_Control(10, ((heater1_input*0.000196695 - 1000)/3.85), &parameters_heater1)*160;
+        TA1CCR1 = Pid_Control(10, ((heater2_input*0.000196695 - 1000)/3.85), &parameters_heater2)*160;
 
 #ifdef _VERBOSE_DEBUG
         uart_tx_debug("**** ADS1248 Mesurements ****\r\n");
@@ -271,9 +285,9 @@ __interrupt void timer0_a0_isr(void){
         float_send((temp_6*0.000196695 - 1000)/(3.85));
         uart_tx_debug("\r\n");
 #elif defined(_DEBUG)
-        float_send((temp_2*0.000196695 - 1000)/(3.85));
+        //float_send((temp_2*0.000196695 - 1000)/(3.85));
         uart_tx_debug(",");
-        float_send((temp_6*0.000196695 - 1000)/(3.85));
+        //float_send((temp_6*0.000196695 - 1000)/(3.85));
         uart_tx_debug(",");
 #endif
 
