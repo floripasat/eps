@@ -20,10 +20,12 @@
 #define COUNTER_EQUIVALENT_TO_10MIN     5999
 #define COUNTER_EQUIVALENT_TO_1H        6
 #define COUNTER_EQUIVALENT_TO_1D        144
+#define FIRST_10_MEASURES               100
 
 #define FIRST_CHARGE_RESET_ACTIVE       0xC5
-#define FIRST_CHARGE_RESET_DONE     0x4F
+#define FIRST_CHARGE_RESET_DONE         0x4F
 
+#define RTD_FILTER_SIZE     10
 
 /**
  * \brief Configures the timer peripheral
