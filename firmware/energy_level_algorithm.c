@@ -23,7 +23,7 @@
 
 uint8_t energyLevelAlgorithm(uint8_t previous_level, uint16_t chargeLevel){
 
-    chargeLevel = 0;
+    chargeLevel = 0x600; //always on level 4
     switch(previous_level){
     case level1:
         if(chargeLevel > 0.8*maxChargeLevel){
