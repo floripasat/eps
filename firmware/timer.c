@@ -343,6 +343,7 @@ __interrupt void timer0_a0_isr(void){
 
             for(i = 0; i < packet_length; i++){
                 uart_tx_beacon(beacon_packet_fsp_array[i]);
+                __delay_cycles(clock*0.001);
             }
         }
 

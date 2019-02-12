@@ -51,7 +51,7 @@ void uart_config(){
 	UCA2CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
 
 	P2SEL |= BIT4;                            // Assign P2.4 to UCA0TXD
-	P2DIR |= BIT4;							  						// set P2.4 as output
+	P2DIR |= BIT4;							  // set P2.4 as output
 	UCA0CTL1 |= UCSWRST;                      // **Put state machine in reset**
 	UCA0CTL1 |= UCSSEL__ACLK;                 // CLK = ACLK
 	UCA0BR0 = 0xD0;                           // baud rate selection 32768/UCA2BRO=9600 => UCA0BRO = 3
