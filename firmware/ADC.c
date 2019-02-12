@@ -43,7 +43,7 @@ void adc_config(void){
 	ADC12MCTL7 = ADC12INCH_7 + ADC12SREF_2;        						// ref+=VeRef, channel = A7
 	ADC12MCTL8 = ADC12INCH_8 + ADC12SREF_2;        						// ref+=VeRef, channel = A8
 	ADC12MCTL9 = ADC12INCH_9 + ADC12SREF_2;        						// ref+=VeRef, channel = A9
-	ADC12MCTL10 = ADC12INCH_10 + ADC12SREF_2;        					// ref+=VeRef, channel = A10
+	ADC12MCTL10 = ADC12INCH_10 + ADC12SREF_2;        		            // ref+=VeRef, channel = A10
 	ADC12MCTL11 = ADC12INCH_11 + ADC12SREF_2;        					// ref+=VeRef, channel = A11
 	ADC12MCTL12 = ADC12INCH_12 + ADC12SREF_2;        					// ref+=VeRef, channel = A12
 	ADC12MCTL13 = ADC12INCH_13 + ADC12SREF_2;        					// ref+=VeRef, channel = A13

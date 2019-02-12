@@ -23,6 +23,7 @@
 #include "energy_level_algorithm.h"
 #include "fsp.h"
 #include "flash.h"
+#include "misc.h"
 
 volatile extern uint8_t EPS_data[70];
 
@@ -64,6 +65,7 @@ __interrupt void timer0_a0_isr(void){
     volatile uint32_t temp_1 = 0;
     volatile uint32_t temp_2 = 0;
     volatile uint32_t temp_6 = 0;
+    volatile uint16_t eps_msp_temperature = 0;
 
 
     if(flash_read_single(FIRST_CHARGE_RESET_ADDR_FLASH) == FIRST_CHARGE_RESET_ACTIVE){
@@ -172,8 +174,9 @@ __interrupt void timer0_a0_isr(void){
 #endif
 
         adc10 = adc_read(msp_temperature);
-        EPS_data[msp_temperature_LSB] = (uint8_t) (adc10 & 0xff);   // bitwise and with 0xff to get LSB
-        EPS_data[msp_temperature_MSB] = (uint8_t) (adc10 >> 8);     // shift data 8 bits to get MSB
+        eps_msp_temperature = msp_temperature_convert(adc10);
+        EPS_data[msp_temperature_LSB] = (uint8_t) (eps_msp_temperature & 0xff);   // bitwise and with 0xff to get LSB
+        EPS_data[msp_temperature_MSB] = (uint8_t) (eps_msp_temperature >> 8);     // shift data 8 bits to get MSB
 
         watchdog_reset_counter();
 
