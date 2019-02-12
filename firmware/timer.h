@@ -24,6 +24,14 @@
 #define FIRST_CHARGE_RESET_ACTIVE       0xC5
 #define FIRST_CHARGE_RESET_DONE     0x4F
 
+// Calibration constant for ADC 1.5-V Reference, Temp. Sensor 30°C
+#define CALADC12_15V_30C        (*((unsigned int *)0x1A1A))
+// Calibration constant for ADC 1.5-V Reference, Temp. Sensor 85°C
+#define CALADC12_15V_85C        (*((unsigned int *)0x1A1C))
+// Calibration constant for ADC 2.5-V Reference, Temp. Sensor 30°C
+#define CALADC12_25V_30C        (*((unsigned int *)0x1A22))
+// Calibration constant for ADC 2.5-V Reference, Temp. Sensor 85°C
+#define CALADC12_25V_85C        (*((unsigned int *)0x1A24))
 
 /**
  * \brief Configures the timer peripheral
