@@ -58,14 +58,6 @@ void int_to_char(int data, char string[], int size){
 	/////////(end) >> string /////////
 }
 
-void update_vector(uint32_t *vector, uint8_t size, uint32_t new_value){
-    int i = 0;
-    for(i=0; i<(size-1) ; i++){
-        vector[i] = vector[i+1];
-    }
-    vector[size-1] = new_value;
-}
-
 uint32_t average(uint32_t value1, uint32_t value2){
     return (value1 + value2)/2;
 }
