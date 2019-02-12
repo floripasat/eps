@@ -63,9 +63,8 @@ __interrupt void timer0_a0_isr(void){
     volatile uint16_t msp_ts = 0;
     volatile uint32_t rtd0_measure = 0, rtd1_measure = 0, rtd2_measure = 0, rtd3_measure = 0;
     volatile uint32_t rtd4_measure = 0, rtd5_measure = 0, rtd6_measure = 0;
-    volatile uint32_t rtd2_values[RTD_FILTER_SIZE], rtd3_values[RTD_FILTER_SIZE];
-    volatile uint32_t rtd5_values[RTD_FILTER_SIZE], rtd6_values[RTD_FILTER_SIZE];
-    volatile uint32_t heater1_input = 0, heater2_input = 0;
+    volatile float heater1_temp = 0, heater2_temp = 0;
+    static uint8_t heater1_duty_cycle = 0, heater2_duty_cycle = 0;
 
 
     if(flash_read_single(FIRST_CHARGE_RESET_ADDR_FLASH) == FIRST_CHARGE_RESET_ACTIVE){
@@ -218,6 +217,7 @@ __interrupt void timer0_a0_isr(void){
 
         EPS_data[protection_register_LSB] = DS2775_read_register(protection_register);      // read protection register
 
+        /** Measurement of RTDs' temperatures (RTD0 to RTD6). **/
         rtd0_measure = read_ADS1248(0);
 
         EPS_data[RTD0_B3] = rtd0_measure & 0xff;
@@ -231,14 +231,12 @@ __interrupt void timer0_a0_isr(void){
         EPS_data[RTD1_B1] = (rtd1_measure >> 16) & 0xff;
 
         rtd2_measure = read_ADS1248(2);
-        update_vector(rtd2_values, RTD_FILTER_SIZE, rtd2_measure);
 
         EPS_data[RTD2_B3] = rtd2_measure & 0xff;
         EPS_data[RTD2_B2] = (rtd2_measure >> 8) & 0xff;
         EPS_data[RTD2_B1] = (rtd2_measure >> 16) & 0xff;
 
         rtd3_measure = read_ADS1248(3);
-        update_vector(rtd3_values, RTD_FILTER_SIZE, rtd3_measure);
 
         EPS_data[RTD3_B3] = rtd3_measure & 0xff;
         EPS_data[RTD3_B2] = (rtd3_measure >> 8) & 0xff;
@@ -251,30 +249,28 @@ __interrupt void timer0_a0_isr(void){
         EPS_data[RTD4_B1] = (rtd4_measure >> 16) & 0xff;
 
         rtd5_measure = read_ADS1248(5);
-        update_vector(rtd5_values, RTD_FILTER_SIZE, rtd5_measure);
 
         EPS_data[RTD5_B3] = rtd5_measure & 0xff;
         EPS_data[RTD5_B2] = (rtd5_measure >> 8) & 0xff;
         EPS_data[RTD5_B1] = (rtd5_measure >> 16) & 0xff;
 
         rtd6_measure = read_ADS1248(6);
-        update_vector(rtd6_values, RTD_FILTER_SIZE, rtd6_measure);
 
         EPS_data[RTD6_B3] = rtd6_measure & 0xff;
         EPS_data[RTD6_B2] = (rtd6_measure >> 8) & 0xff;
         EPS_data[RTD6_B1] = (rtd6_measure >> 16) & 0xff;
 
-        if(counter_12h >= FIRST_10_MEASURES){
-            heater1_input = average(median_value(rtd5_values, RTD_FILTER_SIZE), median_value(rtd6_values, RTD_FILTER_SIZE));
-            heater2_input = average(median_value(rtd2_values, RTD_FILTER_SIZE), median_value(rtd3_values, RTD_FILTER_SIZE));
-        }
-        else{
-            heater1_input = average(rtd5_measure, rtd6_measure);
-            heater2_input = average(rtd2_measure, rtd3_measure);
-        }
+        heater1_temp = average(rtd5_measure, rtd6_measure);         // Temperature of heater 1 is given by RTDs 5 and 6
+        heater2_temp = average(rtd2_measure, rtd3_measure);         // Temperature of heater 2 is given by RTDs 2 and 3
 
-        TA1CCR2 = Pid_Control(10, ((heater1_input*0.000196695 - 1000)/3.85), &parameters_heater1)*160;
-        TA1CCR1 = Pid_Control(10, ((heater2_input*0.000196695 - 1000)/3.85), &parameters_heater2)*160;
+        heater1_temp = (heater1_temp*0.000196695 - 1000)/3.85;      // Converting temperature values to Celsius (according to ADC parameters)
+        heater2_temp = (heater2_temp*0.000196695 - 1000)/3.85;
+
+        heater1_duty_cycle = Pid_Control(HEATER_TEMPERATURE_SETPOINT, heater1_temp, &parameters_heater1) * 160;
+        heater2_duty_cycle = Pid_Control(HEATER_TEMPERATURE_SETPOINT, heater2_temp, &parameters_heater2) * 160;
+
+        TA1CCR2 = heater1_duty_cycle;
+        TA1CCR1 = heater2_duty_cycle;
 
 #ifdef _VERBOSE_DEBUG
         uart_tx_debug("**** ADS1248 Mesurements ****\r\n");
