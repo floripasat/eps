@@ -1,4 +1,5 @@
 #include "misc.h"
+#include "timer.h"
 
 
 void frame_to_string(unsigned char frame[],unsigned char frame_string[], int size){
@@ -57,4 +58,9 @@ void int_to_char(int data, char string[], int size){
 		string[i]=' ';
 	}
 	/////////(end) >> string /////////
+}
+
+uint16_t msp_temperature_convert(uint16_t temperature_raw){
+    float temperature = (((float)((long)temperature_raw - CALADC12_25V_30C)*(85-30))/(CALADC12_25V_85C - CALADC12_25V_30C)) + 30;       //based on datasheet
+    return (uint16_t) temperature*100;                          // multiplies by 100 to use two decimal places in uint16_t format
 }
