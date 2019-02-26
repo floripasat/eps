@@ -260,8 +260,8 @@ __interrupt void timer0_a0_isr(void){
         EPS_data[RTD6_B2] = (rtd6_measure >> 8) & 0xff;
         EPS_data[RTD6_B1] = (rtd6_measure >> 16) & 0xff;
 
-        heater1_temp = average(rtd5_measure, rtd6_measure);         // Temperature of heater 1 is given by RTDs 5 and 6
-        heater2_temp = average(rtd2_measure, rtd3_measure);         // Temperature of heater 2 is given by RTDs 2 and 3
+        heater1_temp = rtd_value_verification(rtd5_measure, rtd6_measure);         // Temperature of heater 1 is given by RTDs 5 and 6
+        heater2_temp = rtd_value_verification(rtd2_measure, rtd3_measure);         // Temperature of heater 2 is given by RTDs 2 and 3
 
         heater1_temp = (heater1_temp*0.000196695 - 1000)/3.85;      // Converting temperature values to Celsius (according to ADC parameters)
         heater2_temp = (heater2_temp*0.000196695 - 1000)/3.85;

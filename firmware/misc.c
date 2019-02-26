@@ -58,11 +58,23 @@ void int_to_char(int data, char string[], int size){
 	/////////(end) >> string /////////
 }
 
-uint32_t average(uint32_t value1, uint32_t value2){
-    return (value1 + value2)/2;
+uint32_t rtd_value_verification(uint32_t value1, uint32_t value2){
+	uint8_t value_check = 0;
+	if ((value1 > RTD_VALUE_LOWER_LIMIT) && (value1 < RTD_VALUE_UPPER_LIMIT)){
+		value_check += 0x01;
+	}
+	if ((value2 > RTD_VALUE_LOWER_LIMIT) && (value2 < RTD_VALUE_UPPER_LIMIT)){
+		value_check += 0x10;
+	}
+	switch(value_check){
+		case 0x00: return 0x007FFFFF;
+		case 0x01: return value1;
+		case 0x10: return value2;
+		case 0x11: return (value1 + value2)/2;
+	}
 }
 
-uint32_t median_value(uint32_t *vector, uint8_t size){
+/*uint32_t median_value(uint32_t *vector, uint8_t size){
     int i, j;
     uint32_t temp;
 
@@ -81,4 +93,4 @@ uint32_t median_value(uint32_t *vector, uint8_t size){
     else{
         return vector[(size-1)/2];
     }
-}
+}*/
