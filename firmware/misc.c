@@ -67,10 +67,10 @@ uint32_t rtd_value_verification(uint32_t value1, uint32_t value2){
 		value_check += 0x10;
 	}
 	switch(value_check){
-		case 0x00: return 0x007FFFFF;
 		case 0x01: return value1;
 		case 0x10: return value2;
 		case 0x11: return (value1 + value2)/2;
+		default: return 0x007FFFFF;
 	}
 }
 
