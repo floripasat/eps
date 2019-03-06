@@ -63,6 +63,7 @@ __interrupt void timer0_a0_isr(void){
     volatile uint16_t msp_ts = 0;
     volatile uint32_t rtd0_measure = 0, rtd1_measure = 0, rtd2_measure = 0, rtd3_measure = 0;
     volatile uint32_t rtd4_measure = 0, rtd5_measure = 0, rtd6_measure = 0;
+    volatile uint32_t battery1_temp = 0, battery2_temp = 0;
     volatile float heater1_temp = 0, heater2_temp = 0;
     static uint8_t heater1_duty_cycle = 0, heater2_duty_cycle = 0;
 
@@ -260,8 +261,24 @@ __interrupt void timer0_a0_isr(void){
         EPS_data[RTD6_B2] = (rtd6_measure >> 8) & 0xff;
         EPS_data[RTD6_B1] = (rtd6_measure >> 16) & 0xff;
 
-        heater1_temp = rtd_value_verification(rtd5_measure, rtd6_measure);         // Temperature of heater 1 is given by RTDs 5 and 6
-        heater2_temp = rtd_value_verification(rtd2_measure, rtd3_measure);         // Temperature of heater 2 is given by RTDs 2 and 3
+    //Heater management
+        battery1_temp = rtd_value_verification(rtd5_measure, rtd6_measure);       //Temperature of battery 1 is given by RTDs 5 and 6
+        battery2_temp = rtd_value_verification(rtd2_measure, rtd2_measure);       //Temperature of battery 2 is given by RTDs 2 and 3
+
+        //Use the other battery in case of malfunction
+        if(battery1_temp != 0x007FFFFF){
+            heater1_temp = battery1_temp;          
+        }
+        else{
+            heater1_temp = battery2_temp;
+        }
+        //Use the other battery in case of malfunction
+        if(battery2_temp != 0x007FFFFF){
+            heater2_temp = battery2_temp;          
+        }
+        else{
+            heater2_temp = battery1_temp;
+        }
 
         heater1_temp = (heater1_temp*0.000196695 - 1000)/3.85;      // Converting temperature values to Celsius (according to ADC parameters)
         heater2_temp = (heater2_temp*0.000196695 - 1000)/3.85;
@@ -317,12 +334,12 @@ __interrupt void timer0_a0_isr(void){
             beacon_packet[1] = EPS_data[battery1_voltage_LSB];
             beacon_packet[2] = EPS_data[battery2_voltage_MSB];
             beacon_packet[3] = EPS_data[battery2_voltage_LSB];
-            beacon_packet[4] = EPS_data[RTD1_B1];
-            beacon_packet[5] = EPS_data[RTD1_B2];
-            beacon_packet[6] = EPS_data[RTD1_B3];
-            beacon_packet[7] = EPS_data[RTD2_B1];
-            beacon_packet[8] = EPS_data[RTD2_B2];
-            beacon_packet[9] = EPS_data[RTD2_B3];
+            beacon_packet[4] = EPS_data[RTD2_B1];
+            beacon_packet[5] = EPS_data[RTD2_B2];
+            beacon_packet[6] = EPS_data[RTD2_B3];
+            beacon_packet[7] = EPS_data[RTD3_B1];
+            beacon_packet[8] = EPS_data[RTD3_B2];
+            beacon_packet[9] = EPS_data[RTD3_B3];
             beacon_packet[10] = EPS_data[battery_accumulated_current_MSB];
             beacon_packet[11] = EPS_data[battery_accumulated_current_LSB];
             beacon_packet[12] = EPS_data[negative_y_panel_current_MSB];

@@ -72,6 +72,7 @@ uint32_t rtd_value_verification(uint32_t value1, uint32_t value2){
 		case 0x11: return (value1 + value2)/2;
 		default: return 0x007FFFFF;
 	}
+	return 0x007FFFFF;
 }
 
 /*uint32_t median_value(uint32_t *vector, uint8_t size){
