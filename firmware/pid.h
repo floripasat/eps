@@ -1,3 +1,11 @@
+/**
+ * \file
+ *
+ * \brief PID algorithm header
+ *
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com> and Leonardo Kessler Slongo <lkslongo@gmail.com>
+ */
+
 #ifndef PID_H_
 #define PID_H_
 

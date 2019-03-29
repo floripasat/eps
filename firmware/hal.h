@@ -1,8 +1,9 @@
-/*
- * hal.h
+/**
+ * \file
  *
- *  Created on: 09/02/2017
- *      Author: Bruno Eiterer
+ * \brief Hardware Abstraction Layer
+ *
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
  */
 
 #ifndef HAL_H_

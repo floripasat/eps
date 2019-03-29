@@ -1,10 +1,9 @@
-/*
- * eps_timer_test.h
+/**
+ * \file
  *
- *  Created on: 11/04/2016
- *      Author: Bruno Eiterer
+ * \brief Timer driver header
  *
- *      uses these guidines: http://umich.edu/~eecs381/handouts/CHeaderFileGuidelines.pdf
+ * \author Bruno Valo Barbosa Eiterer <brunoeiterer@gmail.com> and Daniel Igiski Baron <danieligiskibaron@hotmail.com>
  */
 
 #ifndef TIMER_H_
@@ -14,6 +13,21 @@
 
 #define PWM_DUTY_CYCLE	0.5		// absolute pwm duty cycle
 #define PWM_PERIOD	10000			// pwm period in us
+
+#define COUNTER_EQUIVALENT_TO_12H       431999
+#define COUNTER_EQUIVALENT_TO_1S        9
+#define COUNTER_EQUIVALENT_TO_10S       9
+#define COUNTER_EQUIVALENT_TO_10MIN     5999
+#define COUNTER_EQUIVALENT_TO_1H        6
+#define COUNTER_EQUIVALENT_TO_1D        144
+
+#define FIRST_CHARGE_RESET_ACTIVE       0xC5
+#define FIRST_CHARGE_RESET_DONE         0x4F
+
+#define HEATER_TEMPERATURE_SETPOINT     5
+/**
+ * \brief Configures the timer peripheral
+ */
 
 void timer_config();
 

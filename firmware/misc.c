@@ -1,6 +1,5 @@
 #include "misc.h"
 
-
 void frame_to_string(unsigned char frame[],unsigned char frame_string[], int size){
 	int i;
 	int j = 0;
@@ -58,3 +57,41 @@ void int_to_char(int data, char string[], int size){
 	}
 	/////////(end) >> string /////////
 }
+
+uint32_t rtd_value_verification(uint32_t value1, uint32_t value2){
+	uint8_t value_check = 0;
+	if ((value1 > RTD_VALUE_LOWER_LIMIT) && (value1 < RTD_VALUE_UPPER_LIMIT)){
+		value_check += 0x01;
+	}
+	if ((value2 > RTD_VALUE_LOWER_LIMIT) && (value2 < RTD_VALUE_UPPER_LIMIT)){
+		value_check += 0x10;
+	}
+	switch(value_check){
+		case 0x01: return value1;
+		case 0x10: return value2;
+		case 0x11: return (value1 + value2)/2;
+		default: return 0x007FFFFF;
+	}
+	return 0x007FFFFF;
+}
+
+/*uint32_t median_value(uint32_t *vector, uint8_t size){
+    int i, j;
+    uint32_t temp;
+
+    for(i=0; i<(size-1); i++) {
+        for(j=i+1; j<size; j++) {
+            if(vector[j] < vector[i]) {
+                temp = vector[i];
+                vector[i] = vector[j];
+                vector[j] = temp;
+            }
+        }
+    }
+    if(size%2 == 0){
+        return average(vector[size/2], vector[size/2 - 1]);
+    }
+    else{
+        return vector[(size-1)/2];
+    }
+}*/

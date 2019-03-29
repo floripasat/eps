@@ -1,4 +1,12 @@
-#include <msp430.h> 
+/**
+ * \file
+ *
+ * \brief Main MCU and peripherals configuration
+ *
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
+*/
+
+#include <msp430.h>
 #include <stdlib.h>
 #include "ADC.h"
 #include "ADS1248.h"
@@ -12,10 +20,17 @@
 #include "hal.h"
 #include "watchdog.h"
 #include "fsp.h"
+#include "flash.h"
+
 
 
 void config_msp430(void);
 
+/**
+ * \brief Main Function
+ *
+ * Configures the MCU, the ADS1248 external ADC and the DS2775 batteries monitor.
+*/
 
 void main(void){
 
@@ -25,6 +40,15 @@ void main(void){
 
     config_ADS1248(6);
     config_DS2775();
+
+    volatile uint8_t first_charge_reset_flag = flash_read_single(FIRST_CHARGE_RESET_ADDR_FLASH);
+    if( (first_charge_reset_flag != FIRST_CHARGE_RESET_ACTIVE) && (first_charge_reset_flag != FIRST_CHARGE_RESET_DONE) ){
+        flash_erase(FIRST_CHARGE_RESET_ADDR_FLASH);
+        flash_write_single(FIRST_CHARGE_RESET_ACTIVE, FIRST_CHARGE_RESET_ADDR_FLASH);
+
+        flash_erase(FLASH_COUNTER_ADDR_FLASH);
+        flash_write_long(0x00, FLASH_COUNTER_ADDR_FLASH);
+    }
 
 #ifdef _VERBOSE_DEBUG
     uart_tx_debug("system boot complete\r\n");
@@ -40,13 +64,16 @@ void main(void){
 }
 
 
-/**********************************
- * Function name: config_msp430
+/**
+ * \brief Configures the MCU peripherals
  *
- * Arguments: void
+ * Configures the MCU clock, watchdog, UART, ADC, SPI, I2C, timers,
+ * the regulators and 555 enable pins, starts the fsp protocol in software and prints
+ * messages and turn leds on in debug mode.
  *
- * Returns: void
+ * \param -
  *
+ * \return -
  */
 
 
@@ -93,5 +120,3 @@ void config_msp430(void){
     system_on_port |= system_on_pin;
 #endif
 }
-
-

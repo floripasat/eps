@@ -1,8 +1,9 @@
-/*
- * watchdog.h
+/**
+ * \file
  *
- *  Created on: 11 de mai de 2016
- *      Author: mario
+ * \brief MCU internal watchdog header
+ *
+ * \author: Mario Baldini
  */
 
 #ifndef UTIL_WATCHDOG_H_
@@ -26,9 +27,24 @@
 
 #include <msp430.h>
 
+/**
+ * \brief Configures the MCU internal watchdog
+ */
 void watchdog_config();
+
+/**
+ * \brief Resets the watchdog counter
+ */
 void watchdog_reset_counter(void);
+
+/**
+ * \brief Stops the watchdog counter
+ */
 void wdt_hold_counter(void);
+
+/**
+ * \brief Uses the watchdog to reboot the MCU
+ */
 void reboot(void);
 
 

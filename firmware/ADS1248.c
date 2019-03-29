@@ -1,19 +1,38 @@
+/**
+ * \file
+ *
+ * \brief ADS1248 external ADC driver source
+ *
+ * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
+ */
+
 #include "ADS1248.h"
 
-/*
- * ADS1248 initialization procedure: - send RESET command
- * 									 - wait 0.6ms
- * 									 - send stop read data continous mode (SDATC) command
- * 									 - send write register (WREG) command + 0 offset (will start writing to register MUX0 at address 0x00)
- * 									 - send number of bytes to write - 1 (MUX0 register at address 0x00, Vbias register at address 0x01, MUX1 register at address 0x02h and SYS0 register at 0x03)
- * 									 - send value to be written on register MUX0: turn off burn-out current source and configure channel to be read
- * 									 - send value to be written on register Vbias: disable Vbias
- * 									 - send value to be written on MUX1 register: turn internal reference generator always on, select input reference and normal operation mode
- * 									 - send value to be written on SYS0 register: select PGA gain and data output rate
- * 									 - send write register (WREG) command + 0x0A offset (will start writing to register IDAC0 at address 0x0A)
- * 									 - send number of bytes to write - 1 (IDAC0 register at address 0x0A, IDAC1 register at address 0x0B)
- * 									 - send value to be written on IDAC0 register: set DRDY mode and magnitude of excitation current
- * 									 - send value to be written on IDAC1 register: select output pin of excitation currents
+/**
+ * \brief Configures the ADS1248 external ADC
+ *
+ * Puts the ADS1248 Start pin to high, the ADS1248 RESET pin to high and
+ * the SPI chip select pin to low. Then sends the RESET command to ADS1248
+ * and waits 0.6 ms. Than sends the initialization data as follows:
+ * - Sends SDATAC (stop data continuous mode) command
+ * - Sends WREG (write register) command + address 0 (will start writing to register MUX0 at address 0x00)
+ * - Sends 3 as the number of bytes to write - 1 (MUX0 register at address 0x00, Vbias register at address 0x01, MUX1 register at address 0x02h and SYS0 register at 0x03)
+ * - Sends value to be written on register MUX0: turn off burn-out current source
+ * - Sends value to be written on register Vbias: disable Vbias
+ * - Sends value to be written on MUX1 register: turn internal reference generator always on, select input reference and normal operation mode
+ * - Sends value to be written on SYS0 register: select PGA gain and data output rate
+ * - Sends write register (WREG) command + 0x0A offset (will start writing to register IDAC0 at address 0x0A)
+ * - Sends number of bytes to write - 1 (IDAC0 register at address 0x0A, IDAC1 register at address 0x0B)
+ * - Sends value to be written on IDAC0 register: set DRDY mode and magnitude of excitation current
+ * - Sends value to be written on IDAC1 register: select output pin of excitation currents <br>
+ *
+ * Then, if a debug mode is active it prints data to the UART port. Finally it pulls
+ * the chip select pin high to stop the communication.
+ *
+ * \param -
+ *
+ * \returns -
+ *
  */
 
 void config_ADS1248(uint8_t positive_channel){
@@ -93,6 +112,22 @@ void config_ADS1248(uint8_t positive_channel){
 		chip_select_port |= chip_select_pin;							// pull chip select high after communication is done
 	}
 }
+
+/**
+ * \brief Reads input from an ADS1248 channel
+ *
+ * Pulls chip select low to start the communication. Sends the SDATAC
+ * command to stop the readings. Configures the channel to be read and
+ * configures the current source output to this channel. Then sends the
+ * SYNC command to start the conversion and waits until it is finished.
+ * Then sends the RDATA command and three consecutive NOP commands to
+ * read the data.
+ *
+ * \param channel to be read by the ADS1248
+ *
+ * \returns an int32_t value containing the 24 bits of the conversion result
+ */
+
 int32_t read_ADS1248(uint8_t channel){
 	volatile uint16_t i = 0;
 	volatile int32_t temp = 0;
