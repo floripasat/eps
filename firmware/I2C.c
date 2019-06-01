@@ -1,14 +1,8 @@
-/**
- * \file
- *
- * \brief I<sup>2</sup>C protocol driver source
  /**
- * \file
- *
- * \brief I<sup>2</sup>C protocol driver source
- *
- * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
- */
+  * \brief I<sup>2</sup>C protocol driver source
+  *
+  * \author Bruno Vale Barbosa Eiterer <brunoeiterer@gmail.com>
+  */
 
 #include <msp430.h>
 #include <stdint.h>
@@ -21,7 +15,7 @@
 
 volatile uint8_t EPS_data[69] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 0, 0x01, 0x02};
 volatile uint8_t EPS_data2[69] = {0};
-volatile FSPPacket obdh_packet_fsp_struct;
+volatile fsp_packet_t obdh_packet_fsp_struct;
 volatile uint8_t obdh_packet_fsp_array[77] = {0};
 
 /**
@@ -92,7 +86,7 @@ __interrupt void USCI_B2_ISR(void)
     static uint8_t packet_length;
     volatile static uint8_t tx_data_counter = 0;
     static uint8_t i = 0;
-    static FSPPacket obdh_rx_packet;
+    static fsp_packet_t obdh_rx_packet;
     static uint8_t obdh_rx_buffer[8];
     uint8_t fsp_status;
 

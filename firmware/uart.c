@@ -152,6 +152,6 @@ void float_send(volatile float c){
     	c = -c;
     }
 
-    sprintf(string, "%f", c);
+//    sprintf(string, "%f", c);     TODO: Remove printf function
 	uart_tx_debug(string);
 }

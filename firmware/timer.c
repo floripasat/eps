@@ -326,7 +326,7 @@ __interrupt void timer0_a0_isr(void){
         if(counter_10s++ >= COUNTER_EQUIVALENT_TO_10S){     // enter every 10 seconds to send data to beacon
             counter_10s = 0;
 
-            static FSPPacket beacon_packet_fsp_struct;
+            static fsp_packet_t beacon_packet_fsp_struct;
             volatile uint8_t beacon_packet_fsp_array[38] = {0};
             volatile uint8_t beacon_packet[31] = {0};
 
