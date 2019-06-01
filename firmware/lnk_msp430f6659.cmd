@@ -1,5 +1,5 @@
 /* ============================================================================ */
-/* Copyright (c) 2014, Texas Instruments Incorporated                           */
+/* Copyright (c) 2018, Texas Instruments Incorporated                           */
 /*  All rights reserved.                                                        */
 /*                                                                              */
 /*  Redistribution and use in source and binary forms, with or without          */
@@ -44,7 +44,7 @@
 /* -heap   0x0100                                   HEAP AREA SIZE            */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
-/* Version: 1.159                                                             */
+/* Version: 1.205                                                             */
 /*----------------------------------------------------------------------------*/
 
 /****************************************************************************/
@@ -143,24 +143,34 @@ SECTIONS
     .sysmem     : {} > RAM                  /* Dynamic memory allocation area    */
     .stack      : {} > RAM (HIGH)           /* Software system stack             */
 
-#ifndef __LARGE_DATA_MODEL__
-    .text       : {}>> FLASH                /* Code                              */
+#ifndef __LARGE_CODE_MODEL__
+    .text       : {} > FLASH                /* Code                              */
 #else
-    .text       : {}>> FLASH2 | FLASH       /* Code                              */
+    .text       : {} >> FLASH2 | FLASH      /* Code                              */
 #endif
     .text:_isr  : {} > FLASH                /* ISR Code space                    */
     .cinit      : {} > FLASH                /* Initialization tables             */
 #ifndef __LARGE_DATA_MODEL__
     .const      : {} > FLASH                /* Constant data                     */
 #else
-    .const      : {} > FLASH | FLASH2       /* Constant data                     */
+    .const      : {} >> FLASH | FLASH2      /* Constant data                     */
 #endif
     .cio        : {} > RAM                  /* C I/O Buffer                      */
 
     .pinit      : {} > FLASH                /* C++ Constructor tables            */
+    .binit      : {} > FLASH                /* Boot-time Initialization tables   */
     .init_array : {} > FLASH                /* C++ Constructor tables            */
     .mspabi.exidx : {} > FLASH              /* C++ Constructor tables            */
     .mspabi.extab : {} > FLASH              /* C++ Constructor tables            */
+#ifdef __TI_COMPILER_VERSION__
+  #if __TI_COMPILER_VERSION__ >= 15009000
+    #ifndef __LARGE_CODE_MODEL__
+    .TI.ramfunc : {} load=FLASH, run=RAM, table(BINIT)
+    #else
+    .TI.ramfunc : {} load=FLASH | FLASH2, run=RAM, table(BINIT)
+    #endif
+  #endif
+#endif
 
     .infoA     : {} > INFOA              /* MSP430 INFO FLASH Memory segments */
     .infoB     : {} > INFOB
@@ -231,7 +241,7 @@ SECTIONS
     COMP_B       : { * ( .int60 ) } > INT60 type = VECT_INIT
     UNMI         : { * ( .int61 ) } > INT61 type = VECT_INIT
     SYSNMI       : { * ( .int62 ) } > INT62 type = VECT_INIT
-    .reset       : {}               > RESET  /* MSP430 Reset vector         */ 
+    .reset       : {}               > RESET  /* MSP430 Reset vector         */
 }
 
 /****************************************************************************/
