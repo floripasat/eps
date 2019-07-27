@@ -12,6 +12,7 @@
 #include "intrinsics.h"
 #include "uart.h"
 #include "I2C.h"
+#include "config.h"
 
 #define clock 8000000
 
@@ -318,30 +319,9 @@ void config_DS2775(void){
     OWWriteByte(current_gain_LSB_register);     // register address
     OWWriteByte(0x00);                  // value to be written
 
-#ifdef _WRITE_ACCUMULATED_CURRENT
+#if RESET_BATTERY_ACCUMULATED_CURRENT = 1
 
-    reset= OneWireReset();                              // ACCUMULATED CURRENT - MSB REGISTER
-    OWWriteByte(0xCC);                                  // eeprom address (only one slave on bus, CC is used)
-    OWWriteByte(0x6C);                                  // write operation
-    OWWriteByte(accumulated_current_MSB_register);      // register address
-    OWWriteByte(0x12);                                  // value to be written
-
-    reset = OneWireReset();
-    OWWriteByte(0xCC);                                  // eeprom address (only one slave on bus, CC is used)
-    OWWriteByte(0x48);                                  // copy data command
-    OWWriteByte(accumulated_current_MSB_register);      // register address
-
-    reset= OneWireReset();                              // ACCUMULATED CURRENT - LSB REGISTER
-    OWWriteByte(0xCC);                                  // eeprom address (only one slave on bus, CC is used)
-    OWWriteByte(0x6C);                                  // write operation
-    OWWriteByte(accumulated_current_LSB_register);      // register address
-    OWWriteByte(0xC0);                                  // value to be written
-
-    reset = OneWireReset();
-    OWWriteByte(0xCC);                                  // eeprom address (only one slave on bus, CC is used)
-    OWWriteByte(0x48);                                  // copy data command
-    OWWriteByte(accumulated_current_LSB_register);      // register address
-
+    write_accumulated_current_max_value();
 
 #endif
 

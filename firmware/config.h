@@ -33,6 +33,8 @@
 
 #define MAX_BATTERY_CHARGE 4800 //[mAh]
 
+#define RESET_BATTERY_ACCUMULATED_CURRENT 1
+
 #endif // CONFIG_H_
 
 //! \} End of config group
