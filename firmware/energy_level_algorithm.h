@@ -13,12 +13,12 @@
 #include <stdint.h>
 #include "hal.h"
 
-#define maxChargeLevel 0x1300
-#define level1 0x01
-#define level2 0x02
-#define level3 0x03
-#define level4 0x04
-#define level5 0x05
+#define MAX_CHARGE_LEVEL 0x1300
+#define LEVEL_1 0x01
+#define LEVEL_2 0x02
+#define LEVEL_3 0x03
+#define LEVEL_4 0x04
+#define LEVEL_5 0x05
 
 /**
  * \brief Determines the operation level of the satellite based on the remaining charge of the batteries.

@@ -24,87 +24,87 @@
 uint8_t energyLevelAlgorithm(uint8_t previous_level, uint16_t chargeLevel){
 
     switch(previous_level){
-    case level1:
-        if(chargeLevel > 0.8*maxChargeLevel){
+    case LEVEL_1:
+        if(chargeLevel > 0.9*MAX_CHARGE_LEVEL){
         	OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
         	payload_regulator_enable_port |= payload_regulator_enable_pin;
-            return level1;
+            return LEVEL_1;
         }
         else{
-            previous_level = level2;
+            previous_level = LEVEL_2;
             OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
-            return level2;
+            return LEVEL_2;
         }
         break;
 
-    case level2:
-        if(chargeLevel > 0.85*maxChargeLevel){
-            previous_level = level1;
+    case LEVEL_2:
+        if(chargeLevel > 0.925*MAX_CHARGE_LEVEL){
+            previous_level = LEVEL_1;
             OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port |= payload_regulator_enable_pin;
-            return level1;
-        }else if(chargeLevel < 0.85*maxChargeLevel && chargeLevel > 0.6*maxChargeLevel){
+            return LEVEL_1;
+        }else if(chargeLevel < 0.925*MAX_CHARGE_LEVEL && chargeLevel > 0.8*MAX_CHARGE_LEVEL){
         	OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
         	payload_regulator_enable_port &= ~payload_regulator_enable_pin;
-            return level2;
+            return LEVEL_2;
         }else{
-            previous_level = level3;
+            previous_level = LEVEL_3;
             OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
-            return level3;
+            return LEVEL_3;
         }
         break;
-    case level3:
-        if(chargeLevel > 0.65*maxChargeLevel){
-            previous_level = level2;
+    case LEVEL_3:
+        if(chargeLevel > 0.825*MAX_CHARGE_LEVEL){
+            previous_level = LEVEL_2;
             OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
-            return level2;
-        }else if(chargeLevel < 0.65*maxChargeLevel && chargeLevel > 0.4*maxChargeLevel){
+            return LEVEL_2;
+        }else if(chargeLevel < 0.825*MAX_CHARGE_LEVEL && chargeLevel > 0.7*MAX_CHARGE_LEVEL){
             OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
-            return level3;
+            return LEVEL_3;
         }else{
-            previous_level = level4;
+            previous_level = LEVEL_4;
             OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
-            return level4;
+            return LEVEL_4;
         }
         break;
-    case level4:
-        if(chargeLevel > 0.45*maxChargeLevel){
-            previous_level = level3;
+    case LEVEL_4:
+        if(chargeLevel > 0.725*MAX_CHARGE_LEVEL){
+            previous_level = LEVEL_3;
             OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
-            return level3;
-        }else if(chargeLevel < 0.45*maxChargeLevel && chargeLevel > 0.2*maxChargeLevel){
+            return LEVEL_3;
+        }else if(chargeLevel < 0.725*MAX_CHARGE_LEVEL && chargeLevel > 0.6*MAX_CHARGE_LEVEL){
             OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
-            return level4;
+            return LEVEL_4;
         }else{
-            previous_level = level5;
+            previous_level = LEVEL_5;
             OBDH_TTC_regulator_enable_port &= ~OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
-            return level5;
+            return LEVEL_5;
         }
         break;
-    case level5:
-        if(chargeLevel > 0.25*maxChargeLevel){
-            previous_level = level4;
+    case LEVEL_5:
+        if(chargeLevel > 0.625*MAX_CHARGE_LEVEL){
+            previous_level = LEVEL_4;
             OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
-            return level4;
+            return LEVEL_4;
         }else{
         	OBDH_TTC_regulator_enable_port &= ~OBDH_TTC_regulator_enable_pin;
         	payload_regulator_enable_port &= ~payload_regulator_enable_pin;
-            return level5;
+            return LEVEL_5;
         }
         break;
     default:
         OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
         payload_regulator_enable_port &= ~payload_regulator_enable_pin;
-        return level4;
+        return LEVEL_4;
         break;
     }
 
