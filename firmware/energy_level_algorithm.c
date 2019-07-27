@@ -84,7 +84,7 @@ uint8_t energyLevelAlgorithm(uint8_t previous_level, uint16_t chargeLevel){
             return LEVEL_4;
         }else{
             previous_level = LEVEL_5;
-            OBDH_TTC_regulator_enable_port &= ~OBDH_TTC_regulator_enable_pin;
+            OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
             return LEVEL_5;
         }
@@ -96,7 +96,7 @@ uint8_t energyLevelAlgorithm(uint8_t previous_level, uint16_t chargeLevel){
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
             return LEVEL_4;
         }else{
-        	OBDH_TTC_regulator_enable_port &= ~OBDH_TTC_regulator_enable_pin;
+        	OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
         	payload_regulator_enable_port &= ~payload_regulator_enable_pin;
             return LEVEL_5;
         }
