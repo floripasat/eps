@@ -12,8 +12,8 @@
 #include <msp430.h>
 #include <stdint.h>
 #include "hal.h"
+#include "config.h"
 
-#define MAX_CHARGE_LEVEL 0x1300
 #define LEVEL_1 0x01
 #define LEVEL_2 0x02
 #define LEVEL_3 0x03

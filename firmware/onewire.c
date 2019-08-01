@@ -16,6 +16,9 @@
 
 #define clock 8000000
 
+#define ACCUMULATED_CURRENT_MSB (uint8_t)MAX_BATTERY_CHARGE>>8
+#define ACCUMULATED_CURRENT_LSB (uint8_t)MAX_BATTERY_CHARGE
+
 #define P_WireOUT P9OUT
 #define P_WireIN P9IN
 #define DIR_P_Wire P9DIR
@@ -319,11 +322,11 @@ void config_DS2775(void){
     OWWriteByte(current_gain_LSB_register);     // register address
     OWWriteByte(0x00);                  // value to be written
 
-#if RESET_BATTERY_ACCUMULATED_CURRENT = 1
+#if RESET_BATTERY_ACCUMULATED_CURRENT == 1
 
     write_accumulated_current_max_value();
 
-#endif
+#endif //RESET_BATTERY_ACCUMULATED_CURRENT
 
 #ifdef _VERBOSE_DEBUG
     uint8_t one_wire_data_sent_back[8] = {0};
@@ -686,7 +689,7 @@ void write_accumulated_current_max_value(void){         // write 3Ah to battery 
     OWWriteByte(0xCC);                                  // eeprom address (only one slave on bus, CC is used)
     OWWriteByte(0x6C);                                  // write operation
     OWWriteByte(accumulated_current_MSB_register);      // register address
-    OWWriteByte(0x12);                                  // value to be written
+    OWWriteByte(ACCUMULATED_CURRENT_MSB);               // value to be written
 
     reset = OneWireReset();
     OWWriteByte(0xCC);                                  // eeprom address (only one slave on bus, CC is used)
@@ -697,7 +700,7 @@ void write_accumulated_current_max_value(void){         // write 3Ah to battery 
     OWWriteByte(0xCC);                                  // eeprom address (only one slave on bus, CC is used)
     OWWriteByte(0x6C);                                  // write operation
     OWWriteByte(accumulated_current_LSB_register);      // register address
-    OWWriteByte(0xC0);                                  // value to be written
+    OWWriteByte(ACCUMULATED_CURRENT_LSB);               // value to be written
 
     reset = OneWireReset();
     OWWriteByte(0xCC);                                  // eeprom address (only one slave on bus, CC is used)
