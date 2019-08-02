@@ -44,7 +44,7 @@ uint8_t energyLevelAlgorithm(uint8_t previous_level, uint16_t chargeLevel){
             OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port |= payload_regulator_enable_pin;
             return LEVEL_1;
-        }else if(chargeLevel < 0.925*MAX_BATTERY_CHARGE && chargeLevel > 0.8*MAX_BATTERY_CHARGE){
+        }else if(chargeLevel <= 0.925*MAX_BATTERY_CHARGE && chargeLevel > 0.8*MAX_BATTERY_CHARGE){
         	OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
         	payload_regulator_enable_port &= ~payload_regulator_enable_pin;
             return LEVEL_2;
@@ -61,7 +61,7 @@ uint8_t energyLevelAlgorithm(uint8_t previous_level, uint16_t chargeLevel){
             OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
             return LEVEL_2;
-        }else if(chargeLevel < 0.825*MAX_BATTERY_CHARGE && chargeLevel > 0.7*MAX_BATTERY_CHARGE){
+        }else if(chargeLevel <= 0.825*MAX_BATTERY_CHARGE && chargeLevel > 0.7*MAX_BATTERY_CHARGE){
             OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
             return LEVEL_3;
@@ -78,7 +78,7 @@ uint8_t energyLevelAlgorithm(uint8_t previous_level, uint16_t chargeLevel){
             OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
             return LEVEL_3;
-        }else if(chargeLevel < 0.725*MAX_BATTERY_CHARGE && chargeLevel > 0.6*MAX_BATTERY_CHARGE){
+        }else if(chargeLevel <= 0.725*MAX_BATTERY_CHARGE && chargeLevel > 0.6*MAX_BATTERY_CHARGE){
             OBDH_TTC_regulator_enable_port |= OBDH_TTC_regulator_enable_pin;
             payload_regulator_enable_port &= ~payload_regulator_enable_pin;
             return LEVEL_4;
