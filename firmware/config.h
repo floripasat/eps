@@ -31,9 +31,9 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#define MAX_BATTERY_CHARGE 						4800 //[mAh]
+#define MAX_BATTERY_CHARGE 						(uint16_t)(3000/0.625) //[mAh]
 
-#define RESET_BATTERY_ACCUMULATED_CURRENT		0
+#define RESET_BATTERY_ACCUMULATED_CURRENT		1
 
 #endif // CONFIG_H_
 
