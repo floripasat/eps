@@ -31,7 +31,8 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#define MAX_BATTERY_CHARGE 						(uint16_t)(3000/0.625) //[mAh]
+#define MAX_BATTERY_CHARGE 						3000 //[mAh]
+#define BAT_MONITOR_CHARGE_VALUE				(uint16_t)(MAX_BATTERY_CHARGE/0.625) //0.625 is a conversion factor for the  battery monitor
 
 #define RESET_BATTERY_ACCUMULATED_CURRENT		0
 
