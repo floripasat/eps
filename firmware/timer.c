@@ -306,7 +306,7 @@ __interrupt void timer0_a0_isr(void){
 
         watchdog_reset_counter();
 
-        EPS_data[eps_status] = energyLevelAlgorithm(EPS_data[eps_status], EPS_data[battery_accumulated_current_LSB] | (EPS_data[battery_accumulated_current_MSB] << 8));
+        EPS_data[eps_status] = energyLevelAlgorithm(EPS_data[eps_status], (EPS_data[battery_accumulated_current_LSB] | (EPS_data[battery_accumulated_current_MSB] << 8))*0.625);
 
         watchdog_reset_counter();
 
