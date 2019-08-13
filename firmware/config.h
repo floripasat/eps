@@ -35,6 +35,7 @@
 #define BAT_MONITOR_CHARGE_VALUE				(uint16_t)(MAX_BATTERY_CHARGE/0.625) //0.625 is a conversion factor for the  battery monitor
 
 #define RESET_BATTERY_ACCUMULATED_CURRENT		0
+#define FIRST_CHARGE_RESET_ROUTINE				0
 
 #endif // CONFIG_H_
 
