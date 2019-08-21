@@ -21,6 +21,7 @@
 #include "watchdog.h"
 #include "fsp.h"
 #include "flash.h"
+#include "config.h"
 
 
 
@@ -41,6 +42,7 @@ void main(void){
     config_ADS1248(6);
     config_DS2775();
 
+#if FIRST_CHARGE_RESET_ROUTINE == 1
     volatile uint8_t first_charge_reset_flag = flash_read_single(FIRST_CHARGE_RESET_ADDR_FLASH);
     if( (first_charge_reset_flag != FIRST_CHARGE_RESET_ACTIVE) && (first_charge_reset_flag != FIRST_CHARGE_RESET_DONE) ){
         flash_erase(FIRST_CHARGE_RESET_ADDR_FLASH);
@@ -49,6 +51,7 @@ void main(void){
         flash_erase(FLASH_COUNTER_ADDR_FLASH);
         flash_write_long(0x00, FLASH_COUNTER_ADDR_FLASH);
     }
+#endif //FIRST_CHARGE_RESET_ROUTINE
 
 #ifdef _VERBOSE_DEBUG
     uart_tx_debug("system boot complete\r\n");

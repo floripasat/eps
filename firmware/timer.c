@@ -24,6 +24,7 @@
 #include "fsp.h"
 #include "flash.h"
 #include "misc.h"
+#include "config.h"
 
 volatile extern uint8_t EPS_data[70];
 
@@ -67,7 +68,7 @@ __interrupt void timer0_a0_isr(void){
     volatile float heater1_temp = 0, heater2_temp = 0;
     static uint8_t heater1_duty_cycle = 0, heater2_duty_cycle = 0;
 
-
+#if FIRST_CHARGE_RESET_ROUTINE == 1
     if(flash_read_single(FIRST_CHARGE_RESET_ADDR_FLASH) == FIRST_CHARGE_RESET_ACTIVE){
         if(counter_10min++ >= COUNTER_EQUIVALENT_TO_10MIN){
             counter_10min = 0;
@@ -88,8 +89,8 @@ __interrupt void timer0_a0_isr(void){
                 flash_write_long(FIRST_CHARGE_RESET_DONE, FIRST_CHARGE_RESET_ADDR_FLASH);
             }
         }
-    }
-
+    }    
+#endif //FIRST_CHARGE_RESET_ROUTINE
 
     if(flash_read_single(RESET_BATTERY_CHARGE_ADDR_FLASH) == RESET_BATTERY_CHARGE_COMMAND){         // enter if the reset battery charge mode flag is active
 
@@ -306,7 +307,7 @@ __interrupt void timer0_a0_isr(void){
 
         watchdog_reset_counter();
 
-        EPS_data[eps_status] = energyLevelAlgorithm(EPS_data[eps_status], EPS_data[battery_accumulated_current_LSB] | (EPS_data[battery_accumulated_current_MSB] << 8));
+        EPS_data[eps_status] = energyLevelAlgorithm(EPS_data[eps_status], (EPS_data[battery_accumulated_current_LSB] | (EPS_data[battery_accumulated_current_MSB] << 8))*0.625);
 
         watchdog_reset_counter();
 
