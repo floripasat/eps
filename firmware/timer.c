@@ -300,8 +300,8 @@ __interrupt void timer0_a0_isr(void){
     #if BATTERY_MONITOR_AS_HEATER_REFERENCE == 1
         if (heater1_temp <= HEATER_TEMPERATURE_SETPOINT)
         {
-            heater1_duty_cycle = 160/2;     // 50 % duty cycle
-            heater2_duty_cycle = 160/2;     // 50 % duty cycle
+            heater1_duty_cycle = 160*BATTERY_MONITOR_AS_HEATER_REF_DUTY_CYCLE;
+            heater2_duty_cycle = 160*BATTERY_MONITOR_AS_HEATER_REF_DUTY_CYCLE;
         }
         else
         {
