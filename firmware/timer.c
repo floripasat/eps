@@ -290,15 +290,28 @@ __interrupt void timer0_a0_isr(void){
     #endif // BATTERY_MONITOR_AS_HEATER_REFERENCE
 
     #if BATTERY_MONITOR_AS_HEATER_REFERENCE == 1
-        heater1_temp = battery1_temp;       // ADD THE CONVERSION EQUATION HERE
+        heater1_temp = (int16_t)(battery1_temp) * 0.125 / 32.0;
         heater2_temp = heater1_temp;
     #else
         heater1_temp = (heater1_temp*0.000196695 - 1000)/3.85;      // Converting temperature values to Celsius (according to ADC parameters)
         heater2_temp = (heater2_temp*0.000196695 - 1000)/3.85;
     #endif // BATTERY_MONITOR_AS_HEATER_REFERENCE
 
+    #if BATTERY_MONITOR_AS_HEATER_REFERENCE == 1
+        if (heater1_temp <= HEATER_TEMPERATURE_SETPOINT)
+        {
+            heater1_duty_cycle = 160/2;     // 50 % duty cycle
+            heater2_duty_cycle = 160/2;     // 50 % duty cycle
+        }
+        else
+        {
+            heater1_duty_cycle = 0;
+            heater2_duty_cycle = 0;
+        }
+    #else
         heater1_duty_cycle = Pid_Control(HEATER_TEMPERATURE_SETPOINT, heater1_temp, &parameters_heater1) * 160;
         heater2_duty_cycle = Pid_Control(HEATER_TEMPERATURE_SETPOINT, heater2_temp, &parameters_heater2) * 160;
+    #endif // BATTERY_MONITOR_AS_HEATER_REFERENCE
 
         TA1CCR2 = heater1_duty_cycle;
         TA1CCR1 = heater2_duty_cycle;
