@@ -37,6 +37,8 @@
 #define RESET_BATTERY_ACCUMULATED_CURRENT		0
 #define FIRST_CHARGE_RESET_ROUTINE				0
 
+#define BATTERY_MONITOR_AS_HEATER_REFERENCE     0
+
 #endif // CONFIG_H_
 
 //! \} End of config group
