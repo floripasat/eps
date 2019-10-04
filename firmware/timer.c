@@ -262,10 +262,16 @@ __interrupt void timer0_a0_isr(void){
         EPS_data[RTD6_B2] = (rtd6_measure >> 8) & 0xff;
         EPS_data[RTD6_B1] = (rtd6_measure >> 16) & 0xff;
 
-    //Heater management
+        //Heater management
+    #if BATTERY_MONITOR_AS_HEATER_REFERENCE == 1
+        battery1_temp = ((uint16_t)EPS_data[battery_monitor_temeperature_MSB] << 8) | EPS_data[battery_monitor_temeperature_LSB];   //Temperature of battery 1 is given by the battery monitor
+        battery2_temp = battery1_temp;
+    #else
         battery1_temp = rtd_value_verification(rtd5_measure, rtd6_measure);       //Temperature of battery 1 is given by RTDs 5 and 6
         battery2_temp = rtd_value_verification(rtd2_measure, rtd2_measure);       //Temperature of battery 2 is given by RTDs 2 and 3
+    #endif // BATTERY_MONITOR_AS_HEATER_REFERENCE
 
+    #if BATTERY_MONITOR_AS_HEATER_REFERENCE == 0
         //Use the other battery in case of malfunction
         if(battery1_temp != 0x007FFFFF){
             heater1_temp = battery1_temp;          
@@ -273,6 +279,7 @@ __interrupt void timer0_a0_isr(void){
         else{
             heater1_temp = battery2_temp;
         }
+
         //Use the other battery in case of malfunction
         if(battery2_temp != 0x007FFFFF){
             heater2_temp = battery2_temp;          
@@ -280,12 +287,31 @@ __interrupt void timer0_a0_isr(void){
         else{
             heater2_temp = battery1_temp;
         }
+    #endif // BATTERY_MONITOR_AS_HEATER_REFERENCE
 
+    #if BATTERY_MONITOR_AS_HEATER_REFERENCE == 1
+        heater1_temp = (int16_t)(battery1_temp) * 0.125 / 32.0;
+        heater2_temp = heater1_temp;
+    #else
         heater1_temp = (heater1_temp*0.000196695 - 1000)/3.85;      // Converting temperature values to Celsius (according to ADC parameters)
         heater2_temp = (heater2_temp*0.000196695 - 1000)/3.85;
+    #endif // BATTERY_MONITOR_AS_HEATER_REFERENCE
 
+    #if BATTERY_MONITOR_AS_HEATER_REFERENCE == 1
+        if (heater1_temp <= HEATER_TEMPERATURE_SETPOINT)
+        {
+            heater1_duty_cycle = 160*BATTERY_MONITOR_AS_HEATER_REF_DUTY_CYCLE;
+            heater2_duty_cycle = 160*BATTERY_MONITOR_AS_HEATER_REF_DUTY_CYCLE;
+        }
+        else
+        {
+            heater1_duty_cycle = 0;
+            heater2_duty_cycle = 0;
+        }
+    #else
         heater1_duty_cycle = Pid_Control(HEATER_TEMPERATURE_SETPOINT, heater1_temp, &parameters_heater1) * 160;
         heater2_duty_cycle = Pid_Control(HEATER_TEMPERATURE_SETPOINT, heater2_temp, &parameters_heater2) * 160;
+    #endif // BATTERY_MONITOR_AS_HEATER_REFERENCE
 
         TA1CCR2 = heater1_duty_cycle;
         TA1CCR1 = heater2_duty_cycle;
@@ -335,12 +361,21 @@ __interrupt void timer0_a0_isr(void){
             beacon_packet[1] = EPS_data[battery1_voltage_LSB];
             beacon_packet[2] = EPS_data[battery2_voltage_MSB];
             beacon_packet[3] = EPS_data[battery2_voltage_LSB];
+        #if BATTERY_MONITOR_AS_HEATER_REFERENCE == 1
+            beacon_packet[4] = EPS_data[battery_monitor_temeperature_MSB];
+            beacon_packet[5] = EPS_data[battery_monitor_temeperature_LSB];
+            beacon_packet[6] = EPS_data[battery_current_MSB];
+            beacon_packet[7] = EPS_data[battery_current_LSB];
+            beacon_packet[8] = EPS_data[msp_temperature_MSB];
+            beacon_packet[9] = EPS_data[msp_temperature_LSB];
+        #else
             beacon_packet[4] = EPS_data[RTD2_B1];
             beacon_packet[5] = EPS_data[RTD2_B2];
             beacon_packet[6] = EPS_data[RTD2_B3];
             beacon_packet[7] = EPS_data[RTD3_B1];
             beacon_packet[8] = EPS_data[RTD3_B2];
             beacon_packet[9] = EPS_data[RTD3_B3];
+        #endif // BATTERY_MONITOR_AS_HEATER_REFERENCE
             beacon_packet[10] = EPS_data[battery_accumulated_current_MSB];
             beacon_packet[11] = EPS_data[battery_accumulated_current_LSB];
             beacon_packet[12] = EPS_data[negative_y_panel_current_MSB];
