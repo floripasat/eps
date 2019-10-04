@@ -24,7 +24,6 @@
 #define FIRST_CHARGE_RESET_ACTIVE       0xC5
 #define FIRST_CHARGE_RESET_DONE         0x4F
 
-#define HEATER_TEMPERATURE_SETPOINT     5
 /**
  * \brief Configures the timer peripheral
  */
