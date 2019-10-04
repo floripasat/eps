@@ -348,12 +348,21 @@ __interrupt void timer0_a0_isr(void){
             beacon_packet[1] = EPS_data[battery1_voltage_LSB];
             beacon_packet[2] = EPS_data[battery2_voltage_MSB];
             beacon_packet[3] = EPS_data[battery2_voltage_LSB];
+        #if BATTERY_MONITOR_AS_HEATER_REFERENCE == 1
+            beacon_packet[4] = 0x00;
+            beacon_packet[5] = EPS_data[battery_monitor_temeperature_MSB];
+            beacon_packet[6] = EPS_data[battery_monitor_temeperature_LSB];
+            beacon_packet[7] = 0x00;
+            beacon_packet[8] = EPS_data[battery_monitor_temeperature_MSB];
+            beacon_packet[9] = EPS_data[battery_monitor_temeperature_LSB];
+        #else
             beacon_packet[4] = EPS_data[RTD2_B1];
             beacon_packet[5] = EPS_data[RTD2_B2];
             beacon_packet[6] = EPS_data[RTD2_B3];
             beacon_packet[7] = EPS_data[RTD3_B1];
             beacon_packet[8] = EPS_data[RTD3_B2];
             beacon_packet[9] = EPS_data[RTD3_B3];
+        #endif // BATTERY_MONITOR_AS_HEATER_REFERENCE
             beacon_packet[10] = EPS_data[battery_accumulated_current_MSB];
             beacon_packet[11] = EPS_data[battery_accumulated_current_LSB];
             beacon_packet[12] = EPS_data[negative_y_panel_current_MSB];
