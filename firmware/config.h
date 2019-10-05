@@ -37,6 +37,7 @@
 #define RESET_BATTERY_ACCUMULATED_CURRENT		    0
 #define FIRST_CHARGE_RESET_ROUTINE				    0
 
+#define HEATER_ENABLED                              1
 #define HEATER_TEMPERATURE_SETPOINT                 5   // Temperature in Celsius
 
 #define BATTERY_MONITOR_AS_HEATER_REFERENCE         0

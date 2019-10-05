@@ -313,8 +313,13 @@ __interrupt void timer0_a0_isr(void){
         heater2_duty_cycle = Pid_Control(HEATER_TEMPERATURE_SETPOINT, heater2_temp, &parameters_heater2) * 160;
     #endif // BATTERY_MONITOR_AS_HEATER_REFERENCE
 
+    #if HEATER_ENABLED == 1
         TA1CCR2 = heater1_duty_cycle;
         TA1CCR1 = heater2_duty_cycle;
+    #else
+        TA1CCR2 = 0;    // Duty cycle = 0
+        TA1CCR1 = 0;    // Duty cycle = 0
+    #endif // HEATER_ENABLED
 
 #ifdef _VERBOSE_DEBUG
         uart_tx_debug("**** ADS1248 Mesurements ****\r\n");
